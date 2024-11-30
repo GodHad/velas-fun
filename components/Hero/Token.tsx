@@ -2,7 +2,8 @@ import Image from "next/image"
 import { Token } from "@/types/token"
 import { users } from "@/utils/statics"
 
-export default ({ token }: { token: Token }) => {
+const TokenComponent = ({ token }: { token: Token }) => {
+    const user = users.find(user => user.id === token.creator);
     return (
         <>
             <div className="card cursor-pointer">
@@ -41,15 +42,15 @@ export default ({ token }: { token: Token }) => {
                         <div className="flex items-center gap-2 md:gap-2.5">
                             <Image
                                 className="img-fluid w-6 md:w-8 h-6 md:h-8 rounded-full border-body-color border"
-                                src={users.find(user => user.id === token.creator).logo ? users.find(user => user.id === token.creator).logo : '/images/creator-logos/default.png'}
+                                src={user && user.logo ? user.logo : '/images/creator-logos/default.png'}
                                 width={32}
                                 height={32}
-                                alt={users.find(user => user.id === token.creator).username}
+                                alt={user ? user.username : 'Creator name'}
                                 unoptimized
                             />
                             <div className="flex flex-col gap-1">
                                 <p className="text-body-color text-[9px] !leading-none font-normal">Creator</p>
-                                <p className="text-[10px] !leading-none font-medium hover:underline">{users.find(user => user.id === token.creator).username}</p>
+                                <p className="text-[10px] !leading-none font-medium hover:underline">{users.find(user => user.id === token.creator)?.username}</p>
                             </div>
                         </div>
                     </div>
@@ -58,3 +59,5 @@ export default ({ token }: { token: Token }) => {
         </>
     )
 }
+
+export default TokenComponent;
