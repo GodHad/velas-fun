@@ -64,16 +64,16 @@ const Hero = () => {
         <>
             <section
                 id="home"
-                className="dark:bg-gray-dark relative z-10 overflow-hidden bg-white pb-16 pt-[120px] md:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px] 2xl:pb-[200px] 2xl:pt-[210px]"
+                className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pb-16 pt-[120px] md:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px] 2xl:pb-[200px] 2xl:pt-[210px]"
             >
                 <div className="container">
                     <div className="-mx-4 flex flex-wrap">
                         <div className="w-full px-4">
                             <div
-                                className="wow fadeInUp mx-auto max-w-[1000px] text-center md:bg-create-token bg-right bg-no-repeat rounded-lg"
+                                className="wow fadeInUp mx-auto text-center md:bg-create-token bg-right bg-no-repeat rounded-lg"
                                 data-wow-delay=".2s"
                             >
-                                <div className="bg-gray-2 rounded-20 relative z-10 after:content-[''] after:bg-bg-curve after:absolute after:bg-no-repeat after:bg-bottom after:bottom-0 after:left-0 after:w-full after:h-full after:-z-10 after:opacity-10 overflow-hidden p-7 sm:pb-9 sm:pt-11 lg:pt-12 xl:pt-12.5 sm:px-11 lg:px-12.2 xl:px-14.5">
+                                <div className="bg-gray-2 rounded-20 relative z-10 after:content-[''] after:bg-bg-curve after:bg-cover after:absolute after:bg-no-repeat after:bg-bottom after:bottom-0 after:left-0 after:w-full after:h-full after:-z-10 after:opacity-10 overflow-hidden p-7 sm:pb-9 sm:pt-11 lg:pt-12 xl:pt-12.5 sm:px-11 lg:px-12.2 xl:px-14.5">
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 xl:gap-20">
                                         <div className="col-span-1 md:col-span-5">
                                             <div className="flex flex-col flex-wrap gap-4 sm:gap-5.5 pb-4 sm:pb-5 md:pb-7 xl:pb-8">

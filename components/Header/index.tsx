@@ -88,7 +88,6 @@ const Header = () => {
         </div>
         <div className="w-full h-full absolute opacity-50 bg-black z-40" onClick={() => setShowModal(false)}></div>
       </div>
-      <div className="opacity-25 fixed inset-0 z-60 bg-black"></div>
     </>
   );
 };
