@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Velas Fun | Terms",
+    description: "Terms of Velas Fun Platform deploying memecoin",
+};
+
 const Terms = () => {
     return (
         <main

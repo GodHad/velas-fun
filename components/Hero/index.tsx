@@ -70,16 +70,16 @@ const Hero = () => {
                     <div className="-mx-4 flex flex-wrap">
                         <div className="w-full px-4">
                             <div
-                                className="wow fadeInUp mx-auto text-center md:bg-create-token bg-right bg-no-repeat rounded-lg"
+                                className="wow fadeInUp mx-auto text-center bg-create-token bg-top bg-contain md:bg-right bg-no-repeat rounded-lg shadow-md"
                                 data-wow-delay=".2s"
                             >
-                                <div className="bg-gray-2 rounded-20 relative z-10 after:content-[''] after:bg-bg-curve after:bg-cover after:absolute after:bg-no-repeat after:bg-bottom after:bottom-0 after:left-0 after:w-full after:h-full after:-z-10 after:opacity-10 overflow-hidden p-7 sm:pb-9 sm:pt-11 lg:pt-12 xl:pt-12.5 sm:px-11 lg:px-12.2 xl:px-14.5">
+                                <div className="bg-gray-2 rounded-20 relative z-10 after:content-[''] after:bg-bg-curve after:bg-cover after:absolute after:bg-no-repeat after:bg-bottom after:bottom-0 after:left-0 after:w-full after:h-full after:-z-10 after:opacity-10 overflow-hidden p-7 sm:pb-9 sm:pt-11 lg:pt-12 xl:pt-12.5 sm:px-11 lg:px-12.2 xl:px-14.5 min-h-[450px] xs:min-h-[480px] sm:min-h-[550px] md:min-h-[360px] flex items-end md:items-center justify-center md:justify-start">
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 xl:gap-20">
                                         <div className="col-span-1 md:col-span-5">
                                             <div className="flex flex-col flex-wrap gap-4 sm:gap-5.5 pb-4 sm:pb-5 md:pb-7 xl:pb-8">
-                                                <h1 className="font-michroma font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl xl:!leading-lh-55">Build Your Token in Minutes</h1>
+                                                <h1 className="font-michroma font-bold text-3xl lg:text-4xl xl:text-5xl xl:!leading-lh-55">Build Your Token in Minutes</h1>
                                                 <hr className="border-gray opacity-50" />
-                                                <p className="font-michroma font-normal text-body-color text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl"> Empower Your Crypto Journey</p>
+                                                <p className="font-michroma font-normal text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl"> Empower Your Crypto Journey</p>
                                             </div>
                                             <Link
                                                 href="/create"

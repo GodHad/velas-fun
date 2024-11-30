@@ -22,7 +22,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`header left-0 top-0 z-40 flex w-full items-center ${sticky
+        className={`header left-0 top-0 z-40 flex w-full items-center py-[10px] ${sticky
           ? "dark:bg-gray-dark dark:shadow-sticky-dark fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
           : "absolute bg-transparent"
           }`}
@@ -39,7 +39,7 @@ const Header = () => {
               </Link>
             </div>
             <div className="flex w-full items-center justify-end px-4">
-              <div className="flex items-center justify-end pr-16 lg:pr-0">
+              <div className="flex items-center justify-end lg:pr-0">
                 <Link
                   href="#"
                   className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
@@ -53,9 +53,9 @@ const Header = () => {
                   How it works
                 </button>
                 <button
-                  className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                  className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
                 >
-                  Connect Wallet
+                  Connect <span className="hidden sm:block">Wallet</span>
                 </button>
                 <div>
                   <ThemeToggler />
