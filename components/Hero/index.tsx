@@ -13,7 +13,7 @@ enum SortMethods {
 
 const Hero = () => {
 
-  const [showFilter, setShowFilter] = useState<Boolean>(false);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<SortMethods>(SortMethods.lastTrade);
 
   const handleClickSort = (sortMethod: SortMethods) => {
