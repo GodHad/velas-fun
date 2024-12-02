@@ -55,7 +55,7 @@ const Header = () => {
   const connectWallet = async () => {
     const isNetworkAdded = await addVelasNetwork();
     if (!isNetworkAdded) {
-      console.log('Velas network was not added. Wallet connection aborted.');
+      alert('Velas network was not added. Wallet connection aborted.');
       return;
     }
     if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
