@@ -2,7 +2,7 @@ import { Token } from "@/types/token";
 
 export const users = [
     {
-        id: 1, 
+        id: 1,
         username: '4wDDap',
         bio: 'Hello',
         walletAddress: '4wDDApfcjosefnosejioaca342',
@@ -12,7 +12,7 @@ export const users = [
         logo: null
     },
     {
-        id: 2, 
+        id: 2,
         username: '6cQQZD',
         bio: '',
         walletAddress: '6cQQZDfcjosefnosejioaca342',
@@ -22,7 +22,7 @@ export const users = [
         logo: null
     },
     {
-        id: 3, 
+        id: 3,
         username: 'E5fbPC',
         bio: '',
         walletAddress: 'E5fbPCfcjosefnosejioaca342',
@@ -32,7 +32,7 @@ export const users = [
         logo: null
     },
     {
-        id: 4, 
+        id: 4,
         username: '4wDDap',
         bio: '',
         walletAddress: '4wDDApfcjosefnosejioaca342',
@@ -42,7 +42,7 @@ export const users = [
         logo: null
     },
     {
-        id: 5, 
+        id: 5,
         username: '4wDDap',
         bio: '',
         walletAddress: '4wDDApfcjosefnosejioaca342',
@@ -56,6 +56,7 @@ export const users = [
 export const tokens: Token[] = [
     {
         id: 1,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'Onxe 2.0',
         ticker: 'onxe',
         description: 'great project but the DEV rug us. Will purchase the CTO for dex.',
@@ -64,8 +65,10 @@ export const tokens: Token[] = [
         website: '',
         logo: '1.jpg',
         creator: 2,
+        price: 0.000000001,
         marketCap: 2000,
         badge: 'king',
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 1, amount: 800 },
             { userId: 2, amount: 300 },
@@ -104,6 +107,7 @@ export const tokens: Token[] = [
     },
     {
         id: 2,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'manjunamai',
         ticker: 'manju',
         description: 'openlink.co/manjunamia',
@@ -112,8 +116,10 @@ export const tokens: Token[] = [
         website: '',
         logo: '2.jpg',
         creator: 5,
+        price: 0.000000001,
         marketCap: 4000,
         badge: null,
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 2, amount: 800 },
             { userId: 3, amount: 300 },
@@ -152,6 +158,7 @@ export const tokens: Token[] = [
     },
     {
         id: 3,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'Sun',
         ticker: 'Sun',
         description: 'Sun token. Hello. Sun token. Hello. Sun token. Hello. Sun token. Hello. Sun token. Hello. Sun token. Hello. Sun token. Hello.',
@@ -160,8 +167,10 @@ export const tokens: Token[] = [
         website: '',
         logo: '3.jpg',
         creator: 5,
+        price: 0.000000001,
         marketCap: 3000,
         badge: null,
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 2, amount: 800 },
             { userId: 4, amount: 300 },
@@ -200,6 +209,7 @@ export const tokens: Token[] = [
     },
     {
         id: 4,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'IVY',
         ticker: 'IVY',
         description: 'IVY is a tiny black pup with a heart full of love and misc hief.',
@@ -208,8 +218,10 @@ export const tokens: Token[] = [
         website: '',
         logo: '4.jpg',
         creator: 3,
+        price: 0.000000001,
         marketCap: 2000,
         badge: null,
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 3, amount: 800 },
             { userId: 4, amount: 300 },
@@ -248,6 +260,7 @@ export const tokens: Token[] = [
     },
     {
         id: 5,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'Just A Sexy red',
         ticker: 'sexyred',
         description: 'https://hello.com/',
@@ -256,8 +269,10 @@ export const tokens: Token[] = [
         website: '',
         logo: '5.jpg',
         creator: 3,
+        price: 0.000000001,
         marketCap: 3000,
         badge: null,
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 1, amount: 800 },
             { userId: 2, amount: 300 },
@@ -296,6 +311,7 @@ export const tokens: Token[] = [
     },
     {
         id: 6,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'Penguin happy christmas',
         ticker: 'PHCS',
         description: 'PHCS',
@@ -304,8 +320,10 @@ export const tokens: Token[] = [
         website: '',
         logo: '6.jpg',
         creator: 4,
+        price: 0.000000001,
         marketCap: 5000,
         badge: null,
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 1, amount: 800 },
             { userId: 2, amount: 300 },
@@ -344,6 +362,7 @@ export const tokens: Token[] = [
     },
     {
         id: 7,
+        address: '0x857FbcECe3296FDF8af57D1FFa96Bb76327D8f6B',
         name: 'Snake AI',
         ticker: 'SNAKE',
         description: 'Your favorite classic game, with an AI twist.',
@@ -351,9 +370,11 @@ export const tokens: Token[] = [
         telegram: '',
         website: '',
         logo: '7.jpg',
+        price: 0.000000001,
         creator: 2,
         marketCap: 4000,
         badge: null,
+        createdAt: '2024-11-21 14:30:08',
         holders: [
             { userId: 1, amount: 800 },
             { userId: 2, amount: 300 },

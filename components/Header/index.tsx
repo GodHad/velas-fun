@@ -18,7 +18,6 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
 
-
   return (
     <>
       <header
@@ -67,8 +66,8 @@ const Header = () => {
       </header>
       <div
         className={`flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none overflow-x-hidden overflow-y-auto transition-all duration-150 ${showModal
-            ? 'opacity-100 visible'
-            : 'opacity-0 invisible'
+          ? 'opacity-100 visible'
+          : 'opacity-0 invisible'
           }`}
       >
         <div className="relative w-auto my-6 mx-auto max-w-3xl dark:bg-gray-dark dark:shadow-sticky-dark bg-white z-50">

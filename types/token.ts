@@ -1,5 +1,6 @@
 export type Token = {
     id: number | string;
+    address: string;
     name: string;
     ticker: string;
     description: string;
@@ -10,6 +11,8 @@ export type Token = {
     creator: number | string;
     marketCap: number;
     badge: string | null;
+    price: number;
+    createdAt: string;
     holders: {
         userId: number | string;
         amount: number;
