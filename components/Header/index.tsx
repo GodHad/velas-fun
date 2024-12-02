@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
-import Web3 from "web3";
 
 const velasChainData = {
   chainId: '0x6A',
@@ -42,7 +41,8 @@ const Header = () => {
         });
         console.log('Velas network added successfully!');
         return true;
-      } catch (error) {
+      } catch (e) {
+        console.log(e)
         return false;
       }
     } else {
@@ -68,7 +68,6 @@ const Header = () => {
           setAccount(accounts[0]);
           setConnected(true);
 
-          const web3 = new Web3(window.ethereum);
           console.log('Connected to Velas with account:', accounts[0]);
         } else {
           console.log('No account found')

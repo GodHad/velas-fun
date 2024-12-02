@@ -248,11 +248,11 @@ const TokenDetail = ({ token }: { token: Token }) => {
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-gray-12">
-                                                        {token.transactions.map(transaction => (
-                                                            <tr className="text-sm lg:text-[15px] xl:text-base font-normal !leading-none ng-star-inserted">
+                                                        {token.transactions.map((transaction, index) => (
+                                                            <tr className="text-sm lg:text-[15px] xl:text-base font-normal !leading-none ng-star-inserted" key={transaction.transactionId + index}>
                                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">
                                                                     <div className="flex items-center">
-                                                                        <img alt="token-id" className="w-4 h-4" src="https://bxfinance-productions3.s3.amazonaws.com/pumpfun-backend/user-profile-pictures/0xRubeth-upload-DALL%C3%82%C2%B7E%202024-11-17%2000.14.29%20-%20A%20visually%20striking%20futuristic%20workspace%20setup%20for%20a%20blockchain%20developer.%20The%20scene%20includes%20a%20sleek%2C%20multi-monitor%20setup%20displaying%20complex%20Solidity.webp" />
+                                                                        <Image width={16} height={16} alt="token-id" className="w-4 h-4" src="https://bxfinance-productions3.s3.amazonaws.com/pumpfun-backend/user-profile-pictures/0xRubeth-upload-DALL%C3%82%C2%B7E%202024-11-17%2000.14.29%20-%20A%20visually%20striking%20futuristic%20workspace%20setup%20for%20a%20blockchain%20developer.%20The%20scene%20includes%20a%20sleek%2C%20multi-monitor%20setup%20displaying%20complex%20Solidity.webp" />
                                                                         <span className="font-medium pl-1.5 hover:underline cursor-pointer">{transaction.userId}</span>
                                                                     </div>
                                                                 </td>
