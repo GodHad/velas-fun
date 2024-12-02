@@ -2,9 +2,24 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
+import Web3 from "web3";
+
+const velasChainData = {
+  chainId: '0x6A',
+  chainName: 'Velas EVM Mainnet',
+  nativeCurrency: {
+    name: 'Velas',
+    symbol: 'VLX',
+    decimals: 18,
+  },
+  rpcUrls: ['https://evmexplorer.velas.com/rpc'],
+  blockExplorerUrls: ['https://evmexplorer.velas.com'],
+}
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
+  const [account, setAccount] = useState<string | null>(null);
+  const [connected, setConnected] = useState<boolean>(false);
 
   const [sticky, setSticky] = useState(false);
   const handleStickyNavbar = () => {
@@ -17,6 +32,59 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
+
+  const addVelasNetwork = async () => {
+    if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [velasChainData],
+        });
+        console.log('Velas network added successfully!');
+        return true;
+      } catch (error) {
+        return false;
+      }
+    } else {
+      alert('MetaMask is not installed! Please install Metamask extension.');
+      return false;
+    }
+  };
+
+
+  const connectWallet = async () => {
+    const isNetworkAdded = await addVelasNetwork();
+    if (!isNetworkAdded) {
+      console.log('Velas network was not added. Wallet connection aborted.');
+      return;
+    }
+    if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+        }) as string[];
+
+        if (accounts && accounts.length > 0) {
+          setAccount(accounts[0]);
+          setConnected(true);
+
+          const web3 = new Web3(window.ethereum);
+          console.log('Connected to Velas with account:', accounts[0]);
+        } else {
+          console.log('No account found')
+        }
+      } catch (error) {
+        console.error('Error connecting to wallet: ', error);
+      }
+    } else {
+      alert('MetaMask is not installed!');
+    }
+  }
+
+  const disconnectWallet = () => {
+    setConnected(false);
+    setAccount(null);
+  };
 
   return (
     <>
@@ -51,11 +119,24 @@ const Header = () => {
                 >
                   How it works
                 </button>
-                <button
-                  className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
-                >
-                  Connect <span className="hidden sm:block">Wallet</span>
-                </button>
+                {(!connected || !account) ? (
+                  <>
+                    <button
+                      className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                      onClick={connectWallet}
+                    >
+                      Connect <span className="hidden sm:block">Wallet</span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                    onClick={disconnectWallet}
+                  >
+                    {account?.slice(0, 6)}....{account?.slice(-4)}
+                  </button>
+                )
+                }
                 <div>
                   <ThemeToggler />
                 </div>

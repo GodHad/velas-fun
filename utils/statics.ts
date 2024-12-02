@@ -103,6 +103,32 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            },
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            },
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            },
         ]
     },
     {
@@ -154,6 +180,16 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            }
         ]
     },
     {
@@ -205,6 +241,16 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            }
         ]
     },
     {
@@ -256,6 +302,16 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            }
         ]
     },
     {
@@ -307,6 +363,16 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            }
         ]
     },
     {
@@ -358,6 +424,16 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            }
         ]
     },
     {
@@ -409,6 +485,16 @@ export const tokens: Token[] = [
                 date: '2024-11-24 14:31:08',
                 transactionId: '61s7dQVsLGWmZukRGzsAFQhMNsdCywPKU1zUisThHAry2WciEaER8ooDnpmJ23iJnaKczyZQ7ec1zJRcQa7B4fzo',
             },
+        ],
+        replies: [
+            {
+                userId: 2,
+                userLogo: null,
+                content: 'Hello, World!',
+                image: null,
+                likes: 0,
+                createdAt: '2024-11-30 18:10:11',
+            }
         ]
     },
 ];

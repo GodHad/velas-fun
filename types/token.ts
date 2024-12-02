@@ -24,5 +24,13 @@ export type Token = {
         date: string;
         transactionId: string;
     }[];
+    replies: {
+        userId: number | string;
+        userLogo: string | null;
+        content: string;
+        image: string | null;
+        likes: number;
+        createdAt: string;
+    }[];
   };
   
