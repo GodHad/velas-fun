@@ -8,25 +8,21 @@ export const metadata: Metadata = {
   description: "Velas Fun Platform deploying memecoin",
 };
 
-interface CoinPageProps {
-    params: {
-        address: string;
-    };
-}
+const CoinPage = async ({ params }: { params: Promise<{address: string}> }) => {
+  const { address } = await params;
 
-const CoinPage = ({ params }: CoinPageProps) => {
-    const { address } = params;
-    const token = tokens.find(_token => _token.address === address);
+  // Find the token by address
+  const token = tokens.find((_token) => _token.address === address);
 
-    if (!token) {
-        notFound();
-    }
+  if (!token) {
+    notFound();
+  }
 
-    return (
-        <>
-            <TokenDetail token={token} />
-        </>
-    );
+  return (
+    <>
+      <TokenDetail token={token} />
+    </>
+  );
 };
 
 export default CoinPage;

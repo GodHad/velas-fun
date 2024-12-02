@@ -14,7 +14,7 @@ const TokenDetail = ({ token }: { token: Token }) => {
     const handleCopyAddressClick = () => {
         navigator.clipboard.writeText(token.address);
     }
-    
+
     const user = users.find(user => user.id === token.creator);
 
     const [trade, setTrade] = useState<string>('buy');
@@ -179,7 +179,7 @@ const TokenDetail = ({ token }: { token: Token }) => {
                                         <div className="flex flex-col gap-3 lg:gap-4">
                                             <div className="flex flex-col gap-2">
                                                 <a className="flex items-center group text-sm lg:text-base font-normal">
-                                                    <img alt="token-id" className="img-fluid w-5 h-5" src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid" />
+                                                    <Image alt="token-id" className="img-fluid w-5 h-5" src={user?.logo ? user?.logo : '/images/creator-logos/default.png'} width={16} height={16} />
                                                     <div className="flex gap-3">
                                                         <span className="text-yellow hover:text-yellow-500 ps-1.5 inline-flex gap-1 transition-all duration-500 ease-in-out hover:underline cursor-pointer"> 0x2d74 </span>
                                                         <span className="text-body-color">Nov 28, 2024, 02:20:30</span>
@@ -261,7 +261,7 @@ const TokenDetail = ({ token }: { token: Token }) => {
                                 <h4 className="text-[15px] md:text-base xl:text-lg font-semibold !leading-none mb-3.5">Overview</h4>
                                 <div>
                                     <div className="flex flex-wrap items-center gap-5 pb-4 sm:pb-5">
-                                        <img className="img-fluid w-16 md:w-20 h-16 md:h-20" src="https://ipfs.io/ipfs/QmahPXQqh3wXQh1XLR49axJrq5cjuhX653vUa33ghwt46m" />
+                                        <Image className="img-fluid w-16 md:w-20 h-16 md:h-20" src={'/images/token-logos' + token.logo} alt="coin image" width={80} height={80} />
                                         <div className="flex flex-col gap-2.5">
                                             <div className="flex flex-col gap-1.5">
                                                 <p className="text-xs font-normal text-body-color !leading-none">Coin name</p>
