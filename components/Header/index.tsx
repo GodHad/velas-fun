@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import base58 from 'bs58';
 import ThemeToggler from "./ThemeToggler";
+import UserContext from "@/contexts/UserContext";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { userInfo } from "@/types";
+import { confirmWallet, walletConnect } from "@/utils/api";
+import { errorAlert, successAlert } from "../ToastGroup";
+import HowItWork from "../HowItWork";
 
 const velasChainData = {
   chainId: '0x6A',
@@ -17,8 +25,6 @@ const velasChainData = {
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
-  const [account, setAccount] = useState<string | null>(null);
-  const [connected, setConnected] = useState<boolean>(false);
 
   const [sticky, setSticky] = useState(false);
   const handleStickyNavbar = () => {
@@ -52,38 +58,103 @@ const Header = () => {
   };
 
 
-  const connectWallet = async () => {
-    const isNetworkAdded = await addVelasNetwork();
-    if (!isNetworkAdded) {
-      alert('Velas network was not added. Wallet connection aborted.');
-      return;
-    }
-    if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts',
-        }) as string[];
+  // const connectWallet = async () => {
+  //   const isNetworkAdded = await addVelasNetwork();
+  //   if (!isNetworkAdded) {
+  //     alert('Velas network was not added. Wallet connection aborted.');
+  //     return;
+  //   }
+  //   if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
+  //     try {
+  //       const accounts = await window.ethereum.request({
+  //         method: 'eth_requestAccounts',
+  //       }) as string[];
 
-        if (accounts && accounts.length > 0) {
-          setAccount(accounts[0]);
-          setConnected(true);
+  //       if (accounts && accounts.length > 0) {
+  //         setAccount(accounts[0]);
+  //         setConnected(true);
 
-          console.log('Connected to Velas with account:', accounts[0]);
-        } else {
-          console.log('No account found')
-        }
-      } catch (error) {
-        console.error('Error connecting to wallet: ', error);
+  //         console.log('Connected to Velas with account:', accounts[0]);
+  //       } else {
+  //         console.log('No account found')
+  //       }
+  //     } catch (error) {
+  //       console.error('Error connecting to wallet: ', error);
+  //     }
+  //   } else {
+  //     alert('MetaMask is not installed!');
+  //   }
+  // }
+
+  // const disconnectWallet = () => {
+  //   setConnected(false);
+  //   setAccount(null);
+  // };
+
+  const { setUser, login, setLogin, setIsLoading } = useContext(UserContext);
+  const { publicKey, disconnect, signMessage } = useWallet();
+  const { setVisible } = useWalletModal();
+
+  useEffect(() => {
+    const handleClick = async () => {
+      if (publicKey && !login) {
+        const updatedUser: userInfo = {
+          name: publicKey.toBase58().slice(0, 6),
+          wallet: publicKey.toBase58(),
+          isLedger: false,
+        };
+
+        await sign(updatedUser);
       }
-    } else {
-      alert('MetaMask is not installed!');
+    }
+
+    handleClick();
+  }, [publicKey, login]);
+
+  const sign = async (updatedUser: userInfo) => {
+    try {
+      const connection = await walletConnect({ data: updatedUser });
+      if (!connection) return;
+      if (connection.nonce === undefined) {
+        const newUser = {
+          name: connection.name,
+          wallet: connection.wallet,
+          _id: connection._id,
+          avatar: connection.avatar,
+        };
+        setUser(newUser as userInfo);
+        setLogin(true);
+        return;
+      }
+
+      const msg = new TextEncoder().encode(
+        `Nonce to confirm: ${connection.nonce}`
+      );
+
+      const sig = await signMessage?.(msg);
+      const res = base58.encode(sig as Uint8Array);
+      const signedwallet = { ...connection, signature: res };
+      const confirm = await confirmWallet({ data: signedwallet });
+
+      if (confirm) {
+        setUser(confirm);
+        setLogin(true);
+        setIsLoading(false);
+      }
+
+      successAlert("You sign in successfully.");
+    } catch (error) {
+      errorAlert("Sign in failed.");
     }
   }
 
-  const disconnectWallet = () => {
-    setConnected(false);
-    setAccount(null);
-  };
+  const logOut = async () => {
+    if (typeof disconnect === 'function') await disconnect();
+
+    setUser({} as userInfo);
+    setLogin(false);
+    localStorage.clear();
+  }
 
   return (
     <>
@@ -118,11 +189,11 @@ const Header = () => {
                 >
                   How it works
                 </button>
-                {(!connected || !account) ? (
+                {(!login || !publicKey) ? (
                   <>
                     <button
                       className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
-                      onClick={connectWallet}
+                      onClick={() => setVisible(true)}
                     >
                       Connect <span className="hidden sm:block">Wallet</span>
                     </button>
@@ -130,12 +201,11 @@ const Header = () => {
                 ) : (
                   <button
                     className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
-                    onClick={disconnectWallet}
+                    onClick={logOut}
                   >
-                    {account?.slice(0, 6)}....{account?.slice(-4)}
+                    {publicKey.toBase58().slice(0, 4)}....{publicKey.toBase58().slice(-4)}
                   </button>
-                )
-                }
+                )}
                 <div>
                   <ThemeToggler />
                 </div>
@@ -144,29 +214,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <div
-        className={`flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none overflow-x-hidden overflow-y-auto transition-all duration-150 ${showModal
-          ? 'opacity-100 visible'
-          : 'opacity-0 invisible'
-          }`}
-      >
-        <div className="relative w-auto my-6 mx-auto max-w-3xl dark:bg-gray-dark dark:shadow-sticky-dark bg-white z-50">
-          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none">
-            <div className="relative p-6 flex-auto">
-              <div className="modal-content">
-                <h2 className="text-center mb-3 text-[20px] font-semibold">How It Works</h2>
-                <p className="m-[15px] font-medium">Pump prevents rugs by making sure that all created tokens are safe. Each coin on a pump is a fair-launch with no presale and no team allocation.</p>
-                <p className="m-[15px] font-medium">Step 1: pick a coin that you like</p>
-                <p className="m-[15px] font-medium">Step 2: buy the coin on the bonding curve</p>
-                <p className="m-[15px] font-medium">Step 3: sell at any time to lock in your profits or losses</p>
-                <p className="m-[15px] font-medium">Step 4: when enough people buy on the bonding curve it reaches a market cap of $69k</p>
-                <p className="m-[15px] font-medium">Step 5: $12k of liquidity is then deposited in BX Dex and burned</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full h-full absolute opacity-50 bg-black z-40" onClick={() => setShowModal(false)}></div>
-      </div>
+      <HowItWork showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 };

@@ -1,30 +1,28 @@
 import Image from "next/image"
-import { Token } from "@/types/token"
-import { users } from "@/utils/statics"
+import { coinInfo } from "@/types";
 import Link from "next/link";
 
-const TokenComponent = ({ token }: { token: Token }) => {
-    const user = users.find(user => user.id === token.creator);
+const TokenComponent = ({ token }: { token: coinInfo }) => {
     return (
         <>
-            <Link href={`/coin/${token.address}`}>
+            <Link href={`/coin/${token._id}`}>
                 <div className="card cursor-pointer">
                     <div className="dark:bg-black bg-white rounded-lg p-2.5 flex flex-col gap-2.5 shadow-md dark:shadow-blue-600">
                         <div className="relative rounded-lg">
                             <div className="bg-primary rounded-t-lg px-2.5 py-1 h-6 flex items-center gap-3 justify-between w-full z-10">
                                 <p className="text-white text-xxs-10 font-medium leading-none">
-                                    Market cap: ${(token.marketCap / 1000).toFixed(1)}k
+                                    Market cap: ${token.marketcap ? (token.marketcap / 1000).toFixed(1) : 0}k
                                 </p>
-                                {token.badge && (
+                                {/* {token.url && (
                                     <p className="flex items-center gap-1">
                                         <span>Badge</span>
                                         <Image src="/images/king.svg" alt="king" width={16} height={16} className="img-fluid w-3 sm:w-4 h-3 sm:h-4" />
                                     </p>
-                                )}
+                                )} */}
                             </div>
                             <div className="w-full h-full overflow-hidden">
                                 <Image
-                                    src={`/images/token-logos/${token.logo}`}
+                                    src={token.url}
                                     alt={token.name}
                                     width={240}
                                     height={176}
@@ -43,14 +41,14 @@ const TokenComponent = ({ token }: { token: Token }) => {
                             <div className="flex items-center gap-2 md:gap-2.5">
                                 <Image
                                     className="img-fluid w-6 md:w-8 h-6 md:h-8 rounded-full border-body-color border"
-                                    src={user && user.logo ? user.logo : '/images/creator-logos/default.png'}
+                                    src={typeof token.creator !== 'string'  && token.creator.avatar ? token.creator.avatar : '/images/creator-logos/default.png'}
                                     width={32}
                                     height={32}
-                                    alt={user ? user.username : 'Creator name'}
+                                    alt={typeof token.creator !== 'string' && token.creator.name ? token.creator.name : 'Creator Avatar'}
                                 />
                                 <div className="flex flex-col gap-1">
                                     <p className="text-body-color text-[9px] !leading-none font-normal">Creator</p>
-                                    <p className="text-[10px] !leading-none font-medium hover:underline">{users.find(user => user.id === token.creator)?.username}</p>
+                                    <p className="text-[10px] !leading-none font-medium hover:underline">{typeof token.creator !== 'string' ? token.creator.name : token.creator}</p>
                                 </div>
                             </div>
                         </div>

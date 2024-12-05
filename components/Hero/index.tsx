@@ -1,11 +1,12 @@
 'use client'
-import { tokens } from "@/utils/statics";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TokenComponent from "./Token";
-import { Token } from "@/types/token";
 import ResponsivePaginationComponent from "react-responsive-pagination";
 import 'react-responsive-pagination/themes/classic.css';
+import UserContext from "@/contexts/UserContext";
+import { getCoinsInfo } from "@/utils/api";
+import { coinInfo } from "@/types";
 
 enum SortMethods {
     lastTrade = 'Last Trade',
@@ -15,50 +16,46 @@ enum SortMethods {
 };
 
 const Hero = () => {
-    const [allTokens, setAllTokens] = useState<Token[]>(tokens);
-    const [paginatedTokens, setPaginatedTokens] = useState<Token[]>([]);
+    const { setIsLoading } = useContext(UserContext);
+    const [allTokens, setAllTokens] = useState<coinInfo[]>([]);
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<SortMethods>(SortMethods.lastTrade);
-
-    const handleClickSort = (sortMethod: SortMethods) => {
-        setSortBy(sortMethod);
-        setShowFilter(false);
-
-        const sortedTokens = [...allTokens].sort((a, b) => {
-            if (sortMethod === SortMethods.marketCap) return b.marketCap - a.marketCap;
-            // else if (sortMethod === SortMethods.creationTime)
-            // else if (sortMethod === SortMethods.lastReply)
-            // else if (sortMethod === SortMethods.lastTrade)
-            return 0;
-        });
-
-        setAllTokens(sortedTokens);
-        setCurrentPage(1);
-    }
-
-    const perPage = 4;
-    const [totalPage, setTotalPage] = useState<number>(Math.ceil(allTokens.length / perPage));
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [order, setOrder] = useState('desc');
+    const perPage = 4;
+    const [totalPage, setTotalPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
 
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearchTerm(searchTerm);
         }, 1000);
-        
+
         return () => {
             clearTimeout(handler);
         }
-    }, [searchTerm])
+    }, [searchTerm]);
 
     useEffect(() => {
-        const _tokens = allTokens.filter(token => token.name.includes(debouncedSearchTerm));
-        setTotalPage(Math.ceil(_tokens.length / perPage));
-        const startIndex = (currentPage - 1) * perPage;
-        const endIndex = startIndex + perPage;
-        setPaginatedTokens(_tokens.slice(startIndex, endIndex));
-    }, [currentPage, perPage, allTokens, debouncedSearchTerm]);
+        const fetchData = async () => {
+            const { coins, pagination } = await getCoinsInfo({ perPage, sortBy, searchTerm: debouncedSearchTerm, currentPage });
+            if (coins !== null) {
+                setTotalPage(pagination.totalPages);
+                setAllTokens(coins);
+                setIsLoading(true);
+            }
+        }
+
+        fetchData();
+    }, [perPage, sortBy, debouncedSearchTerm, currentPage]);
+
+    const handleClickSort = (sortMethod: SortMethods) => {
+        setSortBy(sortMethod);
+        setShowFilter(false);
+        setCurrentPage(1);
+    }
 
     return (
         <>
@@ -135,8 +132,8 @@ const Hero = () => {
                 </div>
                 <div className="container mt-[50px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 md:gap-x-6 gap-y-6 md:gap-y-7">
-                        {paginatedTokens.map(token => (
-                            <TokenComponent token={token} key={token.id} />
+                        {allTokens.map(token => (
+                            <TokenComponent token={token} key={token._id} />
                         ))}
                     </div>
                     {totalPage > 0 &&
