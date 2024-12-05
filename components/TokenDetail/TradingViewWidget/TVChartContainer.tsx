@@ -5,7 +5,7 @@ import { chartOverrides, disabledFeatures, enabledFeatures } from "@/utils/stati
 import { getDataFeed } from "./datafeed";
 import ReactLoading from "react-loading";
 import { twMerge } from "tailwind-merge";
-import { flare } from "viem/chains";
+// import { flare } from "viem/chains";
 import UserContext from "@/contexts/UserContext";
 
 export type TVChartContainerProps = {

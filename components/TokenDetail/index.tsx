@@ -28,8 +28,6 @@ const TokenDetail = () => {
         fetchData();
     }, [pathname]);
 
-    const [trade, setTrade] = useState<string>('buy');
-
     return (
         <>
             <section id="home"

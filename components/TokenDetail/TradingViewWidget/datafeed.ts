@@ -44,8 +44,8 @@ export function getDataFeed({
         resolveSymbol: async (
             symbolName,
             onSymbolResolvedCallback,
-            _onResolveErrorCallback,
-            _extension,
+            // _onResolveErrorCallback,
+            // _extension,
         ) => {
             console.log("[resolveSymbol]: Method call", symbolName);
 
@@ -113,9 +113,9 @@ export function getDataFeed({
                 onHistoryCallback(bars, {
                     noData: false,
                 });
-            } catch (error: any) {
+            } catch (error) {
                 console.log("[getBars]: Get error", error);
-                onErrorCallback(error);
+                onErrorCallback(error as string);
             }
         },
 

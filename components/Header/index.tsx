@@ -11,17 +11,17 @@ import { confirmWallet, walletConnect } from "@/utils/api";
 import { errorAlert, successAlert } from "../ToastGroup";
 import HowItWork from "../HowItWork";
 
-const velasChainData = {
-  chainId: '0x6A',
-  chainName: 'Velas EVM Mainnet',
-  nativeCurrency: {
-    name: 'Velas',
-    symbol: 'VLX',
-    decimals: 18,
-  },
-  rpcUrls: ['https://evmexplorer.velas.com/rpc'],
-  blockExplorerUrls: ['https://evmexplorer.velas.com'],
-}
+// const velasChainData = {
+//   chainId: '0x6A',
+//   chainName: 'Velas EVM Mainnet',
+//   nativeCurrency: {
+//     name: 'Velas',
+//     symbol: 'VLX',
+//     decimals: 18,
+//   },
+//   rpcUrls: ['https://evmexplorer.velas.com/rpc'],
+//   blockExplorerUrls: ['https://evmexplorer.velas.com'],
+// }
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
@@ -38,24 +38,24 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
 
-  const addVelasNetwork = async () => {
-    if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
-      try {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [velasChainData],
-        });
-        console.log('Velas network added successfully!');
-        return true;
-      } catch (e) {
-        console.log(e)
-        return false;
-      }
-    } else {
-      alert('MetaMask is not installed! Please install Metamask extension.');
-      return false;
-    }
-  };
+  // const addVelasNetwork = async () => {
+  //   if (typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask) {
+  //     try {
+  //       await window.ethereum.request({
+  //         method: 'wallet_addEthereumChain',
+  //         params: [velasChainData],
+  //       });
+  //       console.log('Velas network added successfully!');
+  //       return true;
+  //     } catch (e) {
+  //       console.log(e)
+  //       return false;
+  //     }
+  //   } else {
+  //     alert('MetaMask is not installed! Please install Metamask extension.');
+  //     return false;
+  //   }
+  // };
 
 
   // const connectWallet = async () => {
@@ -143,7 +143,7 @@ const Header = () => {
       }
 
       successAlert("You sign in successfully.");
-    } catch (error) {
+    } catch {
       errorAlert("Sign in failed.");
     }
   }

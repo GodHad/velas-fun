@@ -6,9 +6,7 @@ export const metadata: Metadata = {
   description: "Velas Fun Platform deploying memecoin",
 };
 
-const CoinPage = async ({ params }: { params: Promise<{address: string}> }) => {
-  const { address } = await params;
-
+const CoinPage = async () => {
   return (
     <>
       <TokenDetail />

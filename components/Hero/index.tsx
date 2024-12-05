@@ -21,7 +21,7 @@ const Hero = () => {
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<SortMethods>(SortMethods.lastTrade);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [order, setOrder] = useState('desc');
+    // const [order, setOrder] = useState('desc');
     const perPage = 4;
     const [totalPage, setTotalPage] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);

@@ -8,14 +8,12 @@ interface holderInfo {
 }
 
 export default function Holders({ param }: { param: string | null }) {
-    const [trades, setTrades] = useState<tradeInfo>({} as tradeInfo)
     const [holders, setHolders] = useState<holderInfo[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             if (param) {
                 const data: tradeInfo = await getTradeByCoin(param);
-                setTrades(data);
                 const agr = holderCalc(data.record);
                 setHolders(agr);
             }

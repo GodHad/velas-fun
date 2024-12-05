@@ -26,7 +26,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
         try {
             const balance = await getTokenBalance(user.wallet, token.token);
             setTokenBal(balance ? balance : 0);
-        } catch (error) {
+        } catch {
             setTokenBal(0);
         }
     }
