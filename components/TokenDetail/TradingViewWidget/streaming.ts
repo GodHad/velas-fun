@@ -12,7 +12,7 @@ import { queryClient } from "@/app/providers";
 import { Chart } from "@/types";
 
 let socket: Socket | undefined = undefined;
-let initialTimeStamp: number = new Date().getTime();
+// let initialTimeStamp: number = new Date().getTime();
 
 if (typeof window !== "undefined") {
     socket = io("http://localhost:5000/");
@@ -34,7 +34,7 @@ const channelToSubscription = new Map<number, SubscriptionItem>();
 if (socket) {
     socket.on("connect", () => {
         console.log("[socket] Connected", socket!.id);
-        initialTimeStamp = new Date().getTime();
+        // initialTimeStamp = new Date().getTime();
     });
 
     socket.on("disconnect", (reason) => {
