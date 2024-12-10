@@ -1,4 +1,4 @@
-import { userInfo, coinInfo, msgInfo, CoinResponse, replyInfo } from "@/types"
+import { userInfo, coinInfo, msgInfo, CoinResponse, replyInfo, followerInfo } from "@/types"
 import axios from 'axios';
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -99,3 +99,74 @@ export const uploadImage = async (url: string) => {
         return false;
     }
 };
+
+export const createNewCoin = async (data: coinInfo) => {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/coin/`, data);
+        return response.data;
+    } catch (error) {
+        return { error: 'error setting up the request' };
+    }
+}
+
+export const getUser = async ({ id }: { id: string }): Promise<any> => {
+    try {
+        const response = await axios.get(`${BACKEND_URL}/user/${id}`);
+        return response.data;
+    } catch (error) {
+        return { error: 'error setting up the request' }
+    }
+}
+
+export const getCoinsInfoBy = async (id: string): Promise<coinInfo[]> => {
+    const res = await axios.get<coinInfo[]>(`${BACKEND_URL}/coin/user/${id}`);
+    return res.data
+}
+
+export const getMessagesInfoBy = async (id: string): Promise<msgInfo[]> => {
+    try {
+        const response = await axios.get(`${BACKEND_URL}/feedback/user/${id}`);
+        return response.data;
+    } catch (error) {
+        return [];
+    }
+}
+
+export const getFollowers = async (param: string): Promise<followerInfo> => {
+    try {
+        const response = await axios.get(`${BACKEND_URL}/follow/${param}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return {
+            userId: '',
+            followers: []
+        }
+    }
+}
+
+export const followUser = async (userId: string, param: string): Promise<followerInfo> => {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/follow/${param}`, { followerId: userId });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return {
+            userId: '',
+            followers: []
+        }
+    }
+}
+
+export const unfollowUser = async (userId: string, param: string): Promise<followerInfo> => {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/follow/unfollow/${param}`, { followId: userId });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return {
+            userId: '',
+            followers: []
+        }
+    }
+}

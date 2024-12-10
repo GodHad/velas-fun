@@ -5,12 +5,14 @@ import { coinInfo } from "@/types";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import React, { useContext, useEffect, useState } from "react";
+import { useSocket } from "@/contexts/SocketContext";
 
 export default function TradeForm({ token }: { token: coinInfo }) {
     const [sol, setSol] = useState<string>('');
     const [isBuy, setIsBuy] = useState<number>(2);
     const [tokenBal, setTokenBal] = useState<number>(0);
     const { user } = useContext(UserContext);
+    const { socket } = useSocket();
     const wallet = useWallet();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,12 @@ export default function TradeForm({ token }: { token: coinInfo }) {
 
     const handleTrade = async () => {
         const mint = new PublicKey(token.token);
-        await swapTx(mint, wallet, sol, isBuy);
+        try {
+            await swapTx(mint, wallet, sol, isBuy);
+            socket?.emit('transaction', { isBuy, user: user.name, token: token.name, amount: sol, ticker: token.ticker })
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     useEffect(() => {

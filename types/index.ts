@@ -78,6 +78,7 @@ export interface recordInfo {
     price: number,
     tx: string,
 }
+
 export interface CharTable {
     table: {
         time: number;
@@ -88,6 +89,7 @@ export interface CharTable {
         volume: number;
     }[];
 }
+
 export interface Bar {
     time: number;
     low: number;
@@ -96,9 +98,18 @@ export interface Bar {
     close: number;
     volume: number;
 }
+
 export interface replyInfo {
     coinId: string;
     sender: string;
     msg: string;
     img?: string;
+}
+
+export interface followerInfo {
+    userId: string;
+    followers: {
+        _id: string;
+        follower: userInfo;
+    }[];
 }

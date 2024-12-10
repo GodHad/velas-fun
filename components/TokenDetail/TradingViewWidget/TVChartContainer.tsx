@@ -3,7 +3,6 @@ import { useContext, useEffect, useRef } from "react";
 import { ChartingLibraryWidgetOptions, IChartingLibraryWidget, ResolutionString, widget } from "@/public/libraries/charting_library";
 import { chartOverrides, disabledFeatures, enabledFeatures } from "@/utils/statics";
 import { getDataFeed } from "./datafeed";
-import ReactLoading from "react-loading";
 import { twMerge } from "tailwind-merge";
 // import { flare } from "viem/chains";
 import UserContext from "@/contexts/UserContext";
@@ -81,12 +80,7 @@ export const TVChartContainer = ({
         <div className="relative mb-[1px] h-[500px] w-full ">
             { isLoading ? (
                 <div className="z-9999 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-tizz-background">
-                    <ReactLoading
-                        height={20}
-                        width={50}
-                        type={"bars"}
-                        color={"#36d7b7"}
-                    />
+                    
                 </div>
             ) : null}
             <div

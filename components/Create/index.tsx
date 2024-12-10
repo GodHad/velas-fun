@@ -1,8 +1,11 @@
 'use client'
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from "next/image";
+import { createNewCoin, uploadImage } from "@/utils/api";
+import UserContext from "@/contexts/UserContext";
+import { coinInfo } from "@/types";
 
 interface FormInputs {
     name: string;
@@ -16,22 +19,26 @@ interface FormInputs {
 
 const CreateToken = () => {
     const router = useRouter();
-
-    const { register, getValues, handleSubmit, setValue, formState: { errors } } = useForm<FormInputs>();
+    const { user } = useContext(UserContext);
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormInputs>();
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
-    const [showModal, setShowModal] = useState<boolean>(false);
 
-    const [mainCurrency, setMainCurrency] = useState<boolean>(false);
+    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+        if (!previewSrc) return;
+        const url = await uploadImage(previewSrc)
+        if (url && user._id) {
+            const coin = {
+                ...data,
+                creator: user._id.toString(),
+                url: url,
+                reserveOne: 0,
+                reserveTwo: 0,
+                token: '',
+            } as coinInfo
 
-    const onSubmit: SubmitHandler<FormInputs> = (data) => {
-        console.log("Form Data: ", data);
-
-        setShowModal(true);
-
-        if (data.logo) {
-            const uploadedFile = data.logo;
-            console.log("Uploaded File:", uploadedFile);
+            await createNewCoin(coin);
         }
+            console.log("Uploaded File:", previewSrc, data);
     }
 
     const handleFileChange = (files: FileList | null) => {
@@ -202,7 +209,7 @@ const CreateToken = () => {
                                     id="description"
                                     placeholder="Enter Description"
                                     className="border rounded-xl bg-black-2 placeholder:text-gray-7 text-sm md:text-base px-5 py-4 w-full focus:outline-0 leading-5 h-[122px] mb-5 md:mb-2 dark:border-gray-700 border-gray-200 bg-transparent"
-                                    {...register('description')}
+                                    {...register('description', { required: 'Description is required' })}
                                 />
                             </div>
                             {errors.description && <p className="text-red-600">{errors.description.message}</p>}
@@ -216,61 +223,6 @@ const CreateToken = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-            <div
-                className={`flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none overflow-x-hidden overflow-y-auto transition-all duration-150 ${showModal
-                    ? 'opacity-100 visible'
-                    : 'opacity-0 invisible'
-                    }`}
-            >
-                <div className="relative w-auto my-6 mx-auto max-w-3xl dark:bg-gray-dark dark:shadow-sticky-dark bg-white z-50">
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none">
-                        <div className="relative p-6 flex-auto">
-                            <div className="modal-content">
-                                <h2 className="text-base sm:text-lg md:text-xl lg:text-[22px] font-semibold mb-5 sm:mb-6 text-white leading-5 sm:leading-6 md:leading-7">Choose how many [{getValues('name')}] you want to buy (optional)</h2>
-                                <p className="m-[15px] font-small">tip: its optional but buying a small amount of coins helps protect your coin from snipers</p>
-                                <div className="mb-2.5 relative">
-                                    <input type="number" placeholder="0.0 (optional)" className="border rounded-xl bg-black-2 placeholder:text-body-color text-sm md:text-base px-5 py-4 w-full focus:outline-0 leading-5 hide-arrows" />
-                                    {mainCurrency ?
-                                        <div className="absolute right-5 top-[16px] text-sm md:text-base font-normal flex gap-1.5 items-center leading-5">
-                                            <div className="flex item-center gap-1 rounded-full">
-                                                <span className="relative top-[2px] leading-4">{getValues('name')}</span>
-                                                <Image width={10} height={10} alt="Token Image" className="w-10 sm:w-10 h-10 sm:h-10 rounded-full" src={previewSrc!} />
-                                            </div>
-                                        </div>
-                                        :
-                                        <div className="absolute right-5 top-[16px] text-sm md:text-base text-white font-normal flex gap-1.5 items-center leading-5">
-                                            <div className="flex item-center gap-1 ng-star-inserted">
-                                                <span className="relative top-[2px] leading-4">VLX</span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                                                    <rect x="0.571289" width="20" height="20" rx="10" fill="#8247E5"></rect>
-                                                    <mask id="mask0_508_7931" maskUnits="userSpaceOnUse" x="4" y="4" width="13" height="12" style={{ maskType: 'luminance' }}>
-                                                        <path d="M16.5869 4.79248H4.58691V15.3082H16.5869V4.79248Z" fill="white"></path>
-                                                    </mask>
-                                                    <g mask="url(#mask0_508_7931)">
-                                                        <path d="M13.6473 7.99427C13.4275 7.86818 13.1465 7.86818 12.8979 7.99427L11.1471 9.03179L9.95827 9.69105L8.23987 10.725C8.02012 10.8511 7.73912 10.8511 7.49055 10.725L6.14681 9.90721C5.92705 9.78112 5.77214 9.52894 5.77214 9.24794V7.67724C5.77214 7.42507 5.89823 7.17649 6.14681 7.01798L7.49055 6.23263C7.7103 6.10654 7.9913 6.10654 8.23987 6.23263L9.58361 7.05041C9.80337 7.17649 9.95827 7.42867 9.95827 7.70967V8.74719L11.1471 8.05551V6.98916C11.1471 6.73699 11.021 6.48841 10.7724 6.3299L8.27229 4.85287C8.05254 4.72678 7.77154 4.72678 7.52297 4.85287L4.96158 6.36232C4.713 6.48841 4.58691 6.74059 4.58691 6.98916V9.93963C4.58691 10.1918 4.713 10.4404 4.96158 10.5989L7.49415 12.0759C7.7139 12.202 7.9949 12.202 8.24347 12.0759L9.96188 11.0708L11.1507 10.3791L12.8691 9.37403C13.0889 9.24794 13.3699 9.24794 13.6184 9.37403L14.9622 10.1594C15.1819 10.2855 15.3368 10.5376 15.3368 10.8186V12.3893C15.3368 12.6415 15.2107 12.8901 14.9622 13.0486L13.6509 13.834C13.4311 13.96 13.1501 13.96 12.9015 13.834L11.5542 13.0486C11.3344 12.9225 11.1795 12.6703 11.1795 12.3893V11.3842L9.9907 12.0759V13.1135C9.9907 13.3656 10.1168 13.6142 10.3654 13.7727L12.8979 15.2497C13.1177 15.3758 13.3987 15.3758 13.6473 15.2497L16.1798 13.7727C16.3996 13.6466 16.5545 13.3944 16.5545 13.1135V10.1306C16.5545 9.87839 16.4284 9.62981 16.1798 9.4713L13.6473 7.99427Z" fill="white">
-                                                        </path>
-                                                    </g>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    }
-                                    <br /><br />
-                                    <div className="text-[15px] font-medium leading-none">
-                                    </div>
-                                    <div >
-                                        <a className="text-gray-3 mb-6 text-right underline text-[10px] font-normal block cursor-pointer" onClick={() => setMainCurrency(prev => !prev)}>Switch to {mainCurrency ? 'VLX' : getValues('name')}</a>
-                                        <div className="flex gap-5">
-                                            <button type="button" className="rounded-lg border border-primary hover:bg-primary hover:text-white text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px]"> Cancel </button>
-                                            <button className="rounded-lg bg-primary hover:bg-white text-white hover:text-black-3 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px]"> Create Coin </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full h-full absolute opacity-50 bg-black z-40" onClick={() => setShowModal(false)}></div>
             </div>
         </section>
     )

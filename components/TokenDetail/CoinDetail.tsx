@@ -1,6 +1,7 @@
 import Image from "next/image";
 import moment from 'moment';
 import { coinInfo } from "@/types";
+import Link from "next/link";
 
 export default function CoinDetail({ token }: { token: coinInfo }) {
 
@@ -59,7 +60,7 @@ export default function CoinDetail({ token }: { token: coinInfo }) {
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Created By</p>
                                 <p
                                     className="text-sm lg:text-base font-medium lg:!leading-none hover:underline cursor-pointer">
-                                    {typeof token.creator !== 'string' && token.creator ? token.creator.name : ''}</p>
+                                    <Link href={`/profile/${typeof token.creator !== 'string' && token.creator ? token.creator._id : ''}`}>{typeof token.creator !== 'string' && token.creator ? token.creator.name : ''}</Link></p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-3">

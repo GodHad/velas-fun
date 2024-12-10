@@ -4,7 +4,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from "next/navigation";
-import { errorAlert, successAlert } from "@/components/ToastGroup";
+import { errorAlert, infoAlert, successAlert } from "@/components/ToastGroup";
 
 interface Context {
     socket?: Socket;
@@ -76,6 +76,16 @@ const SocketProvider = (props: { children: any }) => {
         setIsLoading(false);
     }
 
+    const createTransactionHandler = (data: any) => {
+        console.log("Create Transaction:", data);
+        setAlertState({
+            open: true,
+            message: `${data.user} ${data.isBuy === 2 ? 'bought' : 'sold'} ${data.amount} ${data.isBuy ? 'sol' : data.ticker}`,
+            severity: 'info'
+        });
+        infoAlert(`${data.user} ${data.isBuy === 2 ? 'bought' : 'sold'} ${data.amount} ${data.isBuy ? 'sol' : data.ticker}`);
+    }
+
     useEffect(() => {
 
         const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL!, {
@@ -114,11 +124,15 @@ const SocketProvider = (props: { children: any }) => {
                 createSuccessHandler(name, mint);
             });
 
-            socket?.on("TokenNotCreated", async (name: string, mint: string) => {
-                console.log("--------@ Token Not Created: ", name);
+            socket?.on('transaction', (data) => {
+                createTransactionHandler(data);
+            })
 
-                createFailedHandler(name, mint);
-            });
+            // socket?.on("TokenNotCreated", async (name: string, mint: string) => {
+            //     console.log("--------@ Token Not Created: ", name);
+
+            //     createFailedHandler(name, mint);
+            // });
 
             return () => {
                 socket?.off("Creation", createSuccessHandler);

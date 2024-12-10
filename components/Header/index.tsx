@@ -91,7 +91,7 @@ const Header = () => {
   //   setAccount(null);
   // };
 
-  const { setUser, login, setLogin, setIsLoading } = useContext(UserContext);
+  const { user, setUser, login, setLogin, setIsLoading } = useContext(UserContext);
   const { publicKey, disconnect, signMessage } = useWallet();
   const { setVisible } = useWalletModal();
 
@@ -199,12 +199,19 @@ const Header = () => {
                     </button>
                   </>
                 ) : (
-                  <button
-                    className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
-                    onClick={logOut}
-                  >
-                    {publicKey.toBase58().slice(0, 4)}....{publicKey.toBase58().slice(-4)}
-                  </button>
+                  <div className="relative connect-btn">
+                    <button
+                      className="rounded-md bg-primary px-4 py-2 md:px-6 md:py-2 text-base font-semibold duration-300 ease-in-out hover:bg-primary/80 text-white"
+                    >
+                      {publicKey.toBase58().slice(0, 4)}....{publicKey.toBase58().slice(-4)}
+                    </button>
+                    <div className="absolute top-10 right-0 mt-2 w-full rounded-md shadow-lg  bg-black border border-blue1 ring-1 ring-black ring-opacity-5 z-50 ng-star-inserted hidden text-white">
+                      <div role="none" className="py-0">
+                        <Link href={`/profile/${user._id}`} role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium bg-blue2 hover:bg-blue1 rounded-t-md text-left">View Profile</Link>
+                        <button role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium bg-blue2 hover:bg-blue1 rounded-b-md text-left" onClick={logOut}>Disconnect Wallet</button>
+                      </div>
+                    </div>
+                  </div>
                 )}
                 <div>
                   <ThemeToggler />

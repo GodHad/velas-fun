@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: 'localhost'
+      },
+      {
+        hostname: 'ipfs.fleek.co'
+      },
+      {
+        hostname: 'img.freepik.com'
       }
     ]
   }

@@ -38,6 +38,10 @@
   @apply flex h-9 min-w-[36px] items-center justify-center rounded-md bg-body-color bg-opacity-[15%] px-4 text-sm text-body-color transition hover:bg-primary hover:bg-opacity-100 hover:text-white
 }
 
-.token-pagination .item.active {
+.token-pagination .item.active {  
   @apply bg-primary text-white
+}
+
+.connect-btn:hover div {
+  display: block;
 }
