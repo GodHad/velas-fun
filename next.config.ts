@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
         hostname: 'img.freepik.com'
       }
     ]
+  },
+  rewrites: async () => {
+    return [
+      {
+        source: '/:path*',
+        destination: 'http://localhost:5000/:path*'
+      }
+    ]
   }
 };
 
