@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       }
     ]
   },
-  rewrites: async () => {
+  async rewrites() {
     return [
       {
         source: '/:path*',
