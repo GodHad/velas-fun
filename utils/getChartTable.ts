@@ -25,7 +25,7 @@ export async function getChartTable({
             throw new Error();
         }
         return res as ChartTable;
-    } catch (err) {
+    } catch {
         return Promise.reject(new Error("Failed at fetching charts"));
     }
 }

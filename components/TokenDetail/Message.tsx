@@ -1,14 +1,14 @@
 import Image from "next/image";
 import moment from "moment";
-import { msgInfo, userInfo } from "@/types";
+import { coinInfo, msgInfo, userInfo } from "@/types";
 import Link from "next/link";
 
-export default function Message({ message }: { message: msgInfo }) {
+export default function Message({ message, coinDisplay }: { message: msgInfo, coinDisplay?: boolean }) {
     return (
         <div className="dark:bg-gray-800 bg-gray-100 rounded-xl sm:rounded-2xl flex flex-col gap-5 lg:gap-6 p-4 sm:p-5">
             <div className="flex flex-col gap-3 lg:gap-4">
                 <div className="flex flex-col gap-2">
-                    <a className="flex items-center group text-sm lg:text-base font-normal">
+                    <div className="flex items-center group text-sm lg:text-base font-normal">
                         <Image
                             className="img-fluid w-5 h-5"
                             alt="sender avatar"
@@ -21,8 +21,9 @@ export default function Message({ message }: { message: msgInfo }) {
                                 <span className="text-yellow hover:text-yellow-500 ps-1.5 inline-flex gap-1 transition-all duration-500 ease-in-out hover:underline cursor-pointer"> {(message.sender as userInfo).name} </span>
                             </Link>
                             <span className="text-body-color">{moment(message.time).format('MMM DD, YYYY, hh:mm:ss')}</span>
+                            {coinDisplay && <Link href={`/coin/${(message.coinId as coinInfo).token}`}><span className="text-yellow">{(message.coinId as coinInfo).token}</span></Link>}
                         </div>
-                    </a>
+                    </div>
                     <div className="flex gap-4">
                         {message.img &&
                             <Image alt="comment-image" className="img-fluid w-40 h-40 object-cover rounded-2xl" src={message.img} width={160} height={160} />

@@ -9,8 +9,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { clusterApiUrl } from "@solana/web3.js";
-
-require("@solana/wallet-adapter-react-ui/styles.css");
+import '@solana/wallet-adapter-react-ui/styles.css'
 
 export const SolanaWalletProvider = ({ children }: { children: ReactNode }) => {
     // const network = WalletAdapterNetwork.Mainnet;

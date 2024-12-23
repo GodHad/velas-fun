@@ -3,11 +3,13 @@ import moment from 'moment';
 import { coinInfo } from "@/types";
 import Link from "next/link";
 
-export default function CoinDetail({ token }: { token: coinInfo }) {
+export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) {
 
     const handleCopyAddressClick = () => {
         navigator.clipboard.writeText(token.token);
     }
+
+    console.log(token.price, vlxPrice)
 
     return (
         <div className="rounded-xl sm:rounded-2xl p-4 mb-6 border dark:border-gray-700 border-gray-200">
@@ -41,7 +43,7 @@ export default function CoinDetail({ token }: { token: coinInfo }) {
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Price</p>
                                 <p className="text-sm lg:text-base font-medium lg:!leading-none text-green-1">
-                                    {token?.price?.toFixed(9)} USD
+                                    {token?.price?.toFixed(9)}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-1.5">
@@ -53,7 +55,7 @@ export default function CoinDetail({ token }: { token: coinInfo }) {
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Market cap</p>
-                                <p className="text-sm lg:text-base font-medium lg:!leading-none">${(token.reserveOne / 10_000_000_000_000).toFixed(2)}
+                                <p className="text-sm lg:text-base font-medium lg:!leading-none">{token.price ? `$${(vlxPrice * token.price * 1072892901).toFixed(2)}` : ''}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-1.5">

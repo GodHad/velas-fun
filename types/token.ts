@@ -32,5 +32,4 @@ export type Token = {
         likes: number;
         createdAt: string;
     }[];
-  };
-  
+};

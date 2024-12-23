@@ -1,19 +1,25 @@
 import Image from "next/image";
 import UserContext from "@/contexts/UserContext";
-import { getTokenBalance, swapTx } from "@/program/web3";
+import { getTokenBalance } from "@/program/web3";
 import { coinInfo } from "@/types";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
-import React, { useContext, useEffect, useState } from "react";
-import { useSocket } from "@/contexts/SocketContext";
+import { useContext, useEffect, useState } from "react";
+import { buyTokens, sellTokens } from "@/program/VelasFunContractService";
+import { hooks } from "@/connectors/metaMask";
+import { errorAlert, successAlert } from "../ToastGroup";
+import { useWeb3React } from "@web3-react/core";
+import Spinner from "../Common/Spinner";
 
 export default function TradeForm({ token }: { token: coinInfo }) {
+    const { connector } = useWeb3React();
     const [sol, setSol] = useState<string>('');
     const [isBuy, setIsBuy] = useState<number>(2);
     const [tokenBal, setTokenBal] = useState<number>(0);
+    const [isTrading, setIsTrading] = useState<boolean>(false);
     const { user } = useContext(UserContext);
-    const { socket } = useSocket();
-    const wallet = useWallet();
+
+    const { useAccount } = hooks;
+
+    const account = useAccount();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -34,10 +40,21 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     }
 
     const handleTrade = async () => {
-        const mint = new PublicKey(token.token);
         try {
-            await swapTx(mint, wallet, sol, isBuy);
-            socket?.emit('transaction', { isBuy, user: user.name, token: token.name, amount: sol, ticker: token.ticker })
+            if (!connector.provider || !account) {
+                errorAlert('Please connect your wallet')
+                return;
+            }
+
+            let res = false;
+            setIsTrading(true);
+            if (isBuy === 2) res = await buyTokens(connector.provider, account, token.token, sol);
+            else res = await sellTokens(connector.provider, account, token.token, sol);
+
+            if (res) successAlert('Sell tokens successfully');
+            else errorAlert('Failed to buy tokens');
+
+            setIsTrading(false);
         } catch (error) {
             console.error(error);
         }
@@ -45,6 +62,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
 
     useEffect(() => {
         getBalance();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -117,7 +135,13 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                         </div>
                     </>
                 }
-                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2" onClick={handleTrade}>Place trade </button>
+                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2" onClick={handleTrade} disabled={isTrading}>
+                    {
+                        isTrading ? 
+                        <Spinner />
+                        : 'Place trade'
+                    }
+                </button>
             </div>
         </div>
     )

@@ -1,15 +1,15 @@
-import { ComputeBudgetProgram, Connection, Keypair, PublicKey, SYSVAR_RENT_PUBKEY, Signer, SystemProgram, Transaction, TransactionResponse, VersionedTransaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js";
+import { Connection, PublicKey, SYSVAR_RENT_PUBKEY, SystemProgram, Transaction } from "@solana/web3.js";
 import { PROGRAM_ID } from "./cli/programId";
-import { AccountType, TOKEN_PROGRAM_ID, getAssociatedTokenAddress, ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { SwapAccounts, SwapArgs, swap } from "./cli/instructions/swap";
 import * as anchor from "@coral-xyz/anchor"
 import { ASSOCIATED_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
-import { WalletContextState, useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { WalletContextState } from '@solana/wallet-adapter-react';
 
 const curveSeed = "CurveConfiguration"
 const POOL_SEED_PREFIX = "liquidity_pool"
 
-export const connection = new Connection("https://devnet.helius-rpc.com/?api-key=44b7171f-7de7-4e68-9d08-eff1ef7529bd")
+export const connection = new Connection("https://devnet.helius-rpc.com/?api-key=89e93f40-3f43-43c5-b9c9-37ff3ecf590d")
 
 // const privateKey = base58.decode(process.env.PRIVATE_KEY!);
 
@@ -45,7 +45,7 @@ export const getTokenBalance = async (
 // Swap transaction
 export const swapTx = async (
   mint1: PublicKey, wallet: WalletContextState, amount: string, type: number
-): Promise<any> => {
+): Promise<unknown> => {
   console.log("========trade swap==============")
   // check the connection
   if (!wallet.publicKey || !connection) {
@@ -126,7 +126,7 @@ const getAssociatedTokenAccount = async (
   ownerPubkey: PublicKey,
   mintPk: PublicKey
 ): Promise<PublicKey> => {
-  let associatedTokenAccountPubkey = PublicKey.findProgramAddressSync(
+  const associatedTokenAccountPubkey = PublicKey.findProgramAddressSync(
     [
       ownerPubkey.toBuffer(),
       TOKEN_PROGRAM_ID.toBuffer(),
@@ -174,7 +174,7 @@ const getATokenAccountsNeedCreate = async (
   owner: anchor.web3.PublicKey,
   nfts: anchor.web3.PublicKey[]
 ) => {
-  let instructions = [],
+  const instructions = [],
     destinationAccounts = [];
   for (const mint of nfts) {
     const destinationPubkey = await getAssociatedTokenAccount(owner, mint);

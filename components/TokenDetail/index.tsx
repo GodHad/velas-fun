@@ -1,20 +1,22 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import CoinDetail from "./CoinDetail";
 import TradingViewWidget from "./TradingViewWidget";
 import { coinInfo } from "@/types";
 import { usePathname } from "next/navigation";
-import { getCoinInfo } from "@/utils/api";
+import { getCoinInfo, getVLXPrice } from "@/utils/api";
 import Thread from "./Thread";
 import TradeForm from "./TradeForm";
 import TokenOverview from "./TokenOverview";
 import Holders from "./Holders";
+import UserContext from "@/contexts/UserContext";
 
 const TokenDetail = () => {
     const pathname = usePathname();
     const [param, setParam] = useState<string>('');
     const [coin, setCoin] = useState<coinInfo | null>(null);
+    const [vlxPrice, setVLXPrice] = useState<number>(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,11 +24,19 @@ const TokenDetail = () => {
             const parameter = segments[segments.length - 1];
             setParam(parameter);
             const data = await getCoinInfo(parameter);
-            setCoin(data);
+            setCoin(data as coinInfo);
         }
 
         fetchData();
     }, [pathname]);
+
+    useEffect(() => {
+        const _getVLXPrice = async () => {
+            const price = await getVLXPrice();
+            setVLXPrice(Number(price));
+        }
+        _getVLXPrice()
+    }, [])
 
     return (
         <>
@@ -47,7 +57,7 @@ const TokenDetail = () => {
                     </Link>
                     {coin &&
                         <>
-                            <CoinDetail token={coin} />
+                            <CoinDetail token={coin} vlxPrice={vlxPrice} />
                             <div className="flex gap-5 flex-wrap lg:flex-nowrap">
                                 <div className="w-full">
                                     <TradingViewWidget coin={coin} />
@@ -57,7 +67,7 @@ const TokenDetail = () => {
                                 <div className="lg:max-w-[380px] w-auto">
                                     <TradeForm token={coin} />
                                     <TokenOverview token={coin} />
-                                    <Holders param={param} />
+                                    <Holders param={param} token={coin} />
                                 </div>
                             </div>
                         </>

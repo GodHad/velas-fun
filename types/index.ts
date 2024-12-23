@@ -1,5 +1,3 @@
-import { PublicKey } from "@solana/web3.js"
-
 export type ChartTable = {
     table: {
         open: number;
@@ -24,18 +22,22 @@ export interface userInfo {
     name: string,
     wallet: string,
     avatar?: string,
-    isLedger?: Boolean,
+    isLedger?: boolean,
     signature?: string,
+    follower?: number;
+    bio: string;
+}
+
+export interface Pagination {
+    currentPage: string;
+    perPage: string;
+    totalItems: number;
+    totalPages: number;
 }
 
 export interface CoinResponse {
     coins: coinInfo[];
-    pagination: {
-        currentPage: string;
-        perPage: string;
-        totalItems: number;
-        totalPages: number;
-    }
+    pagination: Pagination;
 }
 
 export interface coinInfo {
@@ -67,7 +69,6 @@ export interface msgInfo {
 export interface tradeInfo {
     creator: string | coinInfo,
     record: recordInfo[],
-
 }
 
 export interface recordInfo {

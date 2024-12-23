@@ -3,13 +3,14 @@
 import { ThemeProvider } from "next-themes";
 import React, { ReactNode, useState } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { Web3ReactProvider } from "@web3-react/core";
 import { ToastContainer } from "react-toastify";
 import { PageProvider } from "@/contexts/PageContext";
-import { SolanaWalletProvider } from "@/contexts/SolanaWalletProvider";
 import UserContext from "@/contexts/UserContext";
 import { msgInfo, userInfo } from "@/types";
 import "dotenv/config";
 import SocketProvider from "@/contexts/SocketContext";
+import { hooks, metaMask } from "@/connectors/metaMask";
 
 export const queryClient = new QueryClient();
 
@@ -20,9 +21,10 @@ export default function Providers({ children }: { children: ReactNode }) {
   const [imageUrl, setImageUrl] = useState('/upload-bg.png');
   const [isCreated, setIsCreated] = useState(false);
   const [messages, setMessages] = useState<msgInfo[]>([]);
+  const [vlxPrice, setVLXPrice] = useState<number>(0);
 
   return (
-    <SolanaWalletProvider>
+    <Web3ReactProvider connectors={[[metaMask, hooks]]}>
       <SocketProvider>
         <QueryClientProvider client={queryClient}>
           <PageProvider>
@@ -40,6 +42,8 @@ export default function Providers({ children }: { children: ReactNode }) {
                 setLogin,
                 isLoading,
                 setIsLoading,
+                vlxPrice,
+                setVLXPrice
               }}
             >
               <ThemeProvider attribute="class" enableSystem={false} defaultTheme="dark">
@@ -50,6 +54,6 @@ export default function Providers({ children }: { children: ReactNode }) {
           </PageProvider>
         </QueryClientProvider>
       </SocketProvider>
-    </SolanaWalletProvider>
+    </Web3ReactProvider>
   );
 }

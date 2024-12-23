@@ -6,6 +6,10 @@ import Image from "next/image";
 import { createNewCoin, uploadImage } from "@/utils/api";
 import UserContext from "@/contexts/UserContext";
 import { coinInfo } from "@/types";
+import { hooks, metaMask } from "@/connectors/metaMask";
+import { errorAlert, successAlert, warningAlert } from "../ToastGroup";
+import { createToken } from "@/program/VelasFunContractService";
+import { useWeb3React } from "@web3-react/core";
 
 interface FormInputs {
     name: string;
@@ -18,15 +22,20 @@ interface FormInputs {
 }
 
 const CreateToken = () => {
+    const { connector } = useWeb3React();
     const router = useRouter();
     const { user } = useContext(UserContext);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormInputs>();
+    const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm<FormInputs>();
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+
+    const { useAccount } = hooks;
+
+    const account = useAccount();
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         if (!previewSrc) return;
         const url = await uploadImage(previewSrc)
-        if (url && user._id) {
+        if (url && user._id && account && connector.provider) {
             const coin = {
                 ...data,
                 creator: user._id.toString(),
@@ -35,10 +44,16 @@ const CreateToken = () => {
                 reserveTwo: 0,
                 token: '',
             } as coinInfo
-
-            await createNewCoin(coin);
+            const result = await createToken(connector.provider, account, coin);
+            if (result) {
+                successAlert('Created Coin Successfully');
+                reset();
+                setPreviewSrc(null)
+            }
+            else errorAlert('Failed to create coin');
+        } else {
+            warningAlert('Please check your wallet connection')
         }
-            console.log("Uploaded File:", previewSrc, data);
     }
 
     const handleFileChange = (files: FileList | null) => {

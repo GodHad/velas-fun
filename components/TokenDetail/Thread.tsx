@@ -1,13 +1,15 @@
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import moment from "moment";
-import { coinInfo, tradeInfo, userInfo } from "@/types";
+import { coinInfo, msgInfo, tradeInfo, userInfo } from "@/types";
 import UserContext from "@/contexts/UserContext";
 import { getMessageByCoin, getTradeByCoin } from "@/utils/api";
 import ReplyModal from "./ReplyModal";
 import { useSocket } from "@/contexts/SocketContext";
 import Message from "./Message";
 import Link from "next/link";
+import ResponsivePaginationComponent from "react-responsive-pagination";
+import 'react-responsive-pagination/themes/classic.css';
 
 export default function Thread({ param, coin }: { param: string, coin: coinInfo }) {
     const [trades, setTrades] = useState<tradeInfo>({} as tradeInfo);
@@ -15,27 +17,68 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
     const { user, messages, setMessages } = useContext(UserContext);
     const [showModal, setShowModal] = useState<boolean>(false);
     const { socket } = useSocket();
+
+    const perPage = 30;
+    const [totalPage, setTotalPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
     useEffect(() => {
         const fetchData = async () => {
             if (param) {
                 if (showing === 'thread') {
-                    const data = await getMessageByCoin(param);
-                    setMessages(data);
+                    const data = await getMessageByCoin(param, perPage, currentPage);
+                    setMessages(data.messages);
+                    setTotalPage(data.pagination.totalPages)
                 } else {
-                    const data = await getTradeByCoin(param);
-                    setTrades(data);
+                    const data = await getTradeByCoin(param, perPage, currentPage);
+                    setTrades(data.trade);
+                    setTotalPage(data.pagination.totalPages);
                 }
             }
         }
         fetchData();
-    }, [showing, param]);
+    }, [showing, param, setMessages, perPage, currentPage]);
 
     useEffect(() => {
-        socket?.on('new-post', data => {
+        const handler = (data: { isBuy: number, user: userInfo, token: coinInfo, amount: number, ticker: string, price: number, tx: string }) => {
+            const { isBuy, user, amount, price, tx } = data;
+            if (data.token._id === coin._id && trades.record) {
+                setTrades({
+                    ...trades,
+                    record: [
+                        {
+                            holder: user,
+                            holdingStatus: isBuy,
+                            time: new Date(),
+                            amount: amount,
+                            price: price,
+                            tx: tx,
+                        },
+                        ...trades.record,
+                    ],
+                });
+            }
+        };
+    
+        socket?.on('transaction', handler);
+    
+        return () => {
+            socket?.off('transaction', handler);
+        };
+    }, [socket, trades, coin]);    
+
+    useEffect(() => {
+        const newPostHandler = (data: msgInfo) => {
             if (coin._id === data.coinId)
                 setMessages([...messages, { ...data }])
-        });
-    })
+        }
+
+        socket?.on('new-post', newPostHandler);
+
+        return () => {
+            socket?.off('new-post', newPostHandler);
+        }
+    }, [socket])
 
     return (
         <>
@@ -81,6 +124,23 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                 <Message message={message} key={`reply-${index}`} />
                             ))
                         }
+                        <div
+                            className="wow fadeInUp -mx-4 flex flex-wrap mt-10"
+                            data-wow-delay=".15s"
+                        >
+                            <div className="w-full px-4">
+                                <ResponsivePaginationComponent
+                                    className="token-pagination"
+                                    pageItemClassName="item"
+                                    pageLinkClassName="link"
+                                    activeItemClassName="active"
+                                    disabledItemClassName="disabled"
+                                    current={currentPage}
+                                    total={totalPage}
+                                    onPageChange={setCurrentPage}
+                                />
+                            </div>
+                        </div>
                         <button className="bg-primary text-white rounded-md py-2 px-4" onClick={() => setShowModal(true)}>Post a reply</button>
                         <ReplyModal showModal={showModal} setShowModal={setShowModal} token={coin} user={user} />
                     </>
@@ -97,7 +157,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                 </div>
                             </div>
                             <hr className="border border-gray-200 dark:border-gray-700 line my-2" />
-                            <div className="flex flex-col justify-start px-3">
+                            {/* <div className="flex flex-col justify-start px-3">
                                 <div className="flex flex-row justify-between items-center">
                                     <p className="mr-4">Filter by size</p>
                                     <label className="switch m-2">
@@ -105,7 +165,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                         <span className="slider"></span>
                                     </label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="mb-3 lg:mb-0">
                             <div className="overflow-auto bg-gray-2 rounded-xl sm:rounded-2xl mb-5 md:mb-6 lg:mb-8 ng-star-inserted">
@@ -135,8 +195,8 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">
                                                     <span className={`${transaction.holdingStatus === 2 ? 'text-green-500' : 'text-red-500'}`}> {transaction.holdingStatus === 2 ? 'Buy' : 'Sell'} </span>
                                                 </td>
-                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount * transaction.price / 100).toFixed(2) : (transaction.amount * transaction.price / 1_000_000).toFixed(2)}</td>
-                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.amount}</td>
+                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount / 1_000_000_000).toFixed(3) : (transaction.amount * transaction.price / 1_000_000_000).toFixed(3)}</td>
+                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount / transaction.price / 1_000_000).toFixed(3) : (transaction.amount / 1_000_000).toFixed(3)}</td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">{moment(transaction.time).fromNow()}</td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4 text-center">
                                                     <a target="_blank" className="hover:underline" href={`https://explorer.solana.com/tx/${transaction.tx}`}>{transaction.tx.slice(0, 4)}....{transaction.tx.slice(-4)}</a>
@@ -145,6 +205,23 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                         ))}
                                     </tbody>
                                 </table>
+                                <div
+                                    className="wow fadeInUp -mx-4 flex flex-wrap mt-10"
+                                    data-wow-delay=".15s"
+                                >
+                                    <div className="w-full px-4">
+                                        <ResponsivePaginationComponent
+                                            className="token-pagination"
+                                            pageItemClassName="item"
+                                            pageLinkClassName="link"
+                                            activeItemClassName="active"
+                                            disabledItemClassName="disabled"
+                                            current={currentPage}
+                                            total={totalPage}
+                                            onPageChange={setCurrentPage}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

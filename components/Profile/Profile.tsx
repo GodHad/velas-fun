@@ -1,25 +1,32 @@
 'use client'
-import UserContext from "@/contexts/UserContext";
-import { coinInfo, followerInfo, userInfo } from "@/types";
-import { followUser, getCoinsInfoBy, getFollowers, getMessagesInfoBy, getUser, unfollowUser } from "@/utils/api";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CoinBlog } from "@/components/Common/CoinBlog";
 import { usePathname } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import ResponsivePaginationComponent from "react-responsive-pagination";
+import 'react-responsive-pagination/themes/classic.css';
+import { CoinBlog } from "@/components/Common/CoinBlog";
 import Message from "../TokenDetail/Message";
+import EditModal from "./EditModal";
+import UserContext from "@/contexts/UserContext";
+import { coinInfo, followerInfo, userInfo } from "@/types";
+import { followUser, getCoinsInfoBy, getFollowers, getFollowingUsers, getHoldingBy, getMessagesInfoBy, getUser, unfollowUser, UserHolding } from "@/utils/api";
 
 export default function Profile() {
-    const { user, imageUrl, setMessages, messages, setImageUrl } = useContext(UserContext)
+    const { user, setMessages, messages } = useContext(UserContext)
     const pathname = usePathname();
     const [param, setParam] = useState<string | null>(null);
     const [index, setIndex] = useState<userInfo>({} as userInfo);
     const [option, setOption] = useState<number>(1);
     const [data, setData] = useState<coinInfo[]>([]);
-    const [isModal, setIsModal] = useState<boolean>(false);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [coinHeld, setCoinHeld] = useState([]);
+    const [holding, setHolding] = useState<UserHolding[]>([]);
     const [followers, setFollowers] = useState<followerInfo | null>(null);
+    const [followings, setFollowings] = useState<userInfo[] | null>(null);
+    const [isModal, setIsModal] = useState<boolean>(false);
+
+    const perPage = 30;
+    const [totalPage, setTotalPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
     useEffect(() => {
         const segments = pathname.split('/');
@@ -29,7 +36,7 @@ export default function Profile() {
             const handle = async () => {
                 try {
                     const response = await getUser({ id });
-                    setIndex(response);
+                    setIndex(response as userInfo);
                 } catch (error) {
                     console.error("Error fetching user: ", error);
                 }
@@ -40,37 +47,52 @@ export default function Profile() {
     }, [pathname]);
 
     useEffect(() => {
+        if (user._id === param) setIndex(user)
+    }, [user])
+
+    useEffect(() => {
         const fetchData = async () => {
             if (param) {
+                const res = await getHoldingBy(param, perPage, currentPage);
+                setHolding(res.holdings);
+                setTotalPage(res.pagination.totalPages);
+            }
+        }
+
+        fetchData();
+    }, [param]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (param) {
+                if (option === 1) {
+                    const res = await getHoldingBy(param, perPage, currentPage);
+                    setHolding(res.holdings);
+                    setTotalPage(res.pagination.totalPages)
+                }
                 if (option === 2) {
-                    const messages = await getMessagesInfoBy(param);
-                    setMessages(messages)
+                    const res = await getMessagesInfoBy(param, perPage, currentPage);
+                    setMessages(res.messages)
+                    setTotalPage(res.pagination.totalPages)
                 }
                 if (option === 4) {
-                    const coinsBy = await getCoinsInfoBy(param);
-                    setData(coinsBy);
+                    const res = await getCoinsInfoBy(param, perPage, currentPage);
+                    setData(res.coins);
+                    setTotalPage(res.pagination.totalPages)
                 }
                 if (option === 5) {
                     const followers = await getFollowers(param);
                     setFollowers(followers);
                 }
+                if (option === 6) {
+                    const followings = await getFollowingUsers(param);
+                    setFollowings(followings);
+                }
             }
         }
 
         fetchData();
-    }, [option]);
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files && event.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setImageUrl(url);
-
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
-        }
-    };
+    }, [option, perPage, currentPage]);
 
     const handleFollow = async () => {
         if (user._id && param) {
@@ -88,7 +110,7 @@ export default function Profile() {
 
     return (
         <section
-            className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pt-[120px] pb-[280px] md:pt-[150px] xl:pt-[180px] xl:pb-[300px] 2xl:pt-[210px] 2xl:pb-[350px]">
+            className={`dark:bg-gray-dark bg-white relative ${isModal ? '' : 'z-10'} overflow-hidden pt-[120px] pb-[280px] md:pt-[150px] xl:pt-[180px] xl:pb-[300px] 2xl:pt-[210px] 2xl:pb-[350px]`}>
             <div className="h-full w-full ng-star-inserted">
                 <div className="flex justify-center">
                     <div className="shadow-md rounded-lg p-3 mt-5 w-full sm:max-w-lg mx-auto flex flex-col sm:flex-row gap-5">
@@ -103,20 +125,22 @@ export default function Profile() {
                         </div>
                         <div className="flex-1">
                             <div className="flex justify-between items-center">
-                                <h2 className="text-xl sm:text-2xl font-semibold">{index.name}</h2>
-                                {user._id !== param && (followers && user._id && followers?.followers.map(follower => follower._id).includes(user._id) ?
-                                    <button className="flex items-center rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold px-4 py-2 bg-primary" onClick={handleFollow}>
-                                        <span>Follow</span>
+                                <h2 className="text-xl sm:text-2xl font-semibold">{user._id !== param ? index.name : user.name}</h2>
+                                <span className="text-sm">{user._id !== param ? index.bio : user.bio}</span>
+                                {user._id !== param && (followers && user._id && followers?.followers.map(follower => follower.follower._id).indexOf(user._id) >= 0 ?
+                                    <button className="flex items-center rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold px-4 py-2 bg-primary text-white" onClick={handleUnfollow}>
+                                        <span>Unfollow</span>
                                     </button>
                                     :
-                                    <button className="flex items-center rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold px-4 py-2 bg-primary" onClick={handleUnfollow}>
-                                        <span>Unollow</span>
+                                    <button className="flex items-center rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold px-4 py-2 bg-primary text-white" onClick={handleFollow}>
+                                        <span>Follow</span>
                                     </button>
                                 )}
                             </div>
                             <p className="mt-1">{followers ? followers.followers.length : 0} followers</p>
                             {user._id === param &&
-                                <button className="border border-blue-1 rounded-lg p-1.5 mt-1 flex whitespace-nowrap ng-star-inserted">Edit Profile
+                                <button className="border border-blue-1 rounded-lg p-1.5 mt-1 flex whitespace-nowrap ng-star-inserted" onClick={() => setIsModal(true)}>
+                                    Edit Profile
                                     <span>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="{1.5}"
@@ -156,7 +180,7 @@ export default function Profile() {
                 <div className="flex justify-center">
                     <div className="flex flex-col">
                         <p className="text-xs sm:text-sm md:text-base border border-blue-1 rounded-lg p-2.5 mt-1">{index.wallet}</p>
-                        <div className="flex justify-end">
+                        {/* <div className="flex justify-end">
                             <a target="_blank" className="mt-2 inline-flex cursor-pointer items-center space-x-2 border-b border-transparent hover:border-white" href={`https://solscan.io/address/${index.wallet}`}>
                                 <span>View on Holesky</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="size-4">
@@ -164,42 +188,64 @@ export default function Profile() {
                                         d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"></path>
                                 </svg>
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="flex justify-center">
                     <div className="w-full sm:max-w-3xl mx-auto py-3 sm:p-5 md:p-6 shadow-md rounded-lg">
                         <div
                             className="profile-scroll flex justify-start sm:justify-center whitespace-nowrap overflow-x-auto px-0 pb-4 gap-2">
-                            <button className={`tab-button text-sm sm:text-base text-gray-500 py-2 px-2 sm:px-3 font-semibold border-b-2 ${option === 1 ? 'border-blue-600' : 'border-transparent'}`} onClick={() => setOption(1)}>
+                            <button className={`tab-button text-sm sm:text-base py-2 px-2 sm:px-3 font-semibold ${option === 1 ? 'bg-primary text-white' : 'border-transparent text-gray-500'}`} onClick={() => setOption(1)}>
                                 Coins Held
                             </button>
                             {user._id === param &&
-                                <button className={`tab-button text-sm sm:text-base text-gray-500 py-2 px-2 sm:px-3 font-semibold border-b-2 ${option === 2 ? 'border-blue-600' : 'border-transparent'}`} onClick={() => setOption(2)}>Replies </button>
+                                <button className={`tab-button text-sm sm:text-base py-2 px-2 sm:px-3 font-semibold ${option === 2 ? 'bg-primary text-white' : 'border-transparent text-gray-500'}`} onClick={() => setOption(2)}>Replies </button>
                             }
                             {/* <button
-                                className={`tab-button text-sm sm:text-base text-gray-500 py-2 px-2 sm:px-3 font-semibold border-b-2 ${option === 3 ? 'border-blue-600' : 'border-transparent'}`} onClick={() => setOption(3)}>
+                                className={`tab-button text-sm sm:text-base py-2 px-2 sm:px-3 font-semibold ${option === 3 ? 'bg-primary text-white' : 'border-transparent text-gray-500'}`} onClick={() => setOption(3)}>
                                 Notifications
                             </button> */}
                             <button
-                                className={`tab-button text-sm sm:text-base text-gray-500 py-2 px-2 sm:px-3 font-semibold border-b-2 ${option === 4 ? 'border-blue-600' : 'border-transparent'}`} onClick={() => setOption(4)}>
+                                className={`tab-button text-sm sm:text-base py-2 px-2 sm:px-3 font-semibold ${option === 4 ? 'bg-primary text-white' : 'border-transparent text-gray-500'}`} onClick={() => setOption(4)}>
                                 Coins Created
                             </button>
                             <button
-                                className={`tab-button text-sm sm:text-base text-gray-500 py-2 px-2 sm:px-3 font-semibold border-b-2 ${option === 5 ? 'border-blue-600' : 'border-transparent'}`} onClick={() => setOption(5)}>
+                                className={`tab-button text-sm sm:text-base py-2 px-2 sm:px-3 font-semibold ${option === 5 ? 'bg-primary text-white' : 'border-transparent text-gray-500'}`} onClick={() => setOption(5)}>
                                 Followers
                             </button>
                             <button
-                                className={`tab-button text-sm sm:text-base text-gray-500 py-2 px-2 sm:px-3 font-semibold border-b-2 ${option === 6 ? 'border-blue-600' : 'border-transparent'}`} onClick={() => setOption(6)}>
+                                className={`tab-button text-sm sm:text-base py-2 px-2 sm:px-3 font-semibold ${option === 6 ? 'bg-primary text-white' : 'border-transparent text-gray-500'}`} onClick={() => setOption(6)}>
                                 Following
                             </button>
                         </div>
                         <div>
+                            {option === 1 && (
+                                holding.map(_holding => (
+                                    <div className="mt-2 ng-star-inserted" key={_holding.coin._id}>
+                                        <div className="flex flex-row justify-between p-3">
+                                            <div className="flex justify-start">
+                                                <div className="mx-4 flex items-center">
+                                                    <Image width={36} height={36} alt="Profile Picture" className="rounded-full w-8 h-8 mr-1" src={_holding.coin.url} />
+                                                </div>
+                                                <div className="flex items-center">
+                                                    <p>{`${Math.abs(_holding.totalAmount / 10_000_000_000_000).toFixed(3)}% ${_holding.coin.ticker}`}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-end items-center">
+                                                <div className="flex">
+                                                    <Link href={`/coin/${_holding.coin.token}`} className="hover:underline">[view coin]</Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr className="border-b border-gray-1" />
+                                    </div>
+                                ))
+                            )}
                             {option === 2 && (
                                 <div className="flex flex-col justify-center gap-3">
                                     {
                                         messages.map((message, index) => (
-                                            <Message message={message} key={`reply-${index}`} />
+                                            <Message message={message} key={`reply-${index}`} coinDisplay={true} />
                                         ))
                                     }
                                 </div>
@@ -208,7 +254,7 @@ export default function Profile() {
                                 <div className="justify-center">
                                     {
                                         data.map((coin, index) => (
-                                            <Link key={index} href={`/trading/${coin?.token}`}>
+                                            <Link key={index} href={`/tokens/${coin?.token}`}>
                                                 <CoinBlog coin={coin} componentKey="coin" />
                                             </Link>
                                         ))
@@ -228,17 +274,57 @@ export default function Profile() {
                                                             <span className="font-semibold hover:underline cursor-pointer">{follower.follower.name}</span>
                                                         </Link>
                                                     </div>
-                                                    <p className="text-sm text-gray-500 ml-3"> Followers</p>
+                                                    <p className="text-sm text-gray-500 ml-3"> {follower.follower.follower} Followers</p>
                                                 </div>
                                             </div>
                                         ))
                                     }
                                 </div>
                             }
+                            {option === 6 && followings &&
+                                <div className="flex flex-col justify-center">
+                                    {
+                                        followings.map((following, index) => (
+                                            <div className="w-auto" key={index}>
+                                                <div className="flex justify-between items-center mt-4 gap-3 ng-star-inserted">
+                                                    <div className="flex items-center">
+                                                        <Image alt="Profile Picture"
+                                                            width={10} height={10} className="rounded-full w-10 h-10 mr-3 ng-star-inserted" src={following.avatar ? following.avatar : '/images/creator-logos/default.png'} />
+                                                        <Link href={`/profile/${following._id}`}>
+                                                            <span className="font-semibold hover:underline cursor-pointer">{following.name}</span>
+                                                        </Link>
+                                                    </div>
+                                                    <p className="text-sm text-gray-500 ml-3">{following.follower} Followers</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            }
+                            {option < 5 && totalPage > 0 &&
+                                <div
+                                    className="wow fadeInUp -mx-4 flex flex-wrap mt-10"
+                                    data-wow-delay=".15s"
+                                >
+                                    <div className="w-full px-4">
+                                        <ResponsivePaginationComponent
+                                            className="token-pagination"
+                                            pageItemClassName="item"
+                                            pageLinkClassName="link"
+                                            activeItemClassName="active"
+                                            disabledItemClassName="disabled"
+                                            current={currentPage}
+                                            total={totalPage}
+                                            onPageChange={setCurrentPage}
+                                        />
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
+            {isModal && user._id && <EditModal userId={user._id} closeModal={() => { setIsModal(false) }} />}
         </section>
     )
 }

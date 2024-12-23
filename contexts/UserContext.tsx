@@ -2,29 +2,33 @@
 import { msgInfo, userInfo } from '@/types';
 import { createContext } from 'react';
 
-// interface WalletContextType {
-//     user : userInfo;
-//     setUser: (value: userInfo)=> void;
-
-
-// }
-// const walletContext = createContext<WalletContextType | undefined> ;
-
-// export default walletContext;
-
 const UserContext = createContext({
     user: {} as userInfo,
-    setUser: (value: userInfo) => { },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setUser: (_value: userInfo) => {},
+
     login: false,
-    setLogin: (value: boolean) => { },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setLogin: (_value: boolean) => {},
+
     isLoading: false,
-    setIsLoading: (value: boolean) => { },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setIsLoading: (_value: boolean) => {},
+    
     imageUrl: '/upload-bg.png',
-    setImageUrl: (value: string) => { },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setImageUrl: (_value: string) => {},
+
     isCreated: false,
-    setIsCreated: (value: boolean) => { },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setIsCreated: (_value: boolean) => {},
+
     messages: [] as msgInfo[],
-    setMessages: (value: msgInfo[]) => {},
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setMessages: (_value: msgInfo[]) => {}, 
+
+    vlxPrice: 0,
+    setVLXPrice: (_value: number) => {},
 })
 
 export default UserContext;

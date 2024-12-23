@@ -2,7 +2,6 @@
 "use client"
 import { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from "next/navigation";
 import { errorAlert, infoAlert, successAlert } from "@/components/ToastGroup";
 
@@ -10,19 +9,26 @@ interface Context {
     socket?: Socket;
     counter?: number;
     randValue?: number;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setRandValue?: Function;
-    userArr?: any[];
+    userArr?: unknown[];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setUserArr?: Function;
     playerNumber?: number;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setPlayerNumber?: Function;
     isLoading?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setIsLoading?: Function;
     isShowModal?: string;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setIsShowModal?: Function;
     currentDepositAmount?: number;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setCurrentDepositAmount?: Function;
     numberDecimals?: number;
     alertState?: AlertState;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     setAlertState?: Function;
 }
 
@@ -30,16 +36,16 @@ const context = createContext<Context>({});
 
 export const useSocket = () => useContext(context);
 
-const SocketProvider = (props: { children: any }) => {
+const SocketProvider = (props: React.PropsWithChildren) => {
     const [socket, setSocket] = useState<Socket>();
     const [counter, setCounter] = useState<number>(1);
     const [randValue, setRandValue] = useState<number>(0);
-    const [userArr, setUserArr] = useState<any[]>();
+    const [userArr, setUserArr] = useState<unknown[]>();
     const [playerNumber, setPlayerNumber] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isShowModal, setIsShowModal] = useState('');
     const [currentDepositAmount, setCurrentDepositAmount] = useState(0);
-    const [numberDecimals, setNumberDecimals] = useState(3);
+    const numberDecimals = 3;
     const [alertState, setAlertState] = useState<AlertState>({
         open: false,
         message: '',
@@ -47,8 +53,6 @@ const SocketProvider = (props: { children: any }) => {
     })
     
     const router = useRouter();
-    const wallet = useWallet();
-    const { connection } = useConnection();
 
     const connectionUpdatedHandler = (data: number) => {
         setCounter(data);
@@ -76,14 +80,15 @@ const SocketProvider = (props: { children: any }) => {
         setIsLoading(false);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const createTransactionHandler = (data: any) => {
         console.log("Create Transaction:", data);
         setAlertState({
             open: true,
-            message: `${data.user} ${data.isBuy === 2 ? 'bought' : 'sold'} ${data.amount} ${data.isBuy ? 'sol' : data.ticker}`,
+            message: `${data.user.name} ${data.isBuy === 2 ? 'bought' : 'sold'} ${data.amount} ${data.isBuy === 2 ? 'VLX' : data.ticker}`,
             severity: 'info'
         });
-        infoAlert(`${data.user} ${data.isBuy === 2 ? 'bought' : 'sold'} ${data.amount} ${data.isBuy ? 'sol' : data.ticker}`);
+        infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
     }
 
     useEffect(() => {
@@ -121,7 +126,7 @@ const SocketProvider = (props: { children: any }) => {
             socket?.on("TokenCreated", async (name: string, mint: string) => {
                 console.log("--------@ Token Created!: ", name);
 
-                createSuccessHandler(name, mint);
+                createSuccessHandler(name, mint.slice(0, 6));
             });
 
             socket?.on('transaction', (data) => {

@@ -6,6 +6,7 @@ import { getDataFeed } from "./datafeed";
 import { twMerge } from "tailwind-merge";
 // import { flare } from "viem/chains";
 import UserContext from "@/contexts/UserContext";
+import { useSocket } from "@/contexts/SocketContext";
 
 export type TVChartContainerProps = {
     name: string;
@@ -21,10 +22,11 @@ export const TVChartContainer = ({
     pairIndex,
     token
 }: TVChartContainerProps) => {
+    const { socket } = useSocket();
     const chartContainerRef =
         useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
     const tvWidgetRef = useRef<IChartingLibraryWidget | null>(null);
-    const {isLoading, setIsLoading} = useContext(UserContext);
+    const { isLoading, setIsLoading } = useContext(UserContext);
 
     useEffect(() => {
         if (!chartContainerRef.current) {
@@ -35,11 +37,11 @@ export const TVChartContainer = ({
         }
         const elem = chartContainerRef.current;
         console.log("localhost host", location.host)
-        if(name){
+        if (name) {
             const widgetOptions: ChartingLibraryWidgetOptions = {
                 symbol: name,
                 debug: false,
-                datafeed: getDataFeed({ pairIndex, name, token }),
+                datafeed: getDataFeed({ pairIndex, name, token, socket }),
                 theme: "dark",
                 locale: "en",
                 container: elem,
@@ -57,16 +59,16 @@ export const TVChartContainer = ({
                 custom_css_url: "/tradingview-chart.css",
                 overrides: chartOverrides,
                 interval: "1D" as ResolutionString,
-    
+
             };
-    
+
             tvWidgetRef.current = new widget(widgetOptions);
             tvWidgetRef.current.onChartReady(function () {
                 setIsLoading(false);
                 const priceScale = tvWidgetRef.current?.activeChart().getPanes()[0].getMainSourcePriceScale();
                 priceScale?.setAutoScale(true)
             });
-            
+
             return () => {
                 if (tvWidgetRef.current) {
                     tvWidgetRef.current.remove();
@@ -78,9 +80,9 @@ export const TVChartContainer = ({
 
     return (
         <div className="relative mb-[1px] h-[500px] w-full ">
-            { isLoading ? (
+            {isLoading ? (
                 <div className="z-9999 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-tizz-background">
-                    
+
                 </div>
             ) : null}
             <div
