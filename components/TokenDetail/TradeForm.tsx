@@ -3,7 +3,7 @@ import UserContext from "@/contexts/UserContext";
 import { getTokenBalance } from "@/program/web3";
 import { coinInfo } from "@/types";
 import { useContext, useEffect, useState } from "react";
-import { buyTokens, sellTokens } from "@/program/VelasFunContractService";
+import { buyTokens, sellTokens, getTokenAmount } from "@/program/VelasFunContractService";
 import { hooks } from "@/connectors/metaMask";
 import { errorAlert, successAlert } from "../ToastGroup";
 import { useWeb3React } from "@web3-react/core";
@@ -32,8 +32,9 @@ export default function TradeForm({ token }: { token: coinInfo }) {
 
     const getBalance = async () => {
         try {
-            const balance = await getTokenBalance(user.wallet, token.token);
-            setTokenBal(balance ? balance : 0);
+            if (!account || !connector.provider) return;
+            const balance = await getTokenAmount(connector.provider, account, token.token)
+            setTokenBal(balance);
         } catch {
             setTokenBal(0);
         }
@@ -63,7 +64,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     useEffect(() => {
         getBalance();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [connector, account]);
 
     return (
         <div className="rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:mt-3 mb-4 border dark:border-gray-700 border-gray-200">

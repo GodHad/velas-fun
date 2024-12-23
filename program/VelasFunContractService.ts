@@ -166,6 +166,22 @@ export const sellTokens = async (provider: any, account: string, token: string, 
     }
 }
 
+export const getTokenAmount = async (provider: any, account: string, token: string): Promise<number> => {
+    try {
+        const web3 = new Web3(provider);
+        const tokenContract = new web3.eth.Contract(MemecoinABI, token);
+
+        const balance = await tokenContract.methods.balanceOf(account).call();
+
+        const decimals = await tokenContract.methods.decimals().call();
+        const tokenAmount = web3.utils.toBigInt(balance) / (web3.utils.toBigInt(10) ** (web3.utils.toBigInt(decimals)));
+        return Number(tokenAmount);
+    } catch (error) {
+        console.error("Failed to get token balance: ", error);
+        return 0;
+    }
+}
+
 const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
     try {
         const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
