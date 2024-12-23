@@ -6,7 +6,7 @@ import { boughtTokens, createNewCoin, soldTokens } from "@/utils/api";
 import { coinInfo } from "@/types";
 import axios from "axios";
 
-const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL
+const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || '';
 const JWT = process.env.NEXT_PUBLIC_PINATA_PRIVATE_JWT;
 
 const VelasFunContract: Contract = {
@@ -66,7 +66,7 @@ export const createToken = async (
             from: account,
             to: VelasFunContract.address,
             value: creationFee,
-            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, metadataURI).encodeABI(),
+            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI).encodeABI(),
             gasPrice: gasPrice.toString()
         }
 
@@ -190,12 +190,21 @@ const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
             return;
         }
 
+        const web3 = new Web3(provider);
+        const tokenContract = new web3.eth.Contract(MemecoinABI, tokenAddress);
+
+        const tokenURI = await tokenContract.methods.tokenURI().call();
+        const options: {symbol: string, image: string} = (await axios.get(PINATA_GATEWAY_URL + tokenURI)).data;
+
         const success = await provider.request({
             method: 'wallet_watchAsset',
             params: {
                 type: 'ERC20',
                 options: {
                     address: tokenAddress,
+                    symbol: options.symbol,
+                    decimals: 6,
+                    image: options.image
                 },
             },
         });

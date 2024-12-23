@@ -133,7 +133,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                         </div>
                     </>
                 }
-                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2" onClick={handleTrade} disabled={isTrading}>
+                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden" onClick={handleTrade} disabled={isTrading}>
                     {
                         isTrading ? 
                         <Spinner />
