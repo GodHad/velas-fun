@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import CoinDetail from "./CoinDetail";
 import TradingViewWidget from "./TradingViewWidget";
@@ -10,7 +10,6 @@ import Thread from "./Thread";
 import TradeForm from "./TradeForm";
 import TokenOverview from "./TokenOverview";
 import Holders from "./Holders";
-import UserContext from "@/contexts/UserContext";
 
 const TokenDetail = () => {
     const pathname = usePathname();

@@ -1,8 +1,6 @@
 import Image from "next/image";
-import UserContext from "@/contexts/UserContext";
-import { getTokenBalance } from "@/program/web3";
 import { coinInfo } from "@/types";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { buyTokens, sellTokens, getTokenAmount } from "@/program/VelasFunContractService";
 import { hooks } from "@/connectors/metaMask";
 import { errorAlert, successAlert } from "../ToastGroup";
@@ -15,7 +13,6 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     const [isBuy, setIsBuy] = useState<number>(2);
     const [tokenBal, setTokenBal] = useState<number>(0);
     const [isTrading, setIsTrading] = useState<boolean>(false);
-    const { user } = useContext(UserContext);
 
     const { useAccount } = hooks;
 

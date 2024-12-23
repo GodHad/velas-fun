@@ -1,4 +1,5 @@
 import { coinInfo, userInfo } from "@/types";
+import Image from "next/image";
 
 interface CoinBlogProps {
     coin: coinInfo;
@@ -8,7 +9,7 @@ interface CoinBlogProps {
 export const CoinBlog: React.FC<CoinBlogProps> = ({ coin, componentKey }) => {
     return (
         <div className="flex w-[380px] items-center justify-center hover:border-collapse pt-2 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ">
-            <img src={coin?.url} alt="image" className="w-[110px]  px-3" />
+            <Image width={110} height={110} src={coin?.url} alt="image" className="px-3" />
             {/* <img src="/bonkz10157.png" alt="" className="w-[110px]  px-3" /> */}
             <div>
                 <div className="flex">

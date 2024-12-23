@@ -108,7 +108,7 @@ export function getDataFeed({
                     return;
                 }
         
-                let bars: Bar[] = [];
+                const bars: Bar[] = [];
                 chartTable.table.forEach((bar: Bar) => {
                     if (bar.time >= from && bar.time < to) {
                         bars.push({ ...bar, time: bar.time * 1000 });

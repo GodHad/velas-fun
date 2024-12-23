@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { userInfo, recordInfo, coinInfo } from "@/types";
-import { getRecordByCoin, getTradeByCoin } from "@/utils/api";
+import { getRecordByCoin } from "@/utils/api";
 import { useSocket } from "@/contexts/SocketContext";
 
 interface holderInfo {
@@ -11,6 +11,15 @@ interface holderInfo {
         dev?: boolean;
     };
     totalAmount: number;
+}
+
+interface backendRecordInfo {
+    token: coinInfo;
+    user: userInfo;
+    isBuy: number;
+    amount: number;
+    price: number;
+    tx: string;
 }
 
 export default function Holders({ param, token }: { param: string | null, token: coinInfo }) {
@@ -66,7 +75,7 @@ export default function Holders({ param, token }: { param: string | null, token:
     }, [records]);
 
     useEffect(() => {
-        const handleNewRecord = (data: any) => {
+        const handleNewRecord = (data: backendRecordInfo) => {
             if (data.token._id !== param) return ;
             const newRecord: recordInfo = {
                 holder: data.user,
