@@ -1,7 +1,7 @@
 import { userInfo, coinInfo, msgInfo, CoinResponse, replyInfo, followerInfo, Pagination, tradeInfo, recordInfo } from "@/types"
 import axios from 'axios';
 
-export const BACKEND_URL = '';
+export const BACKEND_URL = '/api';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createNewCoin = async (txHash: string, coin: coinInfo) => {
