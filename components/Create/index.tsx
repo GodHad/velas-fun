@@ -10,6 +10,7 @@ import { hooks } from "@/connectors/metaMask";
 import { errorAlert, successAlert, warningAlert } from "../ToastGroup";
 import { createToken } from "@/program/VelasFunContractService";
 import { useWeb3React } from "@web3-react/core";
+import Modal from "./Modal";
 
 interface FormInputs {
     name: string;
@@ -25,14 +26,16 @@ const CreateToken = () => {
     const { connector } = useWeb3React();
     const router = useRouter();
     const { user } = useContext(UserContext);
-    const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm<FormInputs>();
+    const { register, handleSubmit, getValues, setValue, formState: { errors }, reset } = useForm<FormInputs>();
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+    const [isModal, setIsModal] = useState<boolean>(false);
+    const [data, setData] = useState<FormInputs | null>(null);
 
     const { useAccount } = hooks;
 
     const account = useAccount();
 
-    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+    const createTokenCallback = async (amount: number) => {
         if (!previewSrc) return;
         const url = await uploadImage(previewSrc)
         if (url && user._id && account && connector.provider) {
@@ -44,16 +47,22 @@ const CreateToken = () => {
                 reserveTwo: 0,
                 token: '',
             } as coinInfo
-            const result = await createToken(connector.provider, account, coin);
+            const result = await createToken(connector.provider, account, coin, amount);
             if (result) {
                 successAlert('Created Coin Successfully');
                 reset();
                 setPreviewSrc(null)
             }
             else errorAlert('Failed to create coin');
+            setIsModal(false);
         } else {
             warningAlert('Please check your wallet connection')
         }
+    }
+
+    const onSubmit: SubmitHandler<FormInputs> = async (_data) => {
+        setData(_data);
+        setIsModal(true)
     }
 
     const handleFileChange = (files: FileList | null) => {
@@ -239,6 +248,7 @@ const CreateToken = () => {
                     </form>
                 </div>
             </div>
+            <Modal showModal={isModal} setShowModal={setIsModal} createTokenCallback={createTokenCallback} tokenTicker={getValues('ticker')} tokenImage={previewSrc || ''} />
         </section>
     )
 }

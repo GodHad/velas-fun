@@ -1,15 +1,29 @@
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import moment from 'moment';
 import { coinInfo } from "@/types";
 import Link from "next/link";
+import { useSocket } from "@/contexts/SocketContext";
 
 export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) {
+    const { socket } = useSocket();
 
     const handleCopyAddressClick = () => {
         navigator.clipboard.writeText(token.token);
     }
 
-    console.log(token.price, vlxPrice)
+    const [tokenPrice, setTokenPrice] = useState<number>(token.price || 0)
+
+    useEffect(() => {
+        const handlePrice = (data: { price: number }) => {
+            setTokenPrice(data.price)
+        }
+        socket?.on('transaction', handlePrice);
+
+        return () => {
+            socket?.off('update-bonding-curve', handlePrice);
+        }
+    }, [socket]);
 
     return (
         <div className="rounded-xl sm:rounded-2xl p-4 mb-6 border dark:border-gray-700 border-gray-200">
@@ -43,7 +57,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Price</p>
                                 <p className="text-sm lg:text-base font-medium lg:!leading-none text-green-1">
-                                    {token?.price?.toFixed(9)}
+                                    {tokenPrice.toFixed(9)}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-1.5">
@@ -55,7 +69,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Market cap</p>
-                                <p className="text-sm lg:text-base font-medium lg:!leading-none">{token.price ? `$${(vlxPrice * token.price * 1072892901).toFixed(2)}` : ''}
+                                <p className="text-sm lg:text-base font-medium lg:!leading-none">${(vlxPrice * tokenPrice * 1072892901).toFixed(2)}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-1.5">
@@ -108,7 +122,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                                 <a className="flex items-center group">
                                     <Image
                                         className="img-fluid w-6 md:w-8 h-6 md:h-8 rounded-full border-body-color border"
-                                        src={(typeof token.creator !== 'string' && token.creator &&  token.creator.avatar) ? token.creator.avatar : '/images/creator-logos/default.png'}
+                                        src={(typeof token.creator !== 'string' && token.creator && token.creator.avatar) ? token.creator.avatar : '/images/creator-logos/default.png'}
                                         width={16} height={16} alt={typeof token.creator !== 'string' && token.creator ? token.creator.name : 'Creator name'} />
                                     <span
                                         className="text-sm lg:text-base font-medium lg:!leading-none ps-1.5 inline-flex gap-1 cursor-pointer">

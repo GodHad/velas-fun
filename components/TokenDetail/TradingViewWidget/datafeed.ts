@@ -134,7 +134,8 @@ export function getDataFeed({
             const resolutionInSeconds = getResolutionInSeconds(resolution);
         
             socket?.on(`price-update-${symbolInfo.name}`, (priceUpdate) => {
-                const currentTime = Math.floor(Date.now() / 1000) - 60;
+                const lastTime = new Date(priceUpdate.lastTime).getTime();
+                const currentTime = Math.floor(lastTime / 1000);
                 const alignedTime = Math.floor(currentTime / resolutionInSeconds) * resolutionInSeconds * 1000; 
                 const price = priceUpdate.price;
         
@@ -185,13 +186,11 @@ export function getDataFeed({
     };
 }
 
-const getResolutionInSeconds = (resolution: string): number => {
-    if (resolution === "24h") return 24 * 60 * 60;
-    if (resolution === "4h") return 4 * 60 * 60;
-    if (resolution === "1h") return 60 * 60;
-    if (resolution === "45m") return 45 * 60;
-    if (resolution === "15m") return 15 * 60;
-    if (resolution === "5m") return 5 * 60;
-    return 60;
-}
+const getResolutionInSeconds = (resolution: string) => {
+    if (resolution.toLowerCase().endsWith("y")) return parseInt(resolution) * 86400 * 30 * 12;
+    if (resolution.toLowerCase().endsWith("m")) return parseInt(resolution) * 86400 * 30;
+    if (resolution.toLowerCase().endsWith("d")) return parseInt(resolution) * 86400;
+    if (resolution.toLowerCase().endsWith("h")) return parseInt(resolution) * 3600;
+    return parseInt(resolution) * 60;
+};
 

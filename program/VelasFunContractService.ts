@@ -17,9 +17,10 @@ const VelasFunContract: Contract = {
 const web3Service = Web3Service.getInstance();
 const contract = web3Service.getContractInterface(VelasFunContract);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const uploadMetadata = async (data: coinInfo): Promise<any> => {
     const urlSeg = data.url.split('/');
-    const url = `${PINATA_GATEWAY_URL}/${urlSeg[urlSeg.length - 1]}`;
+    const url = PINATA_GATEWAY_URL + urlSeg[urlSeg.length - 1];
     const metadata = {
         name: data.name,
         symbol: data.ticker,
@@ -47,7 +48,8 @@ export const createToken = async (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     provider: any,
     account: string,
-    coin: coinInfo
+    coin: coinInfo,
+    amount: number
 ) => {
     try {
         const web3 = new Web3(provider)
@@ -55,18 +57,21 @@ export const createToken = async (
         const gasPrice = await web3.eth.getGasPrice()
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
+        console.log(Number(creationFee) + Number(web3.utils.toWei(amount, "ether")))
         const transaction: {
             from: string;
             to: string;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             value: any;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: any;
             gasPrice: string;
             gas?: bigint;
         } = {
             from: account,
             to: VelasFunContract.address,
-            value: creationFee,
-            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI).encodeABI(),
+            value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
+            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, amount).encodeABI(),
             gasPrice: gasPrice.toString()
         }
 
@@ -83,6 +88,7 @@ export const createToken = async (
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const buyTokens = async (provider: any, account: string, token: string, amount: string) => {
     try {
         const web3 = new Web3(provider)
@@ -91,7 +97,9 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         const transaction: {
             from: string;
             to: string;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             value: any;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: any;
             gasPrice: string;
             gas?: bigint;
@@ -115,6 +123,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sellTokens = async (provider: any, account: string, token: string, amount: string) => {
     try {
         const web3 = new Web3(provider);
@@ -144,6 +153,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         const transaction: {
             from: string;
             to: string;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: any;
             gasPrice: string;
             gas?: bigint;
@@ -166,6 +176,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getTokenAmount = async (provider: any, account: string, token: string): Promise<number> => {
     try {
         const web3 = new Web3(provider);
@@ -182,6 +193,7 @@ export const getTokenAmount = async (provider: any, account: string, token: stri
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
     try {
         const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
@@ -193,8 +205,8 @@ const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
         const web3 = new Web3(provider);
         const tokenContract = new web3.eth.Contract(MemecoinABI, tokenAddress);
 
-        const tokenURI = await tokenContract.methods.tokenURI().call();
-        const options: {symbol: string, image: string} = (await axios.get(PINATA_GATEWAY_URL + tokenURI)).data;
+        const tokenURI = (await tokenContract.methods.tokenURI().call()) as string;
+        const options: { symbol: string, image: string } = (await axios.get(tokenURI)).data;
 
         const success = await provider.request({
             method: 'wallet_watchAsset',
@@ -220,6 +232,7 @@ const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
     }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const waitForTransaction = async (txHash: string, web3: any, timeout = 300000): Promise<boolean> => {
     const start = Date.now();
     const pollInterval = 1000;
@@ -243,6 +256,7 @@ const waitForTransaction = async (txHash: string, web3: any, timeout = 300000): 
 };
 
 const waitApprove = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tokenContract: any,
     account: string,
     tokenAmount: number,
