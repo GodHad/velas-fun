@@ -1,7 +1,8 @@
 'use client'
+import dynamic from 'next/dynamic';
 import { ApexOptions } from 'apexcharts';
 import React, { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 const options: ApexOptions = {
   colors: ['#10B981', '#DC3545'],
