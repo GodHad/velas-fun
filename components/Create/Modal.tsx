@@ -1,5 +1,15 @@
 import Image from "next/image";
 import { useState } from "react";
+import Spinner from "../Common/Spinner";
+
+interface ModalProps {
+    showModal: boolean;
+    setShowModal: (_: boolean) => void;
+    createTokenCallback: (_: number) => void;
+    tokenTicker: string;
+    tokenImage: string;
+    isLoading: boolean;
+}
 
 const Modal = ({
     showModal,
@@ -7,13 +17,8 @@ const Modal = ({
     createTokenCallback,
     tokenTicker,
     tokenImage,
-}: ({
-    showModal: boolean,
-    setShowModal: (_: boolean) => void,
-    createTokenCallback: (_: number) => void,
-    tokenTicker: string,
-    tokenImage: string,
-})) => {
+    isLoading
+}: ModalProps) => {
     const [amount, setAmount] = useState<string>('');
     const [isVLX, setIsVLX] = useState<boolean>(true);
 
@@ -69,8 +74,8 @@ const Modal = ({
                                                 <button type="button" className="rounded-lg bg-blue-2 border border-blue-1 hover:bg-blue-1 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px]" onClick={() => setShowModal(false)}>
                                                     Cancel
                                                 </button>
-                                                <button className="rounded-lg bg-primary hover:text-black-3 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px] text-white" onClick={handleCreate}>
-                                                    Create Coin
+                                                <button className="rounded-lg bg-primary hover:text-black-3 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px] text-white disabled:cursor-not-allowed disabled:opacity-50" onClick={handleCreate} disabled={isLoading}>
+                                                    {isLoading ? <Spinner /> : 'Create Coin'}
                                                 </button>
                                             </div>
                                         </div>

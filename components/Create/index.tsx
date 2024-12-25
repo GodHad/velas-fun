@@ -11,6 +11,7 @@ import { errorAlert, successAlert, warningAlert } from "../ToastGroup";
 import { createToken } from "@/program/VelasFunContractService";
 import { useWeb3React } from "@web3-react/core";
 import Modal from "./Modal";
+import Spinner from "../Common/Spinner";
 
 interface FormInputs {
     name: string;
@@ -30,6 +31,7 @@ const CreateToken = () => {
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
     const [isModal, setIsModal] = useState<boolean>(false);
     const [data, setData] = useState<FormInputs | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { useAccount } = hooks;
 
@@ -47,6 +49,9 @@ const CreateToken = () => {
                 reserveTwo: 0,
                 token: '',
             } as coinInfo
+
+            setIsLoading(true);
+            
             const result = await createToken(connector.provider, account, coin, amount);
             if (result) {
                 successAlert('Created Coin Successfully');
@@ -54,7 +59,9 @@ const CreateToken = () => {
                 setPreviewSrc(null)
             }
             else errorAlert('Failed to create coin');
+            
             setIsModal(false);
+            setIsLoading(false);
         } else {
             warningAlert('Please check your wallet connection')
         }
@@ -240,15 +247,15 @@ const CreateToken = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-12 flex justify-end items-end">
-                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50">
-                                    Create Coin
+                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" disabled={isLoading}>
+                                    {isLoading ? <Spinner /> : 'Create Coin'}
                                 </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <Modal showModal={isModal} setShowModal={setIsModal} createTokenCallback={createTokenCallback} tokenTicker={getValues('ticker')} tokenImage={previewSrc || ''} />
+            <Modal showModal={isModal} setShowModal={setIsModal} createTokenCallback={createTokenCallback} tokenTicker={getValues('ticker')} tokenImage={previewSrc || ''} isLoading={isLoading} />
         </section>
     )
 }

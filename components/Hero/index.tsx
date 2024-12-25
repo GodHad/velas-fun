@@ -61,7 +61,7 @@ const Hero = () => {
         <>
             <section
                 id="home"
-                className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pb-16 pt-[120px] md:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px] 2xl:pb-[200px] 2xl:pt-[210px]"
+                className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pb-16 pt-[120px]"
             >
                 <div className="container">
                     <div className="-mx-4 flex flex-wrap">
@@ -92,7 +92,7 @@ const Hero = () => {
                     </div>
                 </div>
             </section >
-            <section id="features" className="py-16 md:py-20 lg:py-28">
+            <section id="features" className="py-12">
                 <div className="container flex justify-between items-center">
                     <div className="">
                         <input
