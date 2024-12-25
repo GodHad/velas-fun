@@ -715,7 +715,7 @@ const Terms = () => {
                     <section className="space-y-6">
                         <h2 className="text-2xl font-semibold  mb-4">29. Contact</h2>
                         <p>29.1. If you have questions, feedback or complaints you can contact us via our
-                            Support team through <a href="https://t.me/pumpfunsupport" className="underline hover:text-gray-300"
+                            Support team through <a href="https://t.me/pumpfunsupport" className="underline hover:00"
                                 target="_blank" rel="noopener noreferrer">https://t.me/pumpfunsupport</a></p>
                         <p>29.2. We will contact you using the details you provide to us or that we may
                             reasonably find, such as via directly messaging you on X (formerly known as Twitter).</p>

@@ -113,7 +113,7 @@ const CreateToken = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid grid-cols-12 gap-[0px]">
                             <div className="col-span-12 sm:col-span-3 lg:col-span-2 mb-5 sm:mb-0">
-                                <label htmlFor="logo" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">Upload File <span className="error text-red-600">*</span></label>
+                                <label htmlFor="logo" className="block  text-sm md:text-base pb-2.5 leading-6">Upload File <span className="error text-red-600">*</span></label>
                                 <div className="center flex flex-col items-center justify-center w-full border dark:border-gray-700 border-gray-200 rounded-xl bg-black-2 text-gray-700 text-sm md:text-base" onDrop={handleDrop} onDragOver={handleDragOver}>
                                     <div className="flex flex-col items-center gap-4 justify-center p-4 md:p-6">
                                         <Image src="/images/upload.svg" alt="Upload Image" width="50" height="50" className="cursor-pointer" onClick={() => document.getElementById('logo')?.click()} />
@@ -157,7 +157,7 @@ const CreateToken = () => {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-[20px] md:gap-[30px] xl:gap-[50px]">
                                     <div>
                                         <div className="mb-[22px]">
-                                            <label htmlFor="token_name" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                            <label htmlFor="token_name" className="block  text-sm md:text-base pb-2.5 leading-6">
                                                 Name <span className="error text-red-600">*</span>
                                             </label>
                                             <input
@@ -170,7 +170,7 @@ const CreateToken = () => {
                                             {errors.name && <p className="text-red-600">{errors.name.message}</p>}
                                         </div>
                                         <div className="mb-[22px]">
-                                            <label htmlFor="token_ticker" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                            <label htmlFor="token_ticker" className="block  text-sm md:text-base pb-2.5 leading-6">
                                                 Ticker <span className="error text-red-600">*</span>
                                             </label>
                                             <input
@@ -183,7 +183,7 @@ const CreateToken = () => {
                                             {errors.ticker && <p className="text-red-600">{errors.ticker.message}</p>}
                                         </div>
                                         <div className="mb-[22px]">
-                                            <label htmlFor="token_telegram" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                            <label htmlFor="token_telegram" className="block  text-sm md:text-base pb-2.5 leading-6">
                                                 Telegram Link
                                             </label>
                                             <input
@@ -197,7 +197,7 @@ const CreateToken = () => {
                                     </div>
                                     <div>
                                         <div className="mb-[22px]">
-                                            <label htmlFor="token_twitter" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                            <label htmlFor="token_twitter" className="block  text-sm md:text-base pb-2.5 leading-6">
                                                 Twitter Link
                                             </label>
                                             <input
@@ -209,7 +209,7 @@ const CreateToken = () => {
                                             />
                                         </div>
                                         <div className="mb-[22px]">
-                                            <label htmlFor="token_website" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                            <label htmlFor="token_website" className="block  text-sm md:text-base pb-2.5 leading-6">
                                                 Website Link
                                             </label>
                                             <input
@@ -226,7 +226,7 @@ const CreateToken = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-12">
-                                <label htmlFor="description" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                <label htmlFor="description" className="block  text-sm md:text-base pb-2.5 leading-6">
                                     Description <span className="error text-red-600">*</span>
                                 </label>
                                 <textarea
@@ -240,7 +240,7 @@ const CreateToken = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-12 flex justify-end items-end">
-                                <button type="submit" className="rounded-lg bg-primary text-gray-3 text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50">
+                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50">
                                     Create Coin
                                 </button>
                             </div>

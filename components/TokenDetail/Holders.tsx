@@ -95,13 +95,13 @@ export default function Holders({ param, token }: { param: string | null, token:
     }, [socket]);
 
     return (
-        <div className="bg-gray-2 rounded-xl sm:rounded-2xl divide-y dark:divide-gray-700 divide-gray-200 border dark:border-gray-700 border-gray-200">
+        <div className=" rounded-xl sm:rounded-2xl divide-y dark:divide-gray-700 divide-gray-200 border dark:border-gray-700 border-gray-200">
             <div className="p-4 py-3 flex items-center justify-between gap-3 flex-wrap xl:flex-nowrap">
                 <h4 className="text-[15px] md:text-base xl:text-lg font-semibold !leading-none">Holders Distribution</h4>
                 <button className="text-xs font-medium xl:!leading-none rounded-md text-white bg-primary hover:bg-primary border border-primary transition-all duration-500 ease-in-out pb-1.5 sm:pb-2 pt-2 sm:pt-2.5 xl:py-2.5 p-2">Generate Bubble Map</button>
             </div>
             {holders && holders.map((holder, index) => (
-                <div className="px-4 py-4 sm:pt-18 sm:pb-17 flex items-center justify-between gap-3" key={'holder' + index}>
+                <div className="px-4 py-4 flex items-center justify-between gap-3" key={'holder' + index}>
                     <a href={`https://solscan.io/address/${holder.holder.wallet}`} className="text-sm lg:text-base font-medium text-body-color !leading-5 xl:!leading-none">
                         {index + 1}. <span className="text-yellow hover:underline cursor-pointer">{holder.holder.name} {holder.holder.dev ? '(dev)' : ''} {holder.holder.bondingCurve ? '(bonding curve)' : ''}</span>
                     </a>

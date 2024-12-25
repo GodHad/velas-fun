@@ -75,7 +75,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
                         <div className="modal-content">
                             <div className="grid grid-cols-12">
                                 <div className="col-span-12">
-                                    <label htmlFor="message" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">
+                                    <label htmlFor="message" className="block  text-sm md:text-base pb-2.5 leading-6">
                                         Message
                                     </label>
                                     <textarea
@@ -88,7 +88,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
                                 </div>
                             </div>
                             <div className="col-span-12 mb-5 sm:mb-0">
-                                <label htmlFor="logo" className="block text-gray-3 text-sm md:text-base pb-2.5 leading-6">Upload File <span className="error text-red-600">*</span></label>
+                                <label htmlFor="logo" className="block  text-sm md:text-base pb-2.5 leading-6">Upload File <span className="error text-red-600">*</span></label>
                                 <div className="center flex flex-col items-center justify-center w-full border dark:border-gray-700 border-gray-200 rounded-xl bg-black-2 text-gray-700 text-sm md:text-base" onDrop={handleDrop} onDragOver={handleDragOver}>
                                     <div className="flex flex-col items-center gap-4 justify-center p-4 md:p-6">
                                         <Image src="/images/upload.svg" alt="Upload Image" width="50" height="50" className="cursor-pointer" onClick={() => document.getElementById('logo')?.click()} />
@@ -126,10 +126,10 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
                             </div>
                             <div className="grid grid-cols-12 mt-5">
                                 <div className="col-span-12 flex justify-end items-end gap-5">
-                                    <button type="submit" className="rounded-lg bg-primary text-gray-3 text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" onClick={replyPost}>
+                                    <button type="submit" className="rounded-lg bg-primary  text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" onClick={replyPost}>
                                         Post
                                     </button>
-                                    <button type="submit" className="rounded-lg bg-body-color text-gray-3 text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" onClick={() => setShowModal(false)}>
+                                    <button type="submit" className="rounded-lg bg-body-color  text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" onClick={() => setShowModal(false)}>
                                         Cancel
                                     </button>
                                 </div>

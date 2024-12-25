@@ -168,7 +168,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                             </div> */}
                         </div>
                         <div className="mb-3 lg:mb-0">
-                            <div className="overflow-auto bg-gray-2 rounded-xl sm:rounded-2xl mb-5 md:mb-6 lg:mb-8 ng-star-inserted">
+                            <div className="overflow-auto  rounded-xl sm:rounded-2xl mb-5 md:mb-6 lg:mb-8 ng-star-inserted">
                                 <table className="table-auto w-full min-w-max">
                                     <thead>
                                         <tr className="text-sm lg:text-xxs-15 xl:text-base font-medium text-gray-600 border-b dark:border-gray-700 border-gray-200 !leading-none">

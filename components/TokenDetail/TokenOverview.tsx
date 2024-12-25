@@ -31,7 +31,7 @@ export default function TokenOverview({ token }: { token: coinInfo }) {
 
     return (
         <>
-            <div className="bg-gray-2 rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
+            <div className=" rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
                 <h4 className="text-sm md:text-base font-semibold !leading-none pb-4 md:pb-5">Bonding curve progress : {progress}%</h4>
                 <div className="bg-body-color w-full rounded-md h-2 md:h-2.5 mb-4 md:mb-5">
                     <div className="bg-primary rounded-md h-2 md:h-2.5" style={{ width: `${progress}%` }}></div>
@@ -41,7 +41,7 @@ export default function TokenOverview({ token }: { token: coinInfo }) {
                     <p className="text-[10px] font-normal leading-normal"> There are {Math.floor(1072892901 - _token.reserveOne / 1_000_000)} tokens still available for sale in the bonding curve and there is {_token.reserveTwo / 1_000_000_000_000_000_000} VLX in the bonding curve. </p>
                 </div>
             </div>
-            <div className="bg-gray-2 rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
+            <div className=" rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
                 <h4 className="text-[15px] md:text-base xl:text-lg font-semibold !leading-none mb-3.5">Overview</h4>
                 <div>
                     <div className="flex flex-wrap items-center gap-5 pb-4 sm:pb-5">
