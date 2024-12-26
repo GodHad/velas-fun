@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useState } from "react";
 import Spinner from "../Common/Spinner";
 
@@ -16,7 +15,6 @@ const Modal = ({
     setShowModal,
     createTokenCallback,
     tokenTicker,
-    tokenImage,
     isLoading
 }: ModalProps) => {
     const [amount, setAmount] = useState<string>('');
