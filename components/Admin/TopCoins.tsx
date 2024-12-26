@@ -54,12 +54,12 @@ const TopCoins = () => {
                     </div>
                     <div className="p-2.5 text-center xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Market Cap
+                            Market Cap($)
                         </h5>
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Price
+                            Price(VLX)
                         </h5>
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
@@ -90,12 +90,12 @@ const TopCoins = () => {
                             <p className="text-black dark:text-white">{coin.holders}</p>
                         </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{coin.price.toFixed(9)} VLX</p>
-                        </div>
-
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
                             <p className="text-meta-3">{(price * coin.marketcap).toFixed(2)}</p>
+                        </div>
+
+                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                            <p className="text-meta-5">{coin.price.toFixed(9)}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
