@@ -26,7 +26,7 @@ const TokenComponent = ({ token }: { token: coinInfo }) => {
                                     alt={token.name}
                                     width={240}
                                     height={176}
-                                    className="w-full h-full rounded-b-lg object-cover z-0 left-0 top-0 blur-bg hover:scale-110 transition-[0.5]"
+                                    className="w-auto h-[176px] rounded-b-lg object-cover z-0 left-0 top-0 blur-bg hover:scale-110 transition-[0.5]"
                                 />
                             </div>
                         </div>

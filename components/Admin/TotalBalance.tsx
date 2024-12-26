@@ -1,8 +1,11 @@
 'use client'
 import dynamic from 'next/dynamic';
 import { ApexOptions } from 'apexcharts';
-import React, { useEffect, useState } from 'react';
-const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
+import { useEffect, useState } from 'react';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { useMutation } from "react-query";
+import { getTotalBalanceAndToken } from '@/utils/api';
+import moment from 'moment';
 
 const options: ApexOptions = {
     legend: {
@@ -50,10 +53,6 @@ const options: ApexOptions = {
         width: [2, 2],
         curve: 'straight',
     },
-    // labels: {
-    //   show: false,
-    //   position: "top",
-    // },
     grid: {
         xaxis: {
             lines: {
@@ -85,20 +84,6 @@ const options: ApexOptions = {
     },
     xaxis: {
         type: 'category',
-        categories: [
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-        ],
         axisBorder: {
             show: false,
         },
@@ -111,6 +96,14 @@ const options: ApexOptions = {
             style: {
                 fontSize: '0px',
             },
+        },
+        labels: {
+            formatter: function (value) {
+                if (Number.isInteger(value)) {
+                    return value.toFixed(0);
+                }
+                return value.toFixed(2);
+            }
         },
         min: 0,
         max: 100,
@@ -125,6 +118,8 @@ interface TotalBalanceState {
 }
 
 const TotalBalance: React.FC = () => {
+    const [option, setOption] = useState<string>('day');
+    const [categories, setCategories] = useState<string[]>([]);
     const [state, setState] = useState<TotalBalanceState>({
         series: [
             {
@@ -139,6 +134,31 @@ const TotalBalance: React.FC = () => {
         ],
     });
 
+    const getBalanceAndTokenMutation = useMutation(getTotalBalanceAndToken, {
+        onSuccess: (data) => {
+            setState({
+                series: [
+                    {
+                        name: 'Total Coins',
+                        data: data.map((_: any) => _.createdTokens)
+                    },
+                    {
+                        name: 'Total Balance',
+                        data: data.map((_: any) => parseFloat(_.balance.toFixed(2)))
+                    }
+                ]
+            })
+            console.log(data.map((_: any) => parseFloat(_.balance.toFixed(2))), data.map((_: any) => _.createdTokens))
+            setCategories(data.map((_: any) =>
+                option === 'day' ? moment(_.time).format('HH') :
+                    option === 'week' ? moment(_.time).format('ddd') :
+                        moment(_.time).format('MM-DD')
+            ));
+
+            handleReset();
+        }
+    })
+
     const handleReset = () => {
         setState((prevState) => ({
             ...prevState,
@@ -147,7 +167,8 @@ const TotalBalance: React.FC = () => {
 
     useEffect(() => {
         handleReset();
-    }, [])
+        getBalanceAndTokenMutation.mutate(option);
+    }, [option])
 
     return (
         <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -174,13 +195,22 @@ const TotalBalance: React.FC = () => {
                 </div>
                 <div className="flex w-full max-w-45 justify-end">
                     <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
-                        <button className="rounded bg-white py-1 px-3 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
+                        <button
+                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${option === 'day' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
+                            onClick={() => setOption('day')}
+                        >
                             Day
                         </button>
-                        <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
+                        <button
+                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdar ${option === 'week' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
+                            onClick={() => setOption('week')}
+                        >
                             Week
                         </button>
-                        <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
+                        <button
+                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdar ${option === 'month' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
+                            onClick={() => setOption('month')}
+                        >
                             Month
                         </button>
                     </div>
@@ -190,7 +220,13 @@ const TotalBalance: React.FC = () => {
             <div>
                 <div id="TotalBalance" className="-ml-5">
                     <ReactApexChart
-                        options={options}
+                        options={{
+                            ...options,
+                            xaxis: {
+                                ...options.xaxis,
+                                categories: categories
+                            }
+                        }}
                         series={state.series}
                         type="area"
                         height={350}

@@ -1,58 +1,39 @@
+'use client'
+import { getTop5Coins, getVLXPrice } from "@/utils/api";
 import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+import { useMutation } from "react-query";
 
-type BRAND = {
+type Coin = {
     name: string;
     image: string;
     holders: number;
-    marketcap: string;
+    marketcap: number;
     transactions: number;
     price: number;
 };
 
-const brandData: BRAND[] = [
-    {
-        name: 'Doge',
-        image: 'https://violet-able-landfowl-471.mypinata.cloud/ipfs/QmPszmMVo7spEqekDssgdmRZtRTNbSenysQ4qrJD2J6pNW',
-        holders: 3.5,
-        marketcap: '5,768',
-        transactions: 590,
-        price: 4.8,
-    },
-    {
-        name: 'Doge',
-        image: 'https://violet-able-landfowl-471.mypinata.cloud/ipfs/QmPszmMVo7spEqekDssgdmRZtRTNbSenysQ4qrJD2J6pNW',
-        holders: 2.2,
-        marketcap: '4,635',
-        transactions: 467,
-        price: 4.3,
-    },
-    {
-        name: 'Doge',
-        image: 'https://violet-able-landfowl-471.mypinata.cloud/ipfs/QmPszmMVo7spEqekDssgdmRZtRTNbSenysQ4qrJD2J6pNW',
-        holders: 2.1,
-        marketcap: '4,290',
-        transactions: 420,
-        price: 3.7,
-    },
-    {
-        name: 'Doge',
-        image: 'https://violet-able-landfowl-471.mypinata.cloud/ipfs/QmPszmMVo7spEqekDssgdmRZtRTNbSenysQ4qrJD2J6pNW',
-        holders: 1.5,
-        marketcap: '3,580',
-        transactions: 389,
-        price: 2.5,
-    },
-    {
-        name: 'Doge',
-        image: 'https://violet-able-landfowl-471.mypinata.cloud/ipfs/QmPszmMVo7spEqekDssgdmRZtRTNbSenysQ4qrJD2J6pNW',
-        holders: 3.5,
-        marketcap: '6,768',
-        transactions: 390,
-        price: 4.2,
-    },
-];
+const TopCoins = () => {
+    const [coins, setCoins] = useState<Coin[]>([]);
+    const [price, setPrice] = useState<number>(0);
 
-const TableOne = () => {
+    const getTop5CoinsMutaion = useMutation(getTop5Coins, {
+        onSuccess: (data) => {
+            setCoins(data);
+        }
+    })
+
+    useEffect(() => {
+        getTop5CoinsMutaion.mutate();
+        const fetchPrice = async () => {
+            const vlxprice = await getVLXPrice();
+            console.log(vlxprice);
+            setPrice(vlxprice);
+        };
+
+        fetchPrice();
+    }, [])
+
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
@@ -88,9 +69,9 @@ const TableOne = () => {
                     </div>
                 </div>
 
-                {brandData.map((brand, key) => (
+                {coins.map((coin, key) => (
                     <div
-                        className={`grid grid-cols-3 sm:grid-cols-5 ${key === brandData.length - 1
+                        className={`grid grid-cols-3 sm:grid-cols-5 ${key === coins.length - 1
                             ? ''
                             : 'border-b border-stroke dark:border-strokedark'
                             }`}
@@ -98,27 +79,27 @@ const TableOne = () => {
                     >
                         <div className="flex items-center gap-3 p-2.5 xl:p-5">
                             <div className="flex-shrink-0">
-                                <Image className="rounded-full" src={brand.image} alt="Brand" width={48} height={48} />
+                                <Image className="rounded-full" src={coin.image} alt="Brand" width={48} height={48} />
                             </div>
                             <p className="hidden text-black dark:text-white sm:block">
-                                {brand.name}
+                                {coin.name}
                             </p>
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-black dark:text-white">{brand.holders}K</p>
+                            <p className="text-black dark:text-white">{coin.holders}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{brand.price}%</p>
+                            <p className="text-meta-5">{coin.price.toFixed(9)} VLX</p>
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">${brand.marketcap}</p>
+                            <p className="text-meta-3">{(price * coin.marketcap).toFixed(2)}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-black dark:text-white">{brand.transactions}</p>
+                            <p className="text-black dark:text-white">{coin.transactions}</p>
                         </div>
                     </div>
                 ))}
@@ -127,4 +108,4 @@ const TableOne = () => {
     );
 };
 
-export default TableOne;
+export default TopCoins;

@@ -238,3 +238,24 @@ export async function getVLXPrice() {
     const price = response.data.velas.usd;
     return price;
 }
+
+export const getOverview = async () => {
+    const response = await axios.get(`${BACKEND_URL}/admin/overview`);
+    const data = response.data;
+    return data;
+}
+
+export const getTotalBalanceAndToken = async (option: string) => {
+    const response = await axios.get(`${BACKEND_URL}/admin/get-balance-token?option=${option}`)
+    return response.data;
+}
+
+export const getTransactionByWeek = async (option: string) => {
+    const response = await axios.get(`${BACKEND_URL}/admin/get-weekly-transaction?option=${option}`)
+    return response.data;
+}
+
+export const getTop5Coins = async () => {
+    const response = await axios.get(`${BACKEND_URL}/admin/get-top-5-coins`);
+    return response.data;
+}

@@ -84,7 +84,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <li>
                                 <Link
                                     href="/admin"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${!pathname.includes('setting') && 'bg-graydark dark:bg-meta-4'
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${!pathname.includes('setting') && 'bg-graydark dark:bg-meta-4 text-white'
                                         }`}
                                 >
                                     <svg
@@ -123,7 +123,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <Link
                                     href="/admin/setting"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('setting') &&
-                                        'bg-graydark dark:bg-meta-4'
+                                        'bg-graydark dark:bg-meta-4 text-white'
                                         }`}
                                 >
                                     <svg
