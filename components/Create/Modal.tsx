@@ -69,7 +69,6 @@ const Modal = ({
                                         </div>
                                         <br /><br />
                                         <div>
-                                            <a className=" mb-6 text-right underline text-[10px] font-normal block cursor-pointer" onClick={() => setIsVLX(prev => !prev)}>Switch to {isVLX ? tokenTicker : 'VLX'}</a>
                                             <div className="flex gap-5">
                                                 <button type="button" className="rounded-lg bg-blue-2 border border-blue-1 hover:bg-blue-1 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px]" onClick={() => setShowModal(false)}>
                                                     Cancel

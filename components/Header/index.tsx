@@ -155,7 +155,7 @@ const Header = () => {
             <div className="flex w-full items-center justify-end px-4">
               <div className="flex items-center justify-end lg:pr-0">
                 <Link
-                  href="#"
+                  href="https://t.me/velasfun"
                   className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
                 >
                   Support
