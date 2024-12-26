@@ -20,10 +20,9 @@ const Modal = ({
     isLoading
 }: ModalProps) => {
     const [amount, setAmount] = useState<string>('');
-    const [isVLX, setIsVLX] = useState<boolean>(true);
 
     const handleCreate = () => {
-        const _amount = isVLX ? Number(amount) : Number(amount) * 300_000 / 1_072_892_901
+        const _amount = Number(amount)
         createTokenCallback(_amount);
     }
 
@@ -53,19 +52,12 @@ const Modal = ({
                                             onChange={(e) => setAmount(e.target.value)}
                                         />
                                         <div className="absolute right-5 top-[16px] text-sm md:text-base font-normal flex gap-1.5 items-center leading-5">
-                                            {isVLX ?
-                                                <div className="flex item-center gap-1 justify-center">
-                                                    <span className="relative top-[2px] leading-4">VLX</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={24} version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
-                                                        <path fill="#0037C1" d="M28.9,13.9L21,27.7l-7.9-13.9H28.9z M36.8,9.2H5.2L21,37L36.8,9.2z M0,0l2.6,4.6h36.7L42,0H0z" />
-                                                    </svg>
-                                                </div>
-                                                :
-                                                <div className="flex item-center gap-1 justify-center">
-                                                    <span className="relative top-[2px] leading-4">{tokenTicker}</span>
-                                                    <Image width={24} height={24} src={tokenImage} alt={tokenTicker} />
-                                                </div>
-                                            }
+                                            <div className="flex item-center gap-1 justify-center">
+                                                <span className="relative top-[2px] leading-4">VLX</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={24} version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
+                                                    <path fill="#0037C1" d="M28.9,13.9L21,27.7l-7.9-13.9H28.9z M36.8,9.2H5.2L21,37L36.8,9.2z M0,0l2.6,4.6h36.7L42,0H0z" />
+                                                </svg>
+                                            </div>
                                         </div>
                                         <br /><br />
                                         <div>
