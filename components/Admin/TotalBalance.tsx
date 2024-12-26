@@ -140,15 +140,19 @@ const TotalBalance: React.FC = () => {
                 series: [
                     {
                         name: 'Total Coins',
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         data: data.map((_: any) => _.createdTokens)
                     },
                     {
                         name: 'Total Balance',
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         data: data.map((_: any) => parseFloat(_.balance.toFixed(2)))
                     }
                 ]
             })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             console.log(data.map((_: any) => parseFloat(_.balance.toFixed(2))), data.map((_: any) => _.createdTokens))
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             setCategories(data.map((_: any) =>
                 option === 'day' ? moment(_.time).format('HH') :
                     option === 'week' ? moment(_.time).format('ddd') :

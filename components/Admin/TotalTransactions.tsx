@@ -91,10 +91,12 @@ const ChartTwo: React.FC = () => {
         series: [
           {
             name: 'Buy',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: data.map((_: any) => _.buyCount)
           },
           {
             name: 'Sell',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: data.map((_: any) => _.sellCount)
           }
         ]

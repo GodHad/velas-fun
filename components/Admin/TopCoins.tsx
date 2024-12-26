@@ -1,7 +1,7 @@
 'use client'
 import { getTop5Coins, getVLXPrice } from "@/utils/api";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
 type Coin = {
