@@ -26,6 +26,7 @@ export interface userInfo {
     signature?: string,
     follower?: number;
     bio: string;
+    admin?: boolean;
 }
 
 export interface Pagination {

@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
         hostname: 'violet-able-landfowl-471.mypinata.cloud',
       },
       {
+        protocol: 'http',
         hostname: 'localhost'
       },
       {

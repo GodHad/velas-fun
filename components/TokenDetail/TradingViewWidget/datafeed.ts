@@ -133,8 +133,9 @@ export function getDataFeed({
             let lastBar: Bar | undefined = lastBarsCache.get(symbolInfo.name);
             const resolutionInSeconds = getResolutionInSeconds(resolution);
         
-            socket?.on(`price-update-${symbolInfo.name}`, (priceUpdate) => {
+            socket?.on(`price-update-${token}`, (priceUpdate) => {
                 const lastTime = new Date(priceUpdate.lastTime).getTime();
+                const closedPrice = priceUpdate.closedPrice;
                 const currentTime = Math.floor(lastTime / 1000);
                 const alignedTime = Math.floor(currentTime / resolutionInSeconds) * resolutionInSeconds * 1000; 
                 const price = priceUpdate.price;
@@ -142,9 +143,9 @@ export function getDataFeed({
                 if (!lastBar) {
                     lastBar = {
                         time: alignedTime,
-                        open: price,
-                        high: price,
-                        low: price,
+                        open: closedPrice,
+                        high: Math.max(closedPrice, price),
+                        low: Math.min(closedPrice, price),
                         close: price,
                         volume: 0,
                     };
@@ -179,7 +180,7 @@ export function getDataFeed({
         
         unsubscribeBars: () => {
             if (socket && currentSymbolInfo) {
-                socket.off(`price-update-${currentSymbolInfo.name}`);
+                socket.off(`price-update-${token}`);
                 console.log(`[unsubscribeBars]: Unsubscribed from price updates for ${currentSymbolInfo.name}`);
             }
         },

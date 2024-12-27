@@ -1,12 +1,31 @@
 'use client'
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, useContext, useEffect } from 'react';
 import Header from '@/components/Admin/Header';
 import Sidebar from '@/components/Admin/Sidebar';
 import 'jsvectormap/dist/jsvectormap.css';
 import 'flatpickr/dist/flatpickr.min.css';
+import UserContext from '@/contexts/UserContext';
+import { useData } from '@/contexts/PageContext';
+import { getAdminData } from '@/utils/api';
+import { redirect } from 'next/navigation';
 
 const AdminLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { user } = useContext(UserContext)
+    const { setAdminData } = useData()
+
+    useEffect(() => {
+        const handleGetData = async () => {
+            if (user.admin) {
+                const adminData = await getAdminData();
+                setAdminData(adminData)
+            } else {
+                redirect('/');
+            }
+        }
+
+        handleGetData()
+    }, [])
 
     return (
         <div className="dark:bg-boxdark-2 dark:text-bodydark">

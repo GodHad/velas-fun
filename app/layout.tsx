@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import Providers from "./providers";
 import { usePathname } from "next/navigation";
 import "./globals.css";
+import AlertComponent from "@/components/Common/AlertComponent";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
               <Footer />
             </>
           }
+          <AlertComponent />
           <ScrollToTop />
         </Providers>
       </body>

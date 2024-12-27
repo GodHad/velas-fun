@@ -28,6 +28,7 @@ const UserContext = createContext({
     setMessages: (_value: msgInfo[]) => {}, 
 
     vlxPrice: 0,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setVLXPrice: (_value: number) => {},
 })
 

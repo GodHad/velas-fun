@@ -6,16 +6,20 @@ import ThemeToggler from "./ThemeToggler";
 import UserContext from "@/contexts/UserContext";
 import { hooks, metaMask } from "@/connectors/metaMask";
 import { userInfo } from "@/types";
-import { walletConnect, confirmWallet } from "@/utils/api";
+import { walletConnect, confirmWallet, getAdminData, getMetaData } from "@/utils/api";
 import { errorAlert, successAlert } from "../ToastGroup";
 import HowItWork from "../HowItWork";
+import { useData } from "@/contexts/PageContext";
+import Logo from "../Common/Logo";
 
 const Header = () => {
   const { useIsActivating, useIsActive, useAccount } = hooks;
-  
+
+  const { setAdminData } = useData();
+
   const isActive = useIsActive();
   const isActivating = useIsActivating();
-  
+
   const [showModal, setShowModal] = useState(false);
 
   const account = useAccount()
@@ -51,14 +55,14 @@ const Header = () => {
           isLedger: false,
           bio: ''
         };
-  
+
         await sign(updatedUser);
       }
     };
-  
+
     handleSignIn();
-  }, [account, login]); // Dependencies for when account or login changes
-  
+  }, [account, login]);
+
   const connect = async () => {
     try {
       await metaMask.provider?.request({
@@ -92,11 +96,16 @@ const Header = () => {
         wallet: user.wallet,
         _id: user._id,
         avatar: user.avatar,
+        admin: user.admin,
       };
 
       if (user.nonce === undefined) {
         setUser(newUser as userInfo);
         setLogin(true);
+        if (user.admin) {
+          const adminData = await getAdminData();
+          setAdminData(adminData)
+        }
         successAlert("You sign in successfully.");
         return;
       }
@@ -132,6 +141,20 @@ const Header = () => {
     setLogin(false);
     localStorage.clear();
   }
+  
+  const { setMetaData } = useData()
+  const getMetaData_ = async () => {
+      try {
+          const data = await getMetaData();
+          setMetaData(data)
+      } catch {
+          errorAlert('Failed to get the MetaData');
+      }
+  }
+
+  useEffect(() => {
+      getMetaData_()
+  }, [])
 
   return (
     <>
@@ -144,21 +167,23 @@ const Header = () => {
         <div className="container">
           <div className="relative -mx-4 flex items-center justify-between">
             <div className="w-60 max-w-full px-4 xl:mr-12">
-              <Link
-                href="/"
-                className={`header-logo block w-full ${sticky ? "py-5 lg:py-2" : "py-8"
-                  } `}
-              >
-                <h1 className="text-[30px] font-extrabold">Velas</h1>
-              </Link>
+              <Logo />
             </div>
             <div className="flex w-full items-center justify-end px-4">
               <div className="flex items-center justify-end lg:pr-0">
+                {user.admin &&
+                  <Link
+                    href="/admin"
+                    className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
+                  >
+                    Admin Page
+                  </Link>
+                }
                 <Link
-                  href="https://t.me/velasfun"
+                  href="/faq"
                   className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
                 >
-                  Support
+                  FAQ
                 </Link>
                 <button
                   className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
@@ -183,7 +208,7 @@ const Header = () => {
                     >
                       {account.slice(0, 4)}....{account.slice(-4)}
                     </button>
-                    <div className="absolute top-8 right-0 mt-2 w-full rounded-md shadow-lg  dark:bg-black dark:border-none border border-body-color z-500 hidden dark:text-white duration-300 transition-all">
+                    <div className="absolute top-8 right-0 mt-2 w-full rounded-md shadow-lg bg-white dark:bg-black dark:border-none border border-body-color z-500 hidden dark:text-white duration-300 transition-all">
                       <div role="none" className="py-0">
                         <Link href={`/profile/${user._id}`} role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white">View Profile</Link>
                         <button role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-b-md text-left hover:bg-primary  hover:text-white" onClick={logOut}>Disconnect Wallet</button>

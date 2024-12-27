@@ -1,15 +1,36 @@
-import { userInfo, coinInfo, msgInfo, CoinResponse, replyInfo, followerInfo, Pagination, tradeInfo, recordInfo } from "@/types"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+    userInfo,
+    coinInfo,
+    msgInfo,
+    CoinResponse,
+    replyInfo,
+    followerInfo,
+    Pagination,
+    tradeInfo,
+    recordInfo
+} from "@/types"
 import axios from 'axios';
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + 'api';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getToken = () => {
+    if (typeof window !== 'undefined') {
+        return window.localStorage.getItem('jwtToken');
+    }
+    return null;
+};
+const axiosWithToken = axios.create({
+    headers: {
+        Authorization: `Bearer ${getToken()}`
+    }
+})
+
 export const createNewCoin = async (txHash: string, coin: coinInfo) => {
     const response = await axios.post(`${BACKEND_URL}/coin/`, { txHash, coin });
     return response.data;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const walletConnect = async ({ data }: { data: userInfo }): Promise<any> => {
     try {
         const response = await axios.post(`${BACKEND_URL}/user/`, data)
@@ -19,7 +40,6 @@ export const walletConnect = async ({ data }: { data: userInfo }): Promise<any> 
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const confirmWallet = async ({ data }: { data: userInfo }): Promise<any> => {
     try {
         const response = await axios.post(`${BACKEND_URL}/user/confirm`, data)
@@ -34,7 +54,6 @@ export const getCoinsInfo = async ({ perPage = 10, sortBy, searchTerm, currentPa
     return res.data
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getCoinInfo = async (data: string, perPage: number = 10, currentPage: number = 0): Promise<any> => {
     try {
         const response = await axios.get(`${BACKEND_URL}/coin/${data}?perPage=${perPage}&currentPage=${currentPage}`)
@@ -118,7 +137,6 @@ export const uploadImage = async (url: string) => {
     }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUser = async ({ id }: { id: string }): Promise<any> => {
     try {
         const response = await axios.get(`${BACKEND_URL}/user/${id}`);
@@ -240,22 +258,67 @@ export async function getVLXPrice() {
 }
 
 export const getOverview = async () => {
-    const response = await axios.get(`${BACKEND_URL}/admin/overview`);
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/overview`);
     const data = response.data;
     return data;
 }
 
 export const getTotalBalanceAndToken = async (option: string) => {
-    const response = await axios.get(`${BACKEND_URL}/admin/get-balance-token?option=${option}`)
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-balance-token?option=${option}`)
     return response.data;
 }
 
 export const getTransactionByWeek = async (option: string) => {
-    const response = await axios.get(`${BACKEND_URL}/admin/get-weekly-transaction?option=${option}`)
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-weekly-transaction?option=${option}`)
     return response.data;
 }
 
 export const getTop5Coins = async () => {
-    const response = await axios.get(`${BACKEND_URL}/admin/get-top-5-coins`);
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-top-5-coins`);
+    return response.data;
+}
+
+export const getAdminData = async () => {
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-admin-data`);
+    return response.data;
+}
+
+export const updateAdmin = async (data: any) => {
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update`, data);
+    return response.data;
+}
+
+export const updateLogoInfo = async (data: any) => {
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update-logo-info`, data);
+    return response.data;
+}
+
+export const updateBannerInfo = async (data: any) => {
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update-banner-info`, data);
+    return response.data;
+}
+
+export const getMetaData = async () => {
+    const response = await axios.get(`${BACKEND_URL}/admin/get-metadata`);
+    return response.data;
+}
+
+export const getFAQs = async () => {
+    const response = await axios.get(`${BACKEND_URL}/admin/faqs`);
+    return response.data;
+}
+
+export const createFAQ = async (data: any) => {
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/faqs`, data)
+    return response.data;
+}
+
+export const updateFAQ = async (data: any) => {
+    const response = await axiosWithToken.put(`${BACKEND_URL}/admin/faqs/${data._id}`, data);
+    return response.data;
+}
+
+export const deleteFAQ = async (id: string) => {
+    const response = await axiosWithToken.delete(`${BACKEND_URL}/admin/faqs/${id}`);
     return response.data;
 }

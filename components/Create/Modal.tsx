@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Spinner from "../Common/Spinner";
+import { useData } from "@/contexts/PageContext";
 
 interface ModalProps {
     showModal: boolean;
@@ -23,6 +24,8 @@ const Modal = ({
         const _amount = Number(amount)
         createTokenCallback(_amount);
     }
+
+    const { metaData } = useData();
 
     return (
         <div
@@ -63,7 +66,7 @@ const Modal = ({
                                                 <button type="button" className="rounded-lg bg-blue-2 border border-blue-1 hover:bg-blue-1 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px]" onClick={() => setShowModal(false)}>
                                                     Cancel
                                                 </button>
-                                                <button className="rounded-lg bg-primary hover:text-black-3 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px] text-white disabled:cursor-not-allowed disabled:opacity-50" onClick={handleCreate} disabled={isLoading}>
+                                                <button className="rounded-lg bg-primary hover:text-black-3 text-sm sm:text-base md:text-lg p-2 md:p-3 focus:outline-0 leading-6 text-center w-[160px] md:w-[200px] text-white disabled:cursor-not-allowed disabled:opacity-50" onClick={handleCreate} disabled={isLoading || metaData?.siteKill}>
                                                     {isLoading ? <Spinner /> : 'Create Coin'}
                                                 </button>
                                             </div>

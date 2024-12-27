@@ -1,10 +1,12 @@
 'use client'
 import { getTop5Coins, getVLXPrice } from "@/utils/api";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
 type Coin = {
+    id: string;
     name: string;
     image: string;
     holders: number;
@@ -81,9 +83,11 @@ const TopCoins = () => {
                             <div className="flex-shrink-0">
                                 <Image className="rounded-full" src={coin.image} alt="Brand" width={48} height={48} />
                             </div>
-                            <p className="hidden text-black dark:text-white sm:block">
+                            <Link href={'/coin/' + coin.id}>
+                            <p className="hidden text-primary underline sm:block">
                                 {coin.name}
                             </p>
+                            </Link>
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">

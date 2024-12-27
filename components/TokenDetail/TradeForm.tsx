@@ -3,9 +3,10 @@ import { coinInfo } from "@/types";
 import { useEffect, useState } from "react";
 import { buyTokens, sellTokens, getTokenAmount } from "@/program/VelasFunContractService";
 import { hooks } from "@/connectors/metaMask";
-import { errorAlert, successAlert } from "../ToastGroup";
+import { errorAlert, warningAlert } from "../ToastGroup";
 import { useWeb3React } from "@web3-react/core";
 import Spinner from "../Common/Spinner";
+import { useData } from "@/contexts/PageContext";
 
 export default function TradeForm({ token }: { token: coinInfo }) {
     const { connector } = useWeb3React();
@@ -44,13 +45,16 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                 return;
             }
 
+            if (metaData?.siteKill) {
+                warningAlert('Site is stopped to working temporarily.')
+            }
+
             let res = false;
             setIsTrading(true);
             if (isBuy === 2) res = await buyTokens(connector.provider, account, token.token, sol);
             else res = await sellTokens(connector.provider, account, token.token, sol);
 
-            if (res) successAlert(isBuy === 2 ? 'Bought tokens successfully' : 'Sold tokens successfully');
-            else errorAlert('Failed to buy tokens');
+            if (!res) errorAlert('Failed to buy tokens');
 
             setIsTrading(false);
         } catch (error) {
@@ -62,6 +66,8 @@ export default function TradeForm({ token }: { token: coinInfo }) {
         getBalance();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [connector, account, isTrading]);
+
+    const { metaData } = useData();
 
     return (
         <div className="rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:mt-3 mb-4 border dark:border-gray-700 border-gray-200">
@@ -87,7 +93,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                                 :
                                 <div className="absolute right-5 top-[16px] text-sm md:text-base font-normal flex gap-1.5 items-center leading-5">
                                     <div className="flex item-center gap-1 rounded-full">
-                                        <span className="relative top-[2px] leading-4">{token.name}</span>
+                                        <span className="relative top-[2px] leading-4">{token.ticker}</span>
                                         <Image width={20} height={20} alt="Token Image" className="w-[20px] sm:w-[20px] h-[20px] sm:h-[20px] rounded-full" src={token.url} />
                                     </div>
                                 </div>
@@ -110,7 +116,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                             <input type="number" id="token" placeholder="0.0" min="0" className="border dark:border-gray-700 border-gray-200 rounded-md placeholder:text-body-color text-[13px] sm:text-sm lg:text-base !leading-none ps-3 pe-16 sm:pe-20 py-3 w-full focus:outline-0 hide-arrows" value={sol} onChange={handleInputChange} />
                             <div className="absolute right-5 top-[16px] text-sm md:text-base font-normal flex gap-1.5 items-center leading-5">
                                 <div className="flex item-center gap-1 rounded-full">
-                                    <span className="relative top-[2px] leading-4">{token.name}</span>
+                                    <span className="relative top-[2px] leading-4">{token.ticker}</span>
                                     <Image width={20} height={20} alt="Token Image" className="w-[20px] sm:w-[20px] h-[20px] sm:h-[20px] rounded-full" src={token.url} />
                                 </div>
                             </div>
@@ -128,7 +134,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                         </div>
                     </>
                 }
-                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden" onClick={handleTrade} disabled={isTrading}>
+                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden" onClick={handleTrade} disabled={isTrading || metaData?.siteKill}>
                     {
                         isTrading ?
                             <Spinner />

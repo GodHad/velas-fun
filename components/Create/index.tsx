@@ -12,6 +12,7 @@ import { createToken } from "@/program/VelasFunContractService";
 import { useWeb3React } from "@web3-react/core";
 import Modal from "./Modal";
 import Spinner from "../Common/Spinner";
+import { useData } from "@/contexts/PageContext";
 
 interface FormInputs {
     name: string;
@@ -39,6 +40,9 @@ const CreateToken = () => {
 
     const createTokenCallback = async (amount: number) => {
         if (!previewSrc) return;
+        if (metaData?.siteKill) {
+            warningAlert('Site is stopped to working temporarily.')
+        }
         const url = await uploadImage(previewSrc)
         if (url && user._id && account && connector.provider) {
             const coin = {
@@ -51,7 +55,7 @@ const CreateToken = () => {
             } as coinInfo
 
             setIsLoading(true);
-            
+
             const result = await createToken(connector.provider, account, coin, amount);
             if (result) {
                 successAlert('Created Coin Successfully');
@@ -59,7 +63,7 @@ const CreateToken = () => {
                 setPreviewSrc(null)
             }
             else errorAlert('Failed to create coin');
-            
+
             setIsModal(false);
             setIsLoading(false);
         } else {
@@ -103,6 +107,8 @@ const CreateToken = () => {
         setPreviewSrc(null)
     }
 
+    const { metaData } = useData()
+
     return (
         <section className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pb-16 pt-[120px] md:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px] 2xl:pb-[200px] 2xl:pt-[210px]">
             <div className="container">
@@ -141,7 +147,7 @@ const CreateToken = () => {
                                         />
                                     </div>
                                     {previewSrc &&
-                                        <div className="flex flex-col items-center group gap-4 justify-center hover:before:border hover:before:border-blue-1 rounded-xl hover:before:rounded-xl relative hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:bg-black hover:before:opacity-80 hover:before:w-full hover:before:h-full ng-star-inserted">
+                                        <div className="flex flex-col items-center group gap-4 justify-center hover:before:border hover:before:border-blue-1 rounded-xl hover:before:rounded-xl relative hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:bg-black hover:before:opacity-80 hover:before:w-full hover:before:h-full">
                                             <Image
                                                 width={155}
                                                 height={168}
@@ -247,7 +253,7 @@ const CreateToken = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-12 flex justify-end items-end">
-                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" disabled={isLoading}>
+                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" disabled={isLoading || metaData?.siteKill}>
                                     {isLoading ? <Spinner /> : 'Create Coin'}
                                 </button>
                             </div>

@@ -76,7 +76,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
                             <div className="grid grid-cols-12">
                                 <div className="col-span-12">
                                     <label htmlFor="message" className="block  text-sm md:text-base pb-2.5 leading-6">
-                                        Message
+                                        Message <span className="error text-red-600">*</span>
                                     </label>
                                     <textarea
                                         id="message"

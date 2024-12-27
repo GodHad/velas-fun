@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^9.3.1",
     "@gainsnetwork/sdk": "^0.2.41-rc2",
     "@metamask/providers": "^18.2.0",
     "@metamask/sdk-react": "^0.31.4",
@@ -20,6 +21,7 @@
     "apexcharts": "^4.3.0",
     "axios": "^1.7.9",
     "bs58": "^6.0.0",
+    "ckeditor5": "^43.2.0",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.4",
     "flatpickr": "^4.6.13",

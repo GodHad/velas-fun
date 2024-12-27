@@ -63,7 +63,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Time</p>
                                 <p className="text-sm lg:text-base font-medium lg:!leading-none">
-                                    {moment(token.date).fromNow()}</p>
+                                    {moment.utc(token.date).fromNow()}</p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-3">
@@ -120,12 +120,8 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Token Address
                                 </p>
                                 <a className="flex items-center group">
-                                    <Image
-                                        className="img-fluid w-6 md:w-8 h-6 md:h-8 rounded-full border-body-color border"
-                                        src={(typeof token.creator !== 'string' && token.creator && token.creator.avatar) ? token.creator.avatar : '/images/creator-logos/default.png'}
-                                        width={16} height={16} alt={typeof token.creator !== 'string' && token.creator ? token.creator.name : 'Creator name'} />
                                     <span
-                                        className="text-sm lg:text-base font-medium lg:!leading-none ps-1.5 inline-flex gap-1 cursor-pointer">
+                                        className="text-sm lg:text-base font-medium lg:!leading-none inline-flex gap-1 cursor-pointer">
                                         {token.token ? `${token.token.slice(0, 4)}....${token.token.slice(-4)}` : ''}
                                         <div onClick={handleCopyAddressClick}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="15"

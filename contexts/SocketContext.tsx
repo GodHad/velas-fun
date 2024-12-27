@@ -3,7 +3,8 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { useRouter } from "next/navigation";
-import { errorAlert, infoAlert, successAlert } from "@/components/ToastGroup";
+import { errorAlert } from "@/components/ToastGroup";
+import { coinInfo, userInfo } from "@/types";
 
 interface Context {
     socket?: Socket;
@@ -32,6 +33,14 @@ interface Context {
     setAlertState?: Function;
 }
 
+const initialAlertState = {
+    open: false,
+    user: null,
+    coin: null,
+    amount: 0,
+    severity: undefined,
+}
+
 const context = createContext<Context>({});
 
 export const useSocket = () => useContext(context);
@@ -46,49 +55,58 @@ const SocketProvider = (props: React.PropsWithChildren) => {
     const [isShowModal, setIsShowModal] = useState('');
     const [currentDepositAmount, setCurrentDepositAmount] = useState(0);
     const numberDecimals = 3;
-    const [alertState, setAlertState] = useState<AlertState>({
-        open: false,
-        message: '',
-        severity: undefined,
-    })
-    
+    const [alertState, setAlertState] = useState<AlertState>(initialAlertState)
+
     const router = useRouter();
 
     const connectionUpdatedHandler = (data: number) => {
         setCounter(data);
     };
 
-    const createSuccessHandler = (name: string, mint: string) => {
-        console.log("Successfully Create Token Name:", name)
+    const createSuccessHandler = (data: {user: userInfo, coin: coinInfo}) => {
         setAlertState({
             open: true,
-            message: 'Success',
-            severity: 'success',
+            user: data.user,
+            coin: data.coin,
+            amount: undefined,
+            severity: 'info'
         });
-        successAlert(`Successfully Created token: ${name} \n ${mint}`);
+        // successAlert(`Successfully Created token: ${data.user.name} \n ${data.coin.ticker}`);
         setIsLoading(false);
+        const resetTimeout = setTimeout(() => {
+            setAlertState((prev) => ({ ...prev, open: false }));
+            setTimeout(() => {
+                setAlertState(initialAlertState); 
+            }, 500); 
+        }, 3000);
+    
+        return () => clearTimeout(resetTimeout);
     }
 
     const createFailedHandler = (name: string, mint: string) => {
         console.log("Failed Create Token Name:", name)
-        setAlertState({
-            open: true,
-            message: 'Failed',
-            severity: 'error',
-        });
         errorAlert(`Failed Create token: ${name} \n ${mint}`)
         setIsLoading(false);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const createTransactionHandler = (data: any) => {
-        console.log("Create Transaction:", data);
         setAlertState({
             open: true,
-            message: `${data.user.name} ${data.isBuy === 2 ? 'bought' : 'sold'} ${data.amount} ${data.isBuy === 2 ? 'VLX' : data.ticker}`,
-            severity: 'info'
+            user: data.user,
+            coin: data.token,
+            amount: data.isBuy === 2 ? data.amount : data.amount / 1_000_000,
+            severity: data.isBuy === 2 ? 'success' : 'error'
         });
-        infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
+        // infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
+        const resetTimeout = setTimeout(() => {
+            setAlertState((prev) => ({ ...prev, open: false })); 
+            setTimeout(() => {
+                setAlertState(initialAlertState);
+            }, 500); 
+        }, 3000);
+    
+        return () => clearTimeout(resetTimeout);
     }
 
     useEffect(() => {
@@ -113,39 +131,43 @@ const SocketProvider = (props: React.PropsWithChildren) => {
     }, [router]);
 
     useEffect(() => {
-            socket?.on("connectionUpdated", async (counter: number) => {
-                console.log("--------@ Connection Updated: ", counter);
-                
-                connectionUpdatedHandler(counter)
-            });
+        socket?.on("connectionUpdated", async (counter: number) => {
+            console.log("--------@ Connection Updated: ", counter);
 
-            socket?.on("Creation",  () => {
-                console.log("--------@ Token Creation: ");
+            connectionUpdatedHandler(counter)
+        });
 
-            });
-            socket?.on("TokenCreated", async (name: string, mint: string) => {
-                console.log("--------@ Token Created!: ", name);
+        socket?.on("Creation", () => {
+            console.log("--------@ Token Creation: ");
 
-                createSuccessHandler(name, mint.slice(0, 6));
-            });
+        });
+        socket?.on("TokenCreated", async (data: {user: userInfo, coin: coinInfo}) => {
+            console.log("--------@ Token Created!: ", name);
 
-            socket?.on('transaction', (data) => {
-                createTransactionHandler(data);
-            })
+            createSuccessHandler(data);
+        });
 
-            // socket?.on("TokenNotCreated", async (name: string, mint: string) => {
-            //     console.log("--------@ Token Not Created: ", name);
+        socket?.on('transaction', (data) => {
+            createTransactionHandler(data);
+        })
 
-            //     createFailedHandler(name, mint);
-            // });
+        socket?.on(`price-update-0x5efBe42b9fd908AF232105EFfAB0Aac53964656B`, (priceUpdate) => {
+            console.log("priceUpdate", priceUpdate)
+        })
 
-            return () => {
-                socket?.off("Creation", createSuccessHandler);
-                socket?.off("TokenCreated", createSuccessHandler);
-                socket?.off("TokenNotCreated", createFailedHandler);
+        // socket?.on("TokenNotCreated", async (name: string, mint: string) => {
+        //     console.log("--------@ Token Not Created: ", name);
 
-                socket?.disconnect();
-            };
+        //     createFailedHandler(name, mint);
+        // });
+
+        return () => {
+            socket?.off("Creation", createSuccessHandler);
+            socket?.off("TokenCreated", createSuccessHandler);
+            socket?.off("TokenNotCreated", createFailedHandler);
+            socket?.off("price-update-0x5efBe42b9fd908AF232105EFfAB0Aac53964656B");
+            socket?.disconnect();
+        };
     }, [socket]);
 
     return (
@@ -177,8 +199,10 @@ const SocketProvider = (props: React.PropsWithChildren) => {
 
 export interface AlertState {
     open: boolean
-    message: string
-    severity: 'success' | 'info' | 'warning' | 'error' | undefined
+    user: userInfo | null,
+    coin: coinInfo | null,
+    amount?: number,
+    severity?: 'success' | 'info' | 'warning' | 'error'
 }
 
 export default SocketProvider;
