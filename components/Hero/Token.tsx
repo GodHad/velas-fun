@@ -1,8 +1,20 @@
+'use client'
 import Image from "next/image"
 import { coinInfo } from "@/types";
 import Link from "next/link";
 
-const TokenComponent = ({ token }: { token: coinInfo }) => {
+const TokenComponent = ({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) => {
+    const formatNumber = (num: number, digit: number = 2) => {
+        if (num >= 1_000_000_000) {
+            return (num / 1_000_000_000).toFixed(2).replace(/\.0$/, '') + 'B';
+        } else if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(2).replace(/\.0$/, '') + 'M';
+        } else if (num >= 1_000) {
+            return (num / 1_000).toFixed(2).replace(/\.0$/, '') + 'K';
+        }
+        return num.toFixed(digit);
+    }
+
     return (
         <>
             <Link href={`/coin/${token._id}`}>
@@ -11,7 +23,7 @@ const TokenComponent = ({ token }: { token: coinInfo }) => {
                         <div className="relative rounded-lg">
                             <div className="bg-primary rounded-t-lg px-2.5 py-1 h-6 flex items-center gap-3 justify-between w-full z-10">
                                 <p className="text-white text-xxs-10 font-medium leading-none">
-                                    Market cap: ${token.marketcap ? (token.marketcap / 1000).toFixed(1) : 0}k
+                                    Market cap: ${formatNumber(vlxPrice * (token.price || 0) * 1072892901)}
                                 </p>
                                 {/* {token.url && (
                                     <p className="flex items-center gap-1">
@@ -41,7 +53,7 @@ const TokenComponent = ({ token }: { token: coinInfo }) => {
                             <div className="flex items-center gap-2 md:gap-2.5">
                                 <Image
                                     className="img-fluid w-6 md:w-8 h-6 md:h-8 rounded-full border-body-color border"
-                                    src={typeof token.creator !== 'string'  && token.creator.avatar ? token.creator.avatar : '/images/creator-logos/default.png'}
+                                    src={typeof token.creator !== 'string' && token.creator.avatar ? token.creator.avatar : '/images/creator-logos/default.png'}
                                     width={32}
                                     height={32}
                                     alt={typeof token.creator !== 'string' && token.creator.name ? token.creator.name : 'Creator Avatar'}

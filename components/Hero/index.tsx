@@ -5,7 +5,7 @@ import TokenComponent from "./Token";
 import ResponsivePaginationComponent from "react-responsive-pagination";
 import 'react-responsive-pagination/themes/classic.css';
 import UserContext from "@/contexts/UserContext";
-import { getCoinsInfo } from "@/utils/api";
+import { getCoinsInfo, getVLXPrice } from "@/utils/api";
 import { coinInfo } from "@/types";
 import { useData } from "@/contexts/PageContext";
 
@@ -61,6 +61,16 @@ const Hero = () => {
     }
 
     const { metaData } = useData();
+
+    const [vlxPrice, setVLXPrice] = useState<number>(0);
+
+    useEffect(() => {
+        const _getVLXPrice = async () => {
+            const price = await getVLXPrice();
+            setVLXPrice(Number(price));
+        }
+        _getVLXPrice()
+    }, [])
 
     return (
         <>
@@ -139,7 +149,7 @@ const Hero = () => {
                 <div className="container mt-[50px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 md:gap-x-6 gap-y-6 md:gap-y-7">
                         {allTokens.map(token => (
-                            <TokenComponent token={token} key={token._id} />
+                            <TokenComponent token={token} key={token._id} vlxPrice={vlxPrice} />
                         ))}
                     </div>
                     {totalPage > 0 &&
