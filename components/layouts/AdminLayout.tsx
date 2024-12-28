@@ -7,7 +7,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import UserContext from '@/contexts/UserContext';
 import { useData } from '@/contexts/PageContext';
 import { getAdminData } from '@/utils/api';
-import { redirect } from 'next/navigation';
+import ErrorPage from '../Common/Error';
 
 const AdminLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -25,8 +25,8 @@ const AdminLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleGetData()
     }, [])
 
-    if (!user.admin) {
-        redirect('/')
+    if (!user || !user.admin) {
+        return <ErrorPage />
     }
 
     return (
