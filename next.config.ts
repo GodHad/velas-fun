@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         hostname: 'localhost'
       },
       {
+        protocol: 'http',
+        hostname: '18.212.112.11'
+      },
+      {
         hostname: 'ipfs.fleek.co'
       },
       {
