@@ -19,13 +19,15 @@ const AdminLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
             if (user.admin) {
                 const adminData = await getAdminData();
                 setAdminData(adminData)
-            } else {
-                redirect('/');
             }
         }
 
         handleGetData()
     }, [])
+
+    if (!user.admin) {
+        redirect('/')
+    }
 
     return (
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
