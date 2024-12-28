@@ -40,7 +40,7 @@ const TokenDetail = () => {
     return (
         <>
             <section id="home"
-                className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pt-[120px] pb-[280px] md:pt-[150px] xl:pt-[180px] xl:pb-[300px] 2xl:pt-[210px] 2xl:pb-[350px]">
+                className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pt-[100px] pb-[60px]">
                 <div className="container">
                     <Link href="/" className="flex gap-2 sm:gap-3 mb-5 text-gray-8 items-center group cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"

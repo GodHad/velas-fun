@@ -15,7 +15,7 @@ export default function AlertComponent() {
                     : alertState?.severity === "error"
                     ? "bg-meta-1"
                     : "bg-meta-5"
-            } cursor-pointer px-3 sm:px-4 md:px-5 xl:px-6 fixed z-20 top-[100px] hidden xs:block ${
+            } cursor-pointer px-3 sm:px-4 md:px-5 xl:px-6 fixed z-20 top-[67px] hidden xs:block ${
                 alertState?.open ? "right-2" : "-right-full"
             } py-2 rounded-sm transition-all duration-500 ease-in-out`}>
             {alertState?.open && alertState?.coin && alertState?.user && alertState?.severity && (
