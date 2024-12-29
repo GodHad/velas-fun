@@ -14,18 +14,13 @@ const SiteKill = () => {
     const { useAccount } = hooks;
 
     const account = useAccount();
-    const [enabled, setEnabled] = useState<boolean | undefined>(adminData?.siteKill);
+    const [enabled, setEnabled] = useState<boolean>(!!adminData?.siteKill);
 
     const handleToggle = useCallback(async () => {
         if (enabled === adminData?.siteKill) return;
 
         if (!connector.provider || !account) {
             errorAlert('Please connect your wallet');
-            return;
-        }
-
-        if (enabled === undefined) {
-            errorAlert('Site pause is not set.');
             return;
         }
 

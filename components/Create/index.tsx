@@ -253,7 +253,7 @@ const CreateToken = () => {
                         </div>
                         <div className="grid grid-cols-12">
                             <div className="col-span-12 flex justify-end items-end">
-                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" disabled={isLoading || metaData?.siteKill}>
+                                <button type="submit" className="rounded-lg bg-primary text-white text-base md:text-lg px-7 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden" disabled={isLoading || metaData?.siteKill}>
                                     {isLoading ? <Spinner /> : 'Create Coin'}
                                 </button>
                             </div>

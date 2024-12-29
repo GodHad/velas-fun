@@ -1,6 +1,6 @@
 const Spinner = () => {
     return (
-        <div className="grid w-full place-items-center overflow-x-scroll rounded-lg lg:overflow-visible">
+        <div className="grid w-full place-items-center rounded-lg overflow-hidden">
             <svg className="00 animate-spin" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24">
                 <path
