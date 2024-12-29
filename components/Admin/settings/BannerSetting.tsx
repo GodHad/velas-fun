@@ -17,7 +17,12 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:500
 const BannerSetting = () => {
     const { adminData, setAdminData } = useData();
 
-    const { register, setValue, handleSubmit, reset } = useForm<BannerSettingProps>();
+    const { register, watch, setValue, handleSubmit, reset } = useForm<BannerSettingProps>({
+        defaultValues: { 
+            bannerTitle: adminData?.bannerTitle,
+            bannerContent: adminData?.bannerContent
+         }
+    });
 
     const [previewImage, setPreviewImage] = useState<string | null>(adminData?.bannerUrl ? (BACKEND_URL + adminData?.bannerUrl) : null);
 
@@ -58,6 +63,12 @@ const BannerSetting = () => {
         reader.readAsDataURL(files[0] as Blob);
     }
 
+    const watchedValues = watch();
+
+    const isDisabled =
+        watchedValues.bannerTitle === adminData?.bannerTitle && watchedValues.bannerContent === adminData?.bannerContent &&
+        ((adminData?.bannerUrl && previewImage === BACKEND_URL + adminData?.bannerUrl) || (!adminData?.bannerUrl && !previewImage))
+
     return (
         <div className="mx-auto my-2">
             <div className="col-span-5 xl:col-span-3">
@@ -83,7 +94,6 @@ const BannerSetting = () => {
                                             type="text"
                                             id="bannerTitle"
                                             placeholder="velas"
-                                            defaultValue={adminData?.bannerTitle}
                                             {...register('bannerTitle')}
                                         />
                                     </div>
@@ -100,7 +110,6 @@ const BannerSetting = () => {
                                                 id="bannerContent"
                                                 rows={6}
                                                 placeholder="Velas Fun bla bla bla"
-                                                defaultValue={adminData?.bannerContent}
                                                 {...register('bannerContent')}
                                             ></textarea>
                                         </div>
@@ -199,8 +208,9 @@ const BannerSetting = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                                     type="submit"
+                                    disabled={isDisabled}
                                 >
                                     Save
                                 </button>

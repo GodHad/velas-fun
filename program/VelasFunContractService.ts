@@ -177,6 +177,46 @@ export const sellTokens = async (provider: any, account: string, token: string, 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateConstantVariables = async (
+    provider: any, 
+    account: string, 
+    paused: boolean, 
+    admin: string[], 
+    creationFee: number, 
+    feePercent: number, 
+    creatorReward: number, 
+    velasFunReward: number, 
+    feeAddress: string
+) => {
+    try {
+        const web3 = new Web3(provider);
+
+        const transaction: {
+            from: string;
+            to: string;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data: any;
+            gasPrice: string;
+            gas?: bigint;
+        } = {
+            from: account,
+            to: VelasFunContract.address,
+            data: contract.methods.updateVariables(paused, admin, creationFee, feePercent, creatorReward, velasFunReward, feeAddress).encodeABI(),
+            gasPrice: (await web3.eth.getGasPrice()).toString()
+        }
+
+        const gas = await web3.eth.estimateGas(transaction);
+        transaction.gas = gas;
+
+        await web3.eth.sendTransaction(transaction);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getTokenAmount = async (provider: any, account: string, token: string): Promise<number> => {
     try {
         const web3 = new Web3(provider);

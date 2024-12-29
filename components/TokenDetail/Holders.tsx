@@ -20,6 +20,7 @@ interface backendRecordInfo {
     amount: number;
     price: number;
     tx: string;
+    feePercent: number;
 }
 
 export default function Holders({ param, token }: { param: string | null, token: coinInfo }) {
@@ -84,6 +85,7 @@ export default function Holders({ param, token }: { param: string | null, token:
                 amount: data.amount, 
                 price: data.price,
                 tx: data.tx,
+                feePercent: data.feePercent
             }
             setRecords(prevState => ([newRecord, ...prevState]));
         }

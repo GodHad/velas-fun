@@ -13,7 +13,14 @@ export interface SocialSettingProps {
 
 const SocialSetting = () => {
     const { adminData, setAdminData } = useData();
-    const { register, handleSubmit, reset } = useForm<SocialSettingProps>();
+    const { register, handleSubmit, reset, watch } = useForm<SocialSettingProps>({
+        defaultValues: {
+            facebook: adminData?.facebook,
+            twitter: adminData?.twitter,
+            youtube: adminData?.youtube,
+            linkedin: adminData?.linkedin
+        }
+    });
 
     const onSubmit: SubmitHandler<SocialSettingProps> = async (_data) => {
         try {
@@ -24,6 +31,14 @@ const SocialSetting = () => {
             errorAlert('Failed to update social info')
         }
     }
+
+    const watchedValues = watch();
+
+    const isDisabled =
+        watchedValues.facebook === adminData?.facebook &&
+        watchedValues.twitter === adminData?.twitter &&
+        watchedValues.youtube === adminData?.youtube &&
+        watchedValues.linkedin === adminData?.linkedin;
 
     return (
         <div className="mx-auto my-2">
@@ -48,7 +63,6 @@ const SocialSetting = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="text"
                                         id="facebook"
-                                        defaultValue={adminData?.facebook}
                                         {...register('facebook')}
                                     />
                                 </div>
@@ -64,7 +78,6 @@ const SocialSetting = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="text"
                                         id="twitter"
-                                        defaultValue={adminData?.twitter}
                                         {...register('twitter')}
                                     />
                                 </div>
@@ -82,7 +95,6 @@ const SocialSetting = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="text"
                                         id="youtube"
-                                        defaultValue={adminData?.youtube}
                                         {...register('youtube')}
                                     />
                                 </div>
@@ -98,7 +110,6 @@ const SocialSetting = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="text"
                                         id="linkedin"
-                                        defaultValue={adminData?.linkedin}
                                         {...register('linkedin')}
                                     />
                                 </div>
@@ -120,7 +131,8 @@ const SocialSetting = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    disabled={isDisabled}
                                     type="submit"
                                 >
                                     Save

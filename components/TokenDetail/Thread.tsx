@@ -40,8 +40,8 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
     }, [showing, param, setMessages, perPage, currentPage]);
 
     useEffect(() => {
-        const handler = (data: { isBuy: number, user: userInfo, token: coinInfo, amount: number, ticker: string, price: number, tx: string }) => {
-            const { isBuy, user, amount, price, tx } = data;
+        const handler = (data: { isBuy: number, user: userInfo, token: coinInfo, amount: number, ticker: string, price: number, tx: string, feePercent: number }) => {
+            const { isBuy, user, amount, price, tx, feePercent } = data;
             if (data.token._id === coin._id && trades.record) {
                 setTrades({
                     ...trades,
@@ -50,9 +50,10 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                             holder: user,
                             holdingStatus: isBuy,
                             time: new Date(),
-                            amount: amount,
-                            price: price,
-                            tx: tx,
+                            amount,
+                            price,
+                            tx,
+                            feePercent
                         },
                         ...trades.record,
                     ],
@@ -196,7 +197,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                                     <span className={`${transaction.holdingStatus === 2 ? 'text-green-500' : 'text-red-500'}`}> {transaction.holdingStatus === 2 ? 'Buy' : 'Sell'} </span>
                                                 </td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount).toFixed(3) : (transaction.amount * transaction.price / 1_000_000).toFixed(3)}</td>
-                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount / transaction.price).toFixed(3) : (transaction.amount / 1_000_000).toFixed(3)}</td>
+                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount * (100 - transaction.feePercent) / 100 / transaction.price).toFixed(3) : (transaction.amount / 1_000_000).toFixed(3)}</td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">{moment(transaction.time).fromNow()}</td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4 text-center">
                                                     <a target="_blank" className="hover:underline" href={`https://explorer.solana.com/tx/${transaction.tx}`}>{transaction.tx.slice(0, 4)}....{transaction.tx.slice(-4)}</a>

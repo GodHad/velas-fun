@@ -1,31 +1,83 @@
-'use client'
+'use client';
+
 import { useData } from '@/contexts/PageContext';
+import { updateConstantVariables } from '@/program/VelasFunContractService';
 import { updateAdmin } from '@/utils/api';
-import { useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { useEffect, useState, useCallback } from 'react';
+import { hooks } from '@/connectors/metaMask';
+import { errorAlert, successAlert } from '@/components/ToastGroup';
 
 const SiteKill = () => {
     const { adminData, setAdminData } = useData();
+    const { connector } = useWeb3React();
+    const { useAccount } = hooks;
 
+    const account = useAccount();
     const [enabled, setEnabled] = useState<boolean | undefined>(adminData?.siteKill);
 
-    useEffect(() => {
-        const handleChange = async () => {
-            if (enabled !== adminData?.siteKill) {
-                const data = await updateAdmin({ siteKill: enabled });
-                setAdminData(data);
-            }
+    const handleToggle = useCallback(async () => {
+        if (enabled === adminData?.siteKill) return;
+
+        if (!connector.provider || !account) {
+            errorAlert('Please connect your wallet');
+            return;
         }
-        handleChange()
-    }, [enabled])
+
+        if (enabled === undefined) {
+            errorAlert('Site pause is not set.');
+            return;
+        }
+
+        if (!adminData?.admin || adminData.admin.length === 0) {
+            errorAlert('Admin data is required.');
+            return;
+        }
+
+        if (!adminData.feeAddress) {
+            errorAlert('Fee Address is required.');
+            return;
+        }
+
+        try {
+            const result = await updateConstantVariables(
+                connector.provider,
+                account,
+                enabled,
+                adminData.admin,
+                adminData.creationFee || 0,
+                adminData.feePercent || 0,
+                adminData.creatorReward || 0,
+                adminData.velasFunReward || 0,
+                adminData.feeAddress
+            );
+
+            if (result) {
+                const updatedData = await updateAdmin({ siteKill: enabled });
+                setAdminData(updatedData);
+                successAlert(enabled ? 'Paused the site' : 'Resumed the site');
+            } else {
+                throw new Error('Failed to update variables');
+            }
+        } catch (error) {
+            console.log(error)
+            errorAlert('Failed to pause/resume the site.');
+        }
+    }, [enabled, connector.provider, account, adminData]);
+
+    useEffect(() => {
+        handleToggle();
+    }, [enabled, handleToggle]);
+
+    const toggleClass = (condition: boolean, trueClass: string, falseClass: string) =>
+        condition ? trueClass : falseClass;
 
     return (
         <div className="mx-auto">
             <div className="col-span-5 xl:col-span-3">
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="border-b border-stroke py-4 px-7 dark:border-strokedark flex">
-                        <h3 className="font-medium text-black dark:text-white mr-5">
-                            Site Pause
-                        </h3>
+                        <h3 className="font-medium text-black dark:text-white mr-5">Site Pause</h3>
                         <div>
                             <label
                                 htmlFor="toggle3"
@@ -36,16 +88,15 @@ const SiteKill = () => {
                                         type="checkbox"
                                         id="toggle3"
                                         className="sr-only"
-                                        onChange={() => {
-                                            setEnabled(!enabled);
-                                        }}
+                                        onChange={() => setEnabled(!enabled)}
+                                        checked={enabled}
                                     />
                                     <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
                                     <div
-                                        className={`dot absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition ${enabled && '!right-1 !translate-x-full !bg-primary dark:!bg-white'
-                                            }`}
+                                        className={`dot absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition 
+                      ${toggleClass(!!enabled, '!right-1 !translate-x-full !bg-primary dark:!bg-white', '')}`}
                                     >
-                                        <span className={`hidden ${enabled && '!block'}`}>
+                                        <span className={toggleClass(!!enabled, '!block', 'hidden')}>
                                             <svg
                                                 className="fill-white dark:fill-black"
                                                 width="11"
@@ -62,7 +113,7 @@ const SiteKill = () => {
                                                 ></path>
                                             </svg>
                                         </span>
-                                        <span className={`${enabled && 'hidden'}`}>
+                                        <span className={toggleClass(!!enabled, 'hidden', '')}>
                                             <svg
                                                 className="h-4 w-4 stroke-current"
                                                 fill="none"

@@ -10,7 +10,11 @@ export interface FooterSettingProps {
 
 const FooterSetting = () => {
     const { adminData, setAdminData } = useData();
-    const { register, handleSubmit, reset } = useForm<FooterSettingProps>();
+    const { watch, register, handleSubmit, reset } = useForm<FooterSettingProps>({
+        defaultValues: {
+            footerContent: adminData?.footerContent
+        }
+    });
 
     const onSubmit: SubmitHandler<FooterSettingProps> = async (_data) => {
         try {
@@ -22,6 +26,10 @@ const FooterSetting = () => {
         }
     }
 
+    const watchedValues = watch();
+
+    const isDisabled = watchedValues.footerContent === adminData?.footerContent
+       
     return (
         <div className="mx-auto my-2">
             <div className="col-span-5 xl:col-span-3">
@@ -45,7 +53,6 @@ const FooterSetting = () => {
                                     id="footerContent"
                                     rows={6}
                                     placeholder="Velas Fun"
-                                    defaultValue={adminData?.footerContent}
                                     {...register('footerContent')}
                                 ></textarea>
                             </div>
@@ -63,7 +70,8 @@ const FooterSetting = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    disabled={isDisabled}
                                     type="submit"
                                 >
                                     Save

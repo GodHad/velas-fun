@@ -3,6 +3,9 @@ import { useData } from "@/contexts/PageContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { updateAdmin } from "@/utils/api";
 import { errorAlert, successAlert } from "@/components/ToastGroup";
+import { updateConstantVariables } from "@/program/VelasFunContractService";
+import { useWeb3React } from "@web3-react/core";
+import { hooks } from "@/connectors/metaMask";
 
 export interface ContractVariable {
     creationFee: number;
@@ -14,17 +17,78 @@ export interface ContractVariable {
 
 const Variables = () => {
     const { adminData, setAdminData } = useData();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<ContractVariable>();
+    const { connector } = useWeb3React();
+    const { useAccount } = hooks;
+
+    const account = useAccount();
+
+    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<ContractVariable>({
+        defaultValues: {
+            creationFee: adminData?.creationFee,
+            creatorReward: adminData?.creatorReward,
+            feePercent: adminData?.feePercent,
+            feeAddress: adminData?.feeAddress,
+            velasFunReward: adminData?.velasFunReward
+        }
+    });
 
     const onSubmit: SubmitHandler<ContractVariable> = async (_data) => {
         try {
-            const data = await updateAdmin(_data)
-            setAdminData(data)
-            successAlert('Update Variables Successfully')
+            handleUpdate(_data)
         } catch {
             errorAlert('Failed to update variables')
         }
     }
+
+    const watchedValues = watch();
+
+    const isDisabled =
+        watchedValues.creationFee === adminData?.creationFee &&
+        watchedValues.creatorReward === adminData?.creatorReward &&
+        watchedValues.feePercent === adminData?.feePercent &&
+        watchedValues.velasFunReward === adminData?.velasFunReward &&
+        watchedValues.feeAddress === adminData?.feeAddress
+
+    const handleUpdate = async (_data: ContractVariable) => {
+        if (!connector.provider || !account) {
+            errorAlert('Please connect your wallet');
+            return;
+        }
+
+        if (!adminData?.admin || adminData.admin.length === 0) {
+            errorAlert('Admin data is required.');
+            return;
+        }
+
+        if (!adminData.feeAddress) {
+            errorAlert('Fee Address is required.');
+            return;
+        }
+
+        try {
+            const result = await updateConstantVariables(
+                connector.provider,
+                account,
+                adminData.siteKill,
+                adminData.admin,
+                _data.creationFee || 0,
+                _data.feePercent || 0,
+                _data.creatorReward || 0,
+                _data.velasFunReward || 0,
+                _data.feeAddress
+            );
+
+            if (result) {
+                const data = await updateAdmin(_data)
+                setAdminData(data)
+                successAlert('Update Variables Successfully')
+            } else {
+                throw new Error('Failed to update variables');
+            }
+        } catch {
+            errorAlert('Failed to update variables')
+        }
+    };
 
     return (
         <div className="mx-auto my-2">
@@ -49,10 +113,9 @@ const Variables = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="creationFee"
-                                        defaultValue={adminData?.creationFee}
-                                        {...register('creationFee', { 
+                                        {...register('creationFee', {
                                             min: { value: 1, message: 'Creation Fee can\'t be lower than 1' },
-                                            required: 'Creation Fee is required' 
+                                            required: 'Creation Fee is required'
                                         })}
                                     />
                                     {errors.creationFee && <p className="text-red-600">{errors.creationFee.message}</p>}
@@ -69,7 +132,6 @@ const Variables = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="feePercent"
-                                        defaultValue={adminData?.feePercent}
                                         {...register('feePercent', {
                                             required: 'Fee Percent is required',
                                             max: { value: 100, message: 'Fee Percent can\'t be higher than 100' },
@@ -92,8 +154,7 @@ const Variables = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="creatorReward"
-                                        defaultValue={adminData?.creatorReward}
-                                        {...register('creatorReward', { 
+                                        {...register('creatorReward', {
                                             required: 'Creator Reward is required',
                                             min: { value: 0, message: 'Creator Reward can\'t be lower than 0' },
                                         })}
@@ -112,8 +173,7 @@ const Variables = () => {
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                         type="number"
                                         id="velasFunReward"
-                                        defaultValue={adminData?.velasFunReward}
-                                        {...register('velasFunReward', { 
+                                        {...register('velasFunReward', {
                                             min: { value: 0, message: 'Velas Fun Reward can\'t be lower than 0' },
                                             required: 'Velas Fun Reward is required'
                                         })}
@@ -134,7 +194,6 @@ const Variables = () => {
                                     type="text"
                                     id="feeAddress"
                                     placeholder="0x1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                    defaultValue={adminData?.feeAddress}
                                     {...register('feeAddress', { required: 'Fee Address is required' })}
                                 />
                                 {errors.feeAddress && <p className="text-red-600">{errors.feeAddress.message}</p>}
@@ -157,8 +216,9 @@ const Variables = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                                     type="submit"
+                                    disabled={isDisabled}
                                 >
                                     Save
                                 </button>

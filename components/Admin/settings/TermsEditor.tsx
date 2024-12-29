@@ -204,7 +204,8 @@ const TermsEditor = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    disabled={content === adminData?.terms}
                                     type="submit"
                                 >
                                     Save

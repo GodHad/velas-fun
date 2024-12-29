@@ -79,6 +79,7 @@ export interface recordInfo {
     amount: number,
     price: number,
     tx: string,
+    feePercent: number;
 }
 
 export interface CharTable {

@@ -42,7 +42,7 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
-  });
+  }, []);
 
   const { user, setUser, login, setLogin, setIsLoading } = useContext(UserContext);
 

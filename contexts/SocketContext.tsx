@@ -99,14 +99,14 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             severity: data.isBuy === 2 ? 'success' : 'error'
         });
         // infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
-        const resetTimeout = setTimeout(() => {
-            setAlertState((prev) => ({ ...prev, open: false })); 
-            setTimeout(() => {
-                setAlertState(initialAlertState);
-            }, 500); 
-        }, 3000);
+        // const resetTimeout = setTimeout(() => {
+        //     setAlertState((prev) => ({ ...prev, open: false })); 
+        //     setTimeout(() => {
+        //         setAlertState(initialAlertState);
+        //     }, 500); 
+        // }, 3000);
     
-        return () => clearTimeout(resetTimeout);
+        // return () => clearTimeout(resetTimeout);
     }
 
     useEffect(() => {

@@ -15,12 +15,16 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:500
 
 const LogoSetting = () => {
     const { adminData, setAdminData } = useData();
-    
+
     const [previewImage, setPreviewImage] = useState<string | null>(adminData?.logoUrl ? (BACKEND_URL + adminData?.logoUrl) : null);
 
     const fileRef = useRef<HTMLInputElement>(null)
-    
-    const { register, setValue, handleSubmit, reset } = useForm<LogoSettingProps>();
+
+    const { register, watch, setValue, handleSubmit, reset } = useForm<LogoSettingProps>({
+        defaultValues: {
+            logoTitle: adminData?.logoTitle
+        }
+    });
 
     const onSubmit: SubmitHandler<LogoSettingProps> = async (_data) => {
         try {
@@ -56,6 +60,13 @@ const LogoSetting = () => {
         reader.readAsDataURL(files[0] as Blob);
     }
 
+    const watchedValues = watch();
+
+    const isDisabled =
+        watchedValues.logoTitle === adminData?.logoTitle &&
+        ((adminData?.logoUrl && previewImage === BACKEND_URL + adminData?.logoUrl) || (!adminData?.logoUrl && !previewImage))
+
+
     return (
         <div className="mx-auto my-2">
             <div className="col-span-5 xl:col-span-3">
@@ -80,7 +91,6 @@ const LogoSetting = () => {
                                         type="text"
                                         id="logoTitle"
                                         placeholder="velas"
-                                        defaultValue={adminData?.logoTitle}
                                         {...register('logoTitle')}
                                     />
                                 </div>
@@ -176,8 +186,9 @@ const LogoSetting = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                                     type="submit"
+                                    disabled={isDisabled}
                                 >
                                     Save
                                 </button>

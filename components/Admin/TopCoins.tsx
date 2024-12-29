@@ -81,7 +81,7 @@ const TopCoins = () => {
                     >
                         <div className="flex items-center gap-3 p-2.5 xl:p-5">
                             <div className="flex-shrink-0">
-                                <Image className="rounded-full" src={coin.image} alt="Brand" width={48} height={48} />
+                                <Image className="rounded-full h-12 w-12 object-contain" src={coin.image} alt="Brand" width={48} height={48} />
                             </div>
                             <Link href={'/coin/' + coin.id}>
                             <p className="hidden text-primary underline sm:block">

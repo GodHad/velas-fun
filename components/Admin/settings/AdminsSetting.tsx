@@ -3,10 +3,16 @@ import { useState } from 'react';
 import { updateAdmin } from '@/utils/api';
 import { useData } from '@/contexts/PageContext';
 import { errorAlert, successAlert } from '@/components/ToastGroup';
+import { useWeb3React } from '@web3-react/core';
+import { hooks } from '@/connectors/metaMask';
+import { updateConstantVariables } from '@/program/VelasFunContractService';
 
 const AdminsSetting = () => {
     const { adminData, setAdminData } = useData();
+    const { connector } = useWeb3React();
+    const { useAccount } = hooks;
 
+    const account = useAccount();
     const [adminAddress, setAdminAddress] = useState<string>('');
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,10 +20,7 @@ const AdminsSetting = () => {
         e.preventDefault();
         if (adminData?.admin) {
             try {
-                const data = await updateAdmin({ admin: [...adminData!.admin, adminAddress] });
-                setAdminData(data);
-                setAdminAddress('');
-                successAlert('Update Admin Info successfully')
+                handleUpdate([...adminData!.admin, adminAddress]);
             } catch {
                 errorAlert('Failed to update Admin Info')
             }
@@ -27,9 +30,53 @@ const AdminsSetting = () => {
     const handleDelete = async (wallet: string) => {
         try {
             if (adminData?.admin) {
-                const data = await updateAdmin({ admin: adminData.admin.filter(_admin => _admin !== wallet) });
+                handleUpdate(adminData.admin.filter(_admin => _admin !== wallet))
+            }
+        } catch {
+            errorAlert('Failed to update Admin Info')
+        }
+    };
+
+    const handleUpdate = async (admin: string[]) => {
+        if (!connector.provider || !account) {
+            errorAlert('Please connect your wallet');
+            return;
+        }
+
+        if (admin.length === 0) {
+            errorAlert('Admin data is required.');
+            return;
+        }
+
+        if (!adminData?.admin || adminData.admin.length === 0) {
+            errorAlert('Admin data is required.');
+            return;
+        }
+
+        if (!adminData.feeAddress) {
+            errorAlert('Fee Address is required.');
+            return;
+        }
+
+        try {
+            const result = await updateConstantVariables(
+                connector.provider,
+                account,
+                adminData.siteKill,
+                admin,
+                adminData.creationFee || 0,
+                adminData.feePercent || 0,
+                adminData.creatorReward || 0,
+                adminData.velasFunReward || 0,
+                adminData.feeAddress
+            );
+
+            if (result) {
+                const data = await updateAdmin({ admin });
                 setAdminData(data);
                 successAlert('Update Admin Info successfully')
+            } else {
+                throw new Error('Failed to update variables');
             }
         } catch {
             errorAlert('Failed to update Admin Info')
@@ -65,7 +112,8 @@ const AdminsSetting = () => {
                                     />
                                 </div>
                                 <button
-                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    disabled={!adminAddress}
                                     type="submit"
                                 >
                                     Add
