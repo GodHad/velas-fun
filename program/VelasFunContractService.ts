@@ -70,7 +70,7 @@ export const createToken = async (
             from: account,
             to: VelasFunContract.address,
             value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
-            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, amount).encodeABI(),
+            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
             gasPrice: gasPrice.toString()
         }
 
