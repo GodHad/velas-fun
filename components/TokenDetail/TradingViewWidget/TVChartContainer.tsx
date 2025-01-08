@@ -15,12 +15,14 @@ export type TVChartContainerProps = {
     classNames?: {
         container: string;
     };
+    vlxPrice: number;
 };
 
 export const TVChartContainer = ({
     name,
     pairIndex,
-    token
+    token,
+    vlxPrice
 }: TVChartContainerProps) => {
     const { socket } = useSocket();
     const chartContainerRef =
@@ -41,7 +43,7 @@ export const TVChartContainer = ({
             const widgetOptions: ChartingLibraryWidgetOptions = {
                 symbol: name,
                 debug: false,
-                datafeed: getDataFeed({ pairIndex, name, token, socket }),
+                datafeed: getDataFeed({ pairIndex, name, token, socket, vlxPrice }),
                 theme: "dark",
                 locale: "en",
                 container: elem,

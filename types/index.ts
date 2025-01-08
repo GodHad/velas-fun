@@ -42,22 +42,26 @@ export interface CoinResponse {
 }
 
 export interface coinInfo {
-    _id?: string,
-    name: string,
-    creator: string | userInfo,
-    ticker: string,
-    url: string,
-    reserveOne: number,
-    reserveTwo: number,
-    token: string,
-    marketcap?: number,
-    price?: number,
-    replies?: number,
-    description?: string,
-    twitter?: string,
-    telegram?: string,
+    _id?: string;
+    name: string;
+    creator: string | userInfo;
+    ticker: string;
+    url: string;
+    reserveOne: number;
+    reserveTwo: number;
+    token: string;
+    marketcap?: number;
+    graduationMarketCap?: number;
+    price?: number;
+    replies?: number;
+    description?: string;
+    twitter?: string;
+    telegram?: string;
     website?: string;
-    date?: Date,
+    date?: Date;
+    tradingOnUniswap?: boolean;
+    tradingPaused?: boolean;
+    uniswapPair?: boolean;
 }
 export interface msgInfo {
     coinId: string | coinInfo,

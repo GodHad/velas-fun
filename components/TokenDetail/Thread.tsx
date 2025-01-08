@@ -148,7 +148,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                 ) : (
                     <div>
                         <div className="flex flex-col color p-3 mb-3 rounded-lg max-w-fit">
-                            <div className="flex flex-col justify-start px-3">
+                            {/* <div className="flex flex-col justify-start px-3">
                                 <div className="flex flex-row justify-between items-center">
                                     <p className="mr-4">Filter by following</p>
                                     <label className="switch m-2">
@@ -157,7 +157,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                     </label>
                                 </div>
                             </div>
-                            <hr className="border border-gray-200 dark:border-gray-700 line my-2" />
+                            <hr className="border border-gray-200 dark:border-gray-700 line my-2" /> */}
                             {/* <div className="flex flex-col justify-start px-3">
                                 <div className="flex flex-row justify-between items-center">
                                     <p className="mr-4">Filter by size</p>
@@ -175,7 +175,7 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                         <tr className="text-sm lg:text-xxs-15 xl:text-base font-medium text-gray-600 border-b dark:border-gray-700 border-gray-200 !leading-none">
                                             <th className="p-4 lg:pb-4 lg:p-5 text-start">Account</th>
                                             <th className="p-4 lg:pb-4 lg:p-5 text-start">Type</th>
-                                            <th className="p-4 lg:pb-4 lg:p-5 text-start">VLX</th>
+                                            <th className="p-4 lg:pb-4 lg:p-5 text-start">ETH</th>
                                             <th className="p-4 lg:pb-4 lg:p-5 text-start">{coin.name}</th>
                                             <th className="p-4 lg:pb-4 lg:p-5 text-start"><p className="flex items-center">Date</p>
                                             </th>

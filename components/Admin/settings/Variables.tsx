@@ -13,6 +13,7 @@ export interface ContractVariable {
     feePercent: number;
     feeAddress: string;
     velasFunReward: number;
+    graduationMarketCap: number;
 }
 
 const Variables = () => {
@@ -47,6 +48,7 @@ const Variables = () => {
         watchedValues.creatorReward === adminData?.creatorReward &&
         watchedValues.feePercent === adminData?.feePercent &&
         watchedValues.velasFunReward === adminData?.velasFunReward &&
+        watchedValues.graduationMarketCap === adminData?.graduationMarketCap &&
         watchedValues.feeAddress === adminData?.feeAddress
 
     const handleUpdate = async (_data: ContractVariable) => {
@@ -75,6 +77,7 @@ const Variables = () => {
                 _data.feePercent || 0,
                 _data.creatorReward || 0,
                 _data.velasFunReward || 0,
+                _data.graduationMarketCap || 0, 
                 _data.feeAddress
             );
 
@@ -107,7 +110,7 @@ const Variables = () => {
                                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                                         htmlFor="creationFee"
                                     >
-                                        Creation Fee(VLX)
+                                        Creation Fee(ETH)
                                     </label>
                                     <input
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
@@ -148,7 +151,7 @@ const Variables = () => {
                                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                                         htmlFor="creatorReward"
                                     >
-                                        Creator Reward(VLX)
+                                        Creator Reward(ETH)
                                     </label>
                                     <input
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
@@ -167,7 +170,7 @@ const Variables = () => {
                                         className="mb-3 block text-sm font-medium text-black dark:text-white"
                                         htmlFor="velasFunReward"
                                     >
-                                        VelasFun Reward(VLX)
+                                        VelasFun Reward(ETH)
                                     </label>
                                     <input
                                         className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
@@ -197,6 +200,27 @@ const Variables = () => {
                                     {...register('feeAddress', { required: 'Fee Address is required' })}
                                 />
                                 {errors.feeAddress && <p className="text-red-600">{errors.feeAddress.message}</p>}
+                            </div>
+
+                            <div className="mb-5.5">
+                                <div className="w-full sm:w-1/2">
+                                    <label
+                                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                                        htmlFor="graduationMarketCap"
+                                    >
+                                        Graduation Market Cap(ETH)
+                                    </label>
+                                    <input
+                                        className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                                        type="number"
+                                        id="graduationMarketCap"
+                                        {...register('graduationMarketCap', {
+                                            min: { value: 0, message: 'Graduation Market Cap can\'t be lower than 0' },
+                                            required: 'Graduation Market Cap is required'
+                                        })}
+                                    />
+                                    {errors.graduationMarketCap && <p className="text-red-600">{errors.graduationMarketCap.message}</p>}
+                                </div>
                             </div>
 
                             <div className="flex justify-end gap-4.5">

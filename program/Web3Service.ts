@@ -6,7 +6,7 @@ export interface Contract {
     abi: any;
 }
 
-const providerUrl = process.env.NEXT_PUBLIC_VELAS_PROVIDER_URL || 'https://evmexplorer.velas.com/rpc';
+const providerUrl = process.env.NEXT_PUBLIC_VELAS_PROVIDER_URL || 'https://holesky.infura.io/v3/f0349246d2b046c9b2e336ce478cf5fb';
 
 export class Web3Service {
     private static instance: Web3Service | null = null;

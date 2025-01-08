@@ -6,7 +6,8 @@ import Script from "next/script";
 import { coinInfo } from "@/types";
 
 interface TradingChartProps {
-    coin: coinInfo
+    coin: coinInfo;
+    vlxPrice: number;
 }
 
 const TVChartContainer = dynamic(
@@ -15,7 +16,7 @@ const TVChartContainer = dynamic(
     { ssr: false }
 );
 
-export default function TradingViewWidget({ coin }: TradingChartProps) {
+export default function TradingViewWidget({ coin, vlxPrice }: TradingChartProps) {
     const [isScriptReady, setIsScriptReady] = useState(false);
     return (
         <>
@@ -33,6 +34,7 @@ export default function TradingViewWidget({ coin }: TradingChartProps) {
                 name={coin.name}
                 pairIndex={10}
                 token={coin.token}
+                vlxPrice={vlxPrice}
             />}
         </>
     );

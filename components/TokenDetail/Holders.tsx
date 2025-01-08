@@ -70,7 +70,7 @@ export default function Holders({ param, token }: { param: string | null, token:
                 wallet: token.token,
                 bondingCurve: true
             },
-            totalAmount: 1072892901 - token.reserveOne / 1_000_000
+            totalAmount: 1_087_598_453 - token.reserveOne / 1_000_000
         }
         setHolders([bondingCurve, ...agr].sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 20));
     }, [records]);
@@ -107,7 +107,7 @@ export default function Holders({ param, token }: { param: string | null, token:
                     <a href={`https://solscan.io/address/${holder.holder.wallet}`} className="text-sm lg:text-base font-medium text-body-color !leading-5 xl:!leading-none">
                         {index + 1}. <span className="text-yellow hover:underline cursor-pointer">{holder.holder.name} {holder.holder.dev ? '(dev)' : ''} {holder.holder.bondingCurve ? '(bonding curve)' : ''}</span>
                     </a>
-                    <p className="text-sm lg:text-base font-medium !leading-5 xl:!leading-none"> {Math.abs(holder.totalAmount / 1072892901 * 100).toFixed(2)}% </p>
+                    <p className="text-sm lg:text-base font-medium !leading-5 xl:!leading-none"> {Math.floor(Math.abs((holder.totalAmount / 1_087_598_453) * 10000)) / 100}% </p>
                 </div>
             ))}
         </div>

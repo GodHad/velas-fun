@@ -30,8 +30,8 @@ export default function TradeForm({ token }: { token: coinInfo }) {
 
     const getBalance = async () => {
         try {
-            if (!account || !connector.provider) return;
-            const balance = await getTokenAmount(connector.provider, account, token.token)
+            if (!account) return;
+            const balance = await getTokenAmount(account, token.token)
             setTokenBal(balance);
         } catch {
             setTokenBal(0);
@@ -54,7 +54,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
             if (isBuy === 2) res = await buyTokens(connector.provider, account, token.token, sol);
             else res = await sellTokens(connector.provider, account, token.token, sol);
 
-            if (!res) errorAlert('Failed to buy tokens');
+            if (!res) errorAlert(isBuy === 2 ? 'Failed to buy tokens' : 'Failed to sell tokens');
 
             setIsTrading(false);
         } catch (error) {
@@ -85,10 +85,8 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                             <input type="number" id="token" placeholder="0.0" min="0" className="border dark:border-gray-700 border-gray-200 rounded-md placeholder:text-body-color text-[13px] sm:text-sm lg:text-base !leading-none ps-3 pe-16 sm:pe-20 py-3 w-full focus:outline-0 hide-arrows ng-valid" value={sol} onChange={handleInputChange} />
                             {isBuy === 2 ?
                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[13px] sm:text-sm lg:text-base !leading-none font-normal flex gap-1 sm:gap-1.5 items-center">
-                                    <span>VLX</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={24} version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 42 42" xmlSpace="preserve">
-                                        <path fill="#0037C1" d="M28.9,13.9L21,27.7l-7.9-13.9H28.9z M36.8,9.2H5.2L21,37L36.8,9.2z M0,0l2.6,4.6h36.7L42,0H0z" />
-                                    </svg>
+                                    <span>ETH</span>
+                                    <Image src={`/images/Base_Network_Logo.svg`} width={24} height={24} alt="base logo" />
                                 </div>
                                 :
                                 <div className="absolute right-5 top-[16px] text-sm md:text-base font-normal flex gap-1.5 items-center leading-5">
@@ -103,9 +101,9 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                             <div className="">
                                 <div className="flex items-center flex-wrap gap-1.5 mb-5 lg:mb-6">
                                     <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('')}>Reset</button>
-                                    <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('1')}> 1 VLX </button>
-                                    <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('5')}> 5 VLX </button>
-                                    <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('10')}> 10 VLX </button>
+                                    <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('0.1')}> 0.1 ETH </button>
+                                    <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('0.5')}> 0.5 ETH </button>
+                                    <button className="text-[10px] font-normal !leading-none text-body-color pb-1 p-1.5 border border-primary rounded" onClick={() => setSol('1')}> 1 ETH </button>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +132,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                         </div>
                     </>
                 }
-                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden" onClick={handleTrade} disabled={isTrading || metaData?.siteKill}>
+                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden" onClick={handleTrade} disabled={isTrading || metaData?.siteKill || (token.tradingPaused && !token.tradingOnUniswap)}>
                     {
                         isTrading ?
                             <Spinner />

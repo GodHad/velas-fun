@@ -68,15 +68,14 @@ const Header = () => {
       await metaMask.provider?.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0x6a', // A 0x-prefixed hexadecimal string
-          chainName: 'Velas EVM Mainnet',
+          chainId: '0x4268', 
+          chainName: 'Holesky',
           nativeCurrency: {
-            name: 'VLX',
-            symbol: 'VLX',
+            name: 'ETH',
+            symbol: 'ETH',
             decimals: 18,
           },
-          rpcUrls: ['https://evmexplorer.velas.com/rpc'], // Array of RPC URLs
-          blockExplorerUrls: ['https://evmexplorer.velas.com/'], // Array of block explorer URLs
+          rpcUrls: ['https://ethereum-holesky.publicnode.com'], 
         }],
       })
       await metaMask.activate(106);

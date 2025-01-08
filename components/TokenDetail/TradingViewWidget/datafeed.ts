@@ -28,12 +28,14 @@ export function getDataFeed({
     pairIndex,
     name,
     token,
-    socket
+    socket,
+    vlxPrice
 }: {
     name: string;
     pairIndex: number;
     token: string;
     socket: Socket | undefined;
+    vlxPrice: number;
 }): IBasicDataFeed {
     return {
         onReady: (callback) => {
@@ -111,7 +113,14 @@ export function getDataFeed({
                 const bars: Bar[] = [];
                 chartTable.table.forEach((bar: Bar) => {
                     if (bar.time >= from && bar.time < to) {
-                        bars.push({ ...bar, time: bar.time * 1000 });
+                        bars.push({ 
+                            ...bar,
+                            open: bar.open * vlxPrice,
+                            close: bar.close * vlxPrice,
+                            high: bar.high * vlxPrice,
+                            low: bar.low * vlxPrice,
+                            time: bar.time * 1000 
+                        });
                     }
                 });
         
@@ -135,10 +144,10 @@ export function getDataFeed({
         
             socket?.on(`price-update-${token}`, (priceUpdate) => {
                 const lastTime = new Date(priceUpdate.lastTime).getTime();
-                const closedPrice = priceUpdate.closedPrice;
+                const closedPrice = priceUpdate.closedPrice * vlxPrice;
                 const currentTime = Math.floor(lastTime / 1000);
                 const alignedTime = Math.floor(currentTime / resolutionInSeconds) * resolutionInSeconds * 1000; 
-                const price = priceUpdate.price;
+                const price = priceUpdate.price * vlxPrice;
         
                 if (!lastBar) {
                     lastBar = {

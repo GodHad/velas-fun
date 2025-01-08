@@ -16,6 +16,7 @@ const TokenDetail = () => {
     const [param, setParam] = useState<string>('');
     const [coin, setCoin] = useState<coinInfo | null>(null);
     const [vlxPrice, setVLXPrice] = useState<number>(0);
+    const [showing, setShowing] = useState<string>('base');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,6 +25,7 @@ const TokenDetail = () => {
             setParam(parameter);
             const data = await getCoinInfo(parameter);
             setCoin(data as coinInfo);
+            if (data.tradingOnUniswap) setShowing('current')
         }
 
         fetchData();
@@ -59,13 +61,26 @@ const TokenDetail = () => {
                             <CoinDetail token={coin} vlxPrice={vlxPrice} />
                             <div className="flex gap-5 flex-wrap lg:flex-nowrap">
                                 <div className="w-full">
-                                    <TradingViewWidget coin={coin} />
+                                    {coin.tradingOnUniswap &&
+                                        <div className="tabs mt-4">
+                                            <div className="flex items-center gap-2 pb-4">
+                                                <div className={`font-semibold text-xs leading-none cursor-pointer w-24 sm:w-28 pb-2 pt-2 px-4 text-center flex justify-center items-center transition-colors duration-300 rounded ${showing === 'base' ? 'bg-primary text-white' : 'text-gray-500'}`} onClick={() => setShowing('base')}> Base Chart </div>
+                                                <div className={`font-semibold text-xs leading-none cursor-pointer w-24 sm:w-28 pb-2 pt-2 px-4 text-center flex justify-center items-center transition-colors duration-300 rounded ${showing === 'current' ? 'bg-primary text-white' : 'text-gray-500'}`} onClick={() => setShowing('current')}> Current Chart</div>
+                                            </div>
+                                        </div>
+                                    }
+                                    {coin.tradingOnUniswap && showing === 'current' &&
+                                        <>
+                                            <iframe id="dextools-widget" title="DEXTools Trading Chart" width={"100%"} height={"400"} src={`https://www.dextools.io/widget-chart/en/base/pe-light/${coin.uniswapPair}?theme=dark`} />
+                                        </>
+                                    }
+                                    {showing === 'base' && <TradingViewWidget coin={coin} vlxPrice={vlxPrice} />}
                                     <Thread param={param} coin={coin} />
                                 </div>
 
                                 <div className="lg:max-w-[380px] w-auto">
                                     <TradeForm token={coin} />
-                                    <TokenOverview token={coin} />
+                                    <TokenOverview token={coin} vlxPrice={vlxPrice} />
                                     <Holders param={param} token={coin} />
                                 </div>
                             </div>

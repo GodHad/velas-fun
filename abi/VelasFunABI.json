@@ -1,6 +1,12 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_router",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -30,6 +36,19 @@
     "inputs": [],
     "name": "ReentrancyGuardReentrantCall",
     "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "GraduatingTokenToUniswap",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -74,7 +93,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "velasFunReward",
+        "name": "baseFunReward",
         "type": "uint256"
       },
       {
@@ -143,6 +162,36 @@
         "indexed": false,
         "internalType": "string",
         "name": "symbol",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "image",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "twitter",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "telegram",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "website",
         "type": "string"
       },
       {
@@ -263,6 +312,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "uniswapPair",
+        "type": "address"
+      }
+    ],
+    "name": "TradingEnabledOnUniswap",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "bool",
         "name": "paused",
@@ -295,7 +363,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "velasFunReward",
+        "name": "baseFunReward",
         "type": "uint256"
       },
       {
@@ -323,7 +391,7 @@
   },
   {
     "inputs": [],
-    "name": "INITIAL_VIRTUAL_TOKENS",
+    "name": "INITIAL_VIRTUAL_ETH",
     "outputs": [
       {
         "internalType": "uint256",
@@ -336,7 +404,7 @@
   },
   {
     "inputs": [],
-    "name": "INITIAL_VIRTUAL_VLX",
+    "name": "INITIAL_VIRTUAL_TOKENS",
     "outputs": [
       {
         "internalType": "uint256",
@@ -388,7 +456,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "vlxAmount",
+        "name": "ethAmount",
         "type": "uint256"
       }
     ],
@@ -454,7 +522,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "vlxAmount",
+        "name": "ethAmount",
         "type": "uint256"
       }
     ],
@@ -524,6 +592,21 @@
             "internalType": "uint256",
             "name": "totalSupply",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "tradingOnUniswap",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "tradingPaused",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "uniswapPair",
+            "type": "address"
           }
         ],
         "internalType": "struct TokenInfo",
@@ -532,6 +615,25 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "y",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTokenETHAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -655,7 +757,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_velasFunReward",
+        "name": "_baseFunReward",
         "type": "uint256"
       },
       {
@@ -700,9 +802,9 @@
         "type": "bool"
       },
       {
-        "internalType": "string[]",
+        "internalType": "address[]",
         "name": "_admin",
-        "type": "string[]"
+        "type": "address[]"
       },
       {
         "internalType": "uint256",
@@ -721,13 +823,18 @@
       },
       {
         "internalType": "uint256",
-        "name": "_velasFunReward",
+        "name": "_baseFunReward",
         "type": "uint256"
       },
       {
-        "internalType": "string",
+        "internalType": "uint256",
+        "name": "_graduationMarketCap",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
         "name": "_feeAddress",
-        "type": "string"
+        "type": "address"
       }
     ],
     "name": "updateVariables",
@@ -736,7 +843,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
     "name": "withdraw",
     "outputs": [],
     "stateMutability": "nonpayable",

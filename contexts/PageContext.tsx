@@ -32,6 +32,7 @@ interface AdminDataProps {
   creationFee: number;
   creatorReward: number;
   velasFunReward: number;
+  graduationMarketCap: number;
   siteKill: boolean;
   logoTitle?: string;
   logoUrl?: string;

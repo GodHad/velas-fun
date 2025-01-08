@@ -44,6 +44,7 @@ const SiteKill = () => {
                 adminData.feePercent || 0,
                 adminData.creatorReward || 0,
                 adminData.velasFunReward || 0,
+                adminData.graduationMarketCap || 0, 
                 adminData.feeAddress
             );
 

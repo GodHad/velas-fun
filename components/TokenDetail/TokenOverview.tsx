@@ -3,23 +3,22 @@ import Image from "next/image";
 import { coinInfo } from "@/types";
 import { useSocket } from "@/contexts/SocketContext";
 
-export default function TokenOverview({ token }: { token: coinInfo }) {
+export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) {
     const [progress, setProgress] = useState<number>(60);
     const { socket } = useSocket();
     const [_token, setToken] = useState(token);
 
     useEffect(() => {
-        const value = Math.floor(_token.reserveOne / (1072892901 * 1_000_000) * 100)
+        const value = Math.floor((_token.price || 0) * 1_000_000_000 / (token.graduationMarketCap || 5) * 100)
         setProgress(value);
     }, [_token, setProgress]);
 
     useEffect(() => {
         const handleUpdateBondingCurve = (data: { tokenId: string, reserveOne: number, reserveTwo: number }) => {
-            console.log(data);
             if (_token._id === data.tokenId) {
-                const value = Math.floor(data.reserveOne / (1072892901 * 1_000_000) * 100)
+                const value = Math.floor((data.reserveTwo / data.reserveOne * 1_000_000_000) / (token.graduationMarketCap || 5) * 100)
                 setProgress(value);
-                setToken(prevState => ({...prevState, reserveOne: data.reserveOne, reserveTwo: data.reserveTwo}))
+                setToken(prevState => ({ ...prevState, reserveOne: data.reserveOne, reserveTwo: data.reserveTwo }))
             }
         }
         socket?.on('update-bonding-curve', handleUpdateBondingCurve);
@@ -32,13 +31,24 @@ export default function TokenOverview({ token }: { token: coinInfo }) {
     return (
         <>
             <div className=" rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
-                <h4 className="text-sm md:text-base font-semibold !leading-none pb-4 md:pb-5">Bonding curve progress : {progress}%</h4>
+                <h4 className="text-sm md:text-base font-semibold !leading-none pb-4 md:pb-5">Bonding curve progress : {Math.min(progress, 100)}%</h4>
                 <div className="bg-body-color w-full rounded-md h-2 md:h-2.5 mb-4 md:mb-5">
                     <div className="bg-primary rounded-md h-2 md:h-2.5" style={{ width: `${progress}%` }}></div>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <p className="text-[10px] font-normal leading-normal"> When the market cap reaches $65,534 all the liquidity from the bonding curve will be deposited into BX Dex and burned. progression increases as the price goes up. </p>
-                    <p className="text-[10px] font-normal leading-normal"> There are {Math.floor(1072892901 - _token.reserveOne / 1_000_000)} tokens still available for sale in the bonding curve and there is {_token.reserveTwo / 1_000_000_000_000_000_000} VLX in the bonding curve. </p>
+                    {
+                        token.tradingOnUniswap ? (
+                            <p className="text-[10px] font-normal leading-normal"> uniswap pool seeded! view on uniswap <a className="text-primary" href={`https://app.uniswap.org/explore/pools/base/${token.uniswapPair}`} target="_blank">here</a></p>
+                        ) : !token.tradingPaused ? (
+                            <>
+                                <p className="text-[10px] font-normal leading-normal"> When the market cap reaches ${(vlxPrice * (token.graduationMarketCap || 5)).toLocaleString()} all the liquidity from the bonding curve will be deposited into Uniswap Dex and burned. progression increases as the price goes up. </p>
+                                {/* There are {Math.floor(1_000_000_000 - _token.reserveOne / 1_000_000)} tokens still available for sale in the bonding curve and  */}
+                                <p className="text-[10px] font-normal leading-normal">there is {(_token.reserveTwo / 1_000_000_000_000_000_000).toFixed(3)} ETH in the bonding curve. </p>
+                            </>
+                        ) : (
+                            <p className="text-[10px] font-normal leading-normal">graduating to uniswap now! This will take 5~20 mins.</p>
+                        )
+                    }
                 </div>
             </div>
             <div className=" rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">

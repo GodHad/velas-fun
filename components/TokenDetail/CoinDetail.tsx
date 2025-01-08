@@ -57,7 +57,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Price</p>
                                 <p className="text-sm lg:text-base font-medium lg:!leading-none text-green-1">
-                                    {tokenPrice.toFixed(9)}
+                                    ${(tokenPrice * vlxPrice).toFixed(9)}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-1.5">
@@ -69,7 +69,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-1.5">
                                 <p className="text-[9px] font-normal !leading-none text-body-color">Market cap</p>
-                                <p className="text-sm lg:text-base font-medium lg:!leading-none">${(vlxPrice * tokenPrice * 1072892901).toFixed(2)}
+                                <p className="text-sm lg:text-base font-medium lg:!leading-none">${(vlxPrice * tokenPrice * 1_000_000_000).toFixed(2)}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-1.5">

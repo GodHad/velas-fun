@@ -23,7 +23,7 @@ const TokenComponent = ({ token, vlxPrice }: { token: coinInfo, vlxPrice: number
                         <div className="relative rounded-lg">
                             <div className="bg-primary rounded-t-lg px-2.5 py-1 h-6 flex items-center gap-3 justify-between w-full z-10">
                                 <p className="text-white text-xxs-10 font-medium leading-none">
-                                    Market cap: ${formatNumber(vlxPrice * (token.price || 0) * 1072892901)}
+                                    Market cap: ${formatNumber(vlxPrice * (token.price || 0) * 1_087_598_453)}
                                 </p>
                                 {/* {token.url && (
                                     <p className="flex items-center gap-1">

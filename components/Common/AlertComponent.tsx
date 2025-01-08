@@ -44,7 +44,7 @@ export default function AlertComponent() {
                     </Link>
                     {alertState.severity === "success" || alertState.severity === "error" ? (
                         <span className="font-medium text-xs sm:text-sm md:text-base xl:text-lg md:leading-normal xl:leading-6 text-white whitespace-nowrap">
-                            {alertState.severity === "success" ? "Bought" : "Sold"} {alertState.amount} VLX of
+                            {alertState.severity === "success" ? "Bought" : "Sold"} {alertState.amount?.toFixed(3)} {alertState.severity === "success" && "ETH"} of
                         </span>
                     ) : (
                         <span className="font-medium text-xs sm:text-sm md:text-base xl:text-lg md:leading-normal xl:leading-6 text-white whitespace-nowrap">

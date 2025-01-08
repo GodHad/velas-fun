@@ -1,3 +1,4 @@
+'use client'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     userInfo,
@@ -26,11 +27,6 @@ const axiosWithToken = axios.create({
     }
 })
 
-export const createNewCoin = async (txHash: string, coin: coinInfo) => {
-    const response = await axios.post(`${BACKEND_URL}/coin/`, { txHash, coin });
-    return response.data;
-}
-
 export const walletConnect = async ({ data }: { data: userInfo }): Promise<any> => {
     try {
         const response = await axios.post(`${BACKEND_URL}/user/`, data)
@@ -54,9 +50,9 @@ export const getCoinsInfo = async ({ perPage = 10, sortBy, searchTerm, currentPa
     return res.data
 }
 
-export const getCoinInfo = async (data: string, perPage: number = 10, currentPage: number = 0): Promise<any> => {
+export const getCoinInfo = async (data: string): Promise<any> => {
     try {
-        const response = await axios.get(`${BACKEND_URL}/coin/${data}?perPage=${perPage}&currentPage=${currentPage}`)
+        const response = await axios.get(`${BACKEND_URL}/coin/${data}`)
         return response.data
     } catch {
         return { error: "error setting up the request" }
@@ -243,17 +239,9 @@ export const testLiveChart = async (name: string, price: number) => {
     await axios.get(`${BACKEND_URL}/chart/test?name=${name}&price=${price}`);
 }
 
-export const boughtTokens = async (txHash: string) => {
-    await axios.post(`${BACKEND_URL}/coin/buy-tokens`, { txHash });
-}
-
-export const soldTokens = async (txHash: string) => {
-    await axios.post(`${BACKEND_URL}/coin/sell-tokens`, { txHash });
-}
-
 export async function getVLXPrice() {
-    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=velas&vs_currencies=usd');
-    const price = response.data.velas.usd;
+    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const price = response.data.ethereum.usd;
     return price;
 }
 

@@ -61,7 +61,7 @@ const TopCoins = () => {
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Price(VLX)
+                            Price(ETH)
                         </h5>
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">

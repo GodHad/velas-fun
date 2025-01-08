@@ -4,7 +4,7 @@ interface CardDataStatsProps {
     title: string;
     data: {
         total: string;
-        rate: string;
+        rate?: string;
         levelUp?: boolean;
         levelDown?: boolean;
         symbol?: string;

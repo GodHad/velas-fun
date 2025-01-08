@@ -2,7 +2,6 @@ import Web3 from "web3";
 import { Web3Service, Contract } from "./Web3Service";
 import VelasFunABI from '@/abi/VelasFunABI.json';
 import MemecoinABI from '@/abi/MemecoinABI.json';
-import { boughtTokens, createNewCoin, soldTokens } from "@/utils/api";
 import { coinInfo } from "@/types";
 import axios from "axios";
 
@@ -79,8 +78,7 @@ export const createToken = async (
 
         transaction.gas = gas;
 
-        const tx = await web3.eth.sendTransaction(transaction)
-        await createNewCoin(tx.transactionHash.toString(), coin);
+        await web3.eth.sendTransaction(transaction)
         return true;
     } catch (error) {
         console.error("Error is occurred:", error);
@@ -113,8 +111,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         const gas = await web3.eth.estimateGas(transaction);
         transaction.gas = gas;
 
-        const tx = await web3.eth.sendTransaction(transaction);
-        await boughtTokens(tx.transactionHash.toString());
+        await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
         return true;
     } catch (error) {
@@ -167,8 +164,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         const gas = await web3.eth.estimateGas(transaction);
         transaction.gas = gas;
 
-        const tx = await web3.eth.sendTransaction(transaction);
-        await soldTokens(tx.transactionHash.toString());
+        await web3.eth.sendTransaction(transaction);
         return true;
     } catch (error) {
         console.error(error);
@@ -186,6 +182,7 @@ export const updateConstantVariables = async (
     feePercent: number, 
     creatorReward: number, 
     velasFunReward: number, 
+    graduationMarketCap: number,
     feeAddress: string
 ) => {
     try {
@@ -201,7 +198,7 @@ export const updateConstantVariables = async (
         } = {
             from: account,
             to: VelasFunContract.address,
-            data: contract.methods.updateVariables(paused, admin, creationFee, feePercent, creatorReward, velasFunReward, feeAddress).encodeABI(),
+            data: contract.methods.updateVariables(paused, admin, creationFee, feePercent, creatorReward, velasFunReward, graduationMarketCap, feeAddress).encodeABI(),
             gasPrice: (await web3.eth.getGasPrice()).toString()
         }
 
@@ -216,10 +213,22 @@ export const updateConstantVariables = async (
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getTokenAmount = async (provider: any, account: string, token: string): Promise<number> => {
+export const getContractBalance = async () => {
     try {
-        const web3 = new Web3(provider);
+        const balanceWei = await web3Service.web3.eth.getBalance(VelasFunContract.address);
+        const balanceVLX = await web3Service.web3.utils.fromWei(balanceWei, 'ether');
+
+        console.log(`Contract Balance: ${balanceVLX} ETH`);
+        return balanceVLX;
+    } catch (error) {
+        console.log("error fetching balance: ", error);
+    }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getTokenAmount = async (account: string, token: string): Promise<number> => {
+    try {
+        const web3 = new Web3(process.env.NEXT_PUBLIC_VELAS_PROVIDER_URL);
         const tokenContract = new web3.eth.Contract(MemecoinABI, token);
 
         const balance = await tokenContract.methods.balanceOf(account).call();
