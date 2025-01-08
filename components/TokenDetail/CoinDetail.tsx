@@ -16,7 +16,7 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
 
     useEffect(() => {
         const handlePrice = (data: { price: number }) => {
-            setTokenPrice(data.price)
+            setTokenPrice(data.price / 1_000_000_000_000)
         }
         socket?.on('transaction', handlePrice);
 

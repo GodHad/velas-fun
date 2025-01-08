@@ -40,8 +40,11 @@ const CreateToken = () => {
 
     const createTokenCallback = async (amount: number) => {
         if (!previewSrc) return;
+        setIsLoading(true);
         if (metaData?.siteKill) {
             warningAlert('Site is stopped to working temporarily.')
+            setIsLoading(false);
+            return;
         }
         const url = await uploadImage(previewSrc)
         if (url && user._id && account && connector.provider) {
@@ -53,8 +56,6 @@ const CreateToken = () => {
                 reserveTwo: 0,
                 token: '',
             } as coinInfo
-
-            setIsLoading(true);
 
             const result = await createToken(connector.provider, account, coin, amount);
             if (result) {
