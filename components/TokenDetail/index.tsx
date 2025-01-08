@@ -10,6 +10,7 @@ import Thread from "./Thread";
 import TradeForm from "./TradeForm";
 import TokenOverview from "./TokenOverview";
 import Holders from "./Holders";
+import { useSocket } from "@/contexts/SocketContext";
 
 const TokenDetail = () => {
     const pathname = usePathname();
@@ -17,6 +18,7 @@ const TokenDetail = () => {
     const [coin, setCoin] = useState<coinInfo | null>(null);
     const [vlxPrice, setVLXPrice] = useState<number>(0);
     const [showing, setShowing] = useState<string>('base');
+    const { socket } = useSocket();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +40,18 @@ const TokenDetail = () => {
         }
         _getVLXPrice()
     }, [])
+
+    useEffect(() => {
+        const handleGraduatingToDEX = (data: coinInfo) => {
+            setCoin(data);
+            setShowing('current')
+        }
+        socket?.on('trading-enabled-on-uniswap', handleGraduatingToDEX);
+
+        return () => {
+            socket?.off('trading-enabled-on-uniswap');
+        }
+    }, [socket])
 
     return (
         <>

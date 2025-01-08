@@ -34,6 +34,8 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
         socket?.on('trading-enabled-on-uniswap', handleGraduatingToDEX);
         return () => {
             socket?.off('update-bonding-curve', handleUpdateBondingCurve);
+            socket?.off('graduating-to-dex');
+            socket?.off('trading-enabled-on-uniswap');
         }
     }, [socket]);
 
@@ -42,7 +44,7 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
             <div className=" rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
                 <h4 className="text-sm md:text-base font-semibold !leading-none pb-4 md:pb-5">Bonding curve progress : {Math.min(progress, 100)}%</h4>
                 <div className="bg-body-color w-full rounded-md h-2 md:h-2.5 mb-4 md:mb-5">
-                    <div className="bg-primary rounded-md h-2 md:h-2.5" style={{ width: `${progress}%` }}></div>
+                    <div className="bg-primary rounded-md h-2 md:h-2.5" style={{ width: `${Math.min(progress, 100)}%` }}></div>
                 </div>
                 <div className="flex flex-col gap-2">
                     {
