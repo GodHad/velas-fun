@@ -8,15 +8,15 @@ const Footer = () => {
   return (
     <>
       <footer
-        className="wow fadeInUp dark:bg-gray-dark relative z-10 bg-white pt-16 md:pt-20 lg:pt-24"
+        className="wow fadeInUp dark:bg-gray-dark relative z-10 bg-white"
         data-wow-delay=".1s"
       >
         <div className="container">
-          <div className="-mx-4 flex flex-wrap">
+          <div className="-mx-4 mb-4 flex flex-wrap">
             <div className="w-full px-4 md:w-1/2 lg:w-5/12 xl:w-6/12">
-              <div className="mb-12 max-w-[360px] lg:mb-16">
+              <div className="max-w-[360px]">
                 <Logo />
-                <p className="dark:text-body-color-dark mb-9 text-base leading-relaxed text-body-color">
+                <p className="dark:text-body-color-dark mb-3 text-base leading-relaxed text-body-color">
                   {metaData?.footerContent}
                 </p>
                 <div className="flex items-center">
@@ -90,15 +90,15 @@ const Footer = () => {
             </div>
 
             <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-2/12 xl:w-2/12">
-              <div className="mb-12 lg:mb-16">
-                <h2 className="mb-10 text-xl font-bold text-black dark:text-white">
+              <div>
+                <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
                   Terms
                 </h2>
                 <ul>
                   <li>
                     <Link
                       href="/policy"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="dark:text-body-color-dark mb-2 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                     >
                       Policy
                     </Link>
@@ -106,7 +106,7 @@ const Footer = () => {
                   <li>
                     <Link
                       href="/terms"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="dark:text-body-color-dark mb-2 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                     >
                       Terms
                     </Link>
@@ -116,15 +116,15 @@ const Footer = () => {
             </div>
 
             <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-3/12">
-              <div className="mb-12 lg:mb-16">
-                <h2 className="mb-10 text-xl font-bold text-black dark:text-white">
+              <div>
+                <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
                   Support & Help
                 </h2>
                 <ul>
                   <li>
                     <Link
                       href="/faq"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="dark:text-body-color-dark mb-2 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                     >
                       FAQ
                     </Link>
@@ -133,7 +133,7 @@ const Footer = () => {
                     <a 
                       href="https://t.me/velasfun" 
                       target="_blank"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="dark:text-body-color-dark mb-2 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                     >Contact</a>
                   </li>
                 </ul>
@@ -142,7 +142,7 @@ const Footer = () => {
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D2D8E183] to-transparent dark:via-[#959CB183]"></div>
-          <div className="py-8">
+          <div className="py-4">
             <p className="text-center text-base text-body-color dark:text-white">
               @2024 velas.fun
             </p>
