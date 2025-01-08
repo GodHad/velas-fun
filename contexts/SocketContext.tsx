@@ -72,15 +72,6 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             severity: 'info'
         });
         // successAlert(`Successfully Created token: ${data.user.name} \n ${data.coin.ticker}`);
-        setIsLoading(false);
-        const resetTimeout = setTimeout(() => {
-            setAlertState((prev) => ({ ...prev, open: false }));
-            setTimeout(() => {
-                setAlertState(initialAlertState); 
-            }, 500); 
-        }, 3000);
-    
-        return () => clearTimeout(resetTimeout);
     }
 
     const createFailedHandler = (name: string, mint: string) => {
@@ -99,14 +90,6 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             severity: data.isBuy === 2 ? 'success' : 'error'
         });
         // infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
-        const resetTimeout = setTimeout(() => {
-            setAlertState((prev) => ({ ...prev, open: false })); 
-            setTimeout(() => {
-                setAlertState(initialAlertState);
-            }, 500); 
-        }, 3000);
-    
-        return () => clearTimeout(resetTimeout);
     }
 
     useEffect(() => {

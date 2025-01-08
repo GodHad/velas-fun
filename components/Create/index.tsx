@@ -129,24 +129,26 @@ const CreateToken = () => {
                             <div className="col-span-12 sm:col-span-3 lg:col-span-2 mb-5 sm:mb-0">
                                 <label htmlFor="logo" className="block  text-sm md:text-base pb-2.5 leading-6">Upload File <span className="error text-red-600">*</span></label>
                                 <div className="center flex flex-col items-center justify-center w-full border dark:border-gray-700 border-gray-200 rounded-xl bg-black-2 text-gray-700 text-sm md:text-base" onDrop={handleDrop} onDragOver={handleDragOver}>
-                                    <div className="flex flex-col items-center gap-4 justify-center p-4 md:p-6">
-                                        <Image src="/images/upload.svg" alt="Upload Image" width="50" height="50" className="cursor-pointer" onClick={() => document.getElementById('logo')?.click()} />
-                                        <p className="text-center text-xs font-light text-black-6 leading-6 text-body-color">
-                                            <label htmlFor="logo" className="pl-1 underline cursor-pointer" >
-                                                Click to Upload
-                                            </label> (or) Drag and Drop
-                                        </p>
-                                        <input
-                                            id="logo"
-                                            type="file"
-                                            className="hidden"
-                                            accept="image/*"
-                                            {...register("logo", {
-                                                required: 'Logo is required',
-                                            })}
-                                            onChange={(e) => { console.log(e.target.files); handleFileChange(e.target.files); }}
-                                        />
-                                    </div>
+                                    {!previewSrc &&
+                                        <div className="flex flex-col items-center gap-4 justify-center p-4 md:p-6">
+                                            <Image src="/images/upload.svg" alt="Upload Image" width="50" height="50" className="cursor-pointer" onClick={() => document.getElementById('logo')?.click()} />
+                                            <p className="text-center text-xs font-light text-black-6 leading-6 text-body-color">
+                                                <label htmlFor="logo" className="pl-1 underline cursor-pointer" >
+                                                    Click to Upload
+                                                </label> (or) Drag and Drop
+                                            </p>
+                                            <input
+                                                id="logo"
+                                                type="file"
+                                                className="hidden"
+                                                accept="image/*"
+                                                {...register("logo", {
+                                                    required: 'Logo is required',
+                                                })}
+                                                onChange={(e) => { console.log(e.target.files); handleFileChange(e.target.files); }}
+                                            />
+                                        </div>
+                                    }
                                     {previewSrc &&
                                         <div className="flex flex-col items-center group gap-4 justify-center hover:before:border hover:before:border-blue-1 rounded-xl hover:before:rounded-xl relative hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:bg-black hover:before:opacity-80 hover:before:w-full hover:before:h-full">
                                             <Image
