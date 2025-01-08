@@ -2,7 +2,7 @@ import { ChartingLibraryFeatureset } from "@/public/libraries/charting_library";
 import { InjectedConnector } from '@web3-react/injected-connector';
 
 export const velasChainInjected = new InjectedConnector({
-    supportedChainIds: [1, 3, 106]
+    supportedChainIds: [1, 3, 17000]
 })
 
 const RED = "#FF6767";

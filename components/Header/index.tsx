@@ -78,7 +78,7 @@ const Header = () => {
           rpcUrls: ['https://ethereum-holesky.publicnode.com'], 
         }],
       })
-      await metaMask.activate(106);
+      await metaMask.activate(17000);
     } catch (error) {
       console.warn(`failed to connect...`, error);
     }
