@@ -92,7 +92,7 @@ const TokenDetail = () => {
                                     <Thread param={param} coin={coin} />
                                 </div>
 
-                                <div className="lg:max-w-[380px] w-auto">
+                                <div className="lg:max-w-[380px] w-full">
                                     <TradeForm token={coin} />
                                     <TokenOverview token={coin} vlxPrice={vlxPrice} />
                                     <Holders param={param} token={coin} />

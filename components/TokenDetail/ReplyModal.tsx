@@ -88,7 +88,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
                                 </div>
                             </div>
                             <div className="col-span-12 mb-5 sm:mb-0">
-                                <label htmlFor="logo" className="block  text-sm md:text-base pb-2.5 leading-6">Upload File <span className="error text-red-600">*</span></label>
+                                <label htmlFor="logo" className="block  text-sm md:text-base pb-2.5 leading-6"></label>
                                 <div className="center flex flex-col items-center justify-center w-full border dark:border-gray-700 border-gray-200 rounded-xl bg-black-2 text-gray-700 text-sm md:text-base" onDrop={handleDrop} onDragOver={handleDragOver}>
                                     <div className="flex flex-col items-center gap-4 justify-center p-4 md:p-6">
                                         <Image src="/images/upload.svg" alt="Upload Image" width="50" height="50" className="cursor-pointer" onClick={() => document.getElementById('logo')?.click()} />
