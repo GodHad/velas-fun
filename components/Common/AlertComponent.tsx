@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function AlertComponent() {
-    const { alertState } = useSocket();
+    const { alertState, setAlertState } = useSocket();
     const [sticky, setSticky] = useState<boolean>(false);
     const handleStickyNavbar = () => {
         if (window.scrollY >= 80) {
@@ -63,6 +63,9 @@ export default function AlertComponent() {
                         width="20"
                         height="20"
                     />
+                    <p className="font-medium text-title-md2" onClick={() => {
+                        if (setAlertState) setAlertState({...alertState, open: false})
+                    }}>&times;</p>
                 </div>
             )}
         </div>
