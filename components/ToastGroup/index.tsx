@@ -61,3 +61,14 @@ export const infoAlert = (text: string) => {
     theme: "colored",
   });
 };
+
+export const txViewAlert = (text: any) => {
+  const isDarkTheme = document.documentElement.classList.contains("dark");
+  toast(text, {
+    autoClose: false,
+    position: "bottom-right",
+    closeOnClick: true,
+    theme: isDarkTheme ? "dark" : "light",
+    style: {width: '400px', right: '100px'}
+  })
+}

@@ -49,7 +49,11 @@ export default function Providers({ children }: { children: ReactNode }) {
               <ThemeProvider attribute="class" enableSystem={false} defaultTheme="dark">
                 {children}
               </ThemeProvider>
-              <ToastContainer pauseOnFocusLoss={false} theme="colored" />
+              <ToastContainer
+                pauseOnFocusLoss={false}
+                theme="colored"
+                limit={6}
+              />
             </UserContext.Provider>
           </PageProvider>
         </QueryClientProvider>

@@ -2,9 +2,12 @@ import { useTheme } from 'next-themes';
 
 const ThemeToggler = () => {
   const { theme, setTheme } = useTheme();
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
   return (
     <button aria-label='theme toggler'
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={toggleTheme}
       className="flex items-center justify-center text-black rounded-full cursor-pointer  dark:bg-dark-bg h-9 w-9 dark:text-white md:h-14 md:w-14"
     >
       <svg

@@ -3,8 +3,9 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { useRouter } from "next/navigation";
-import { errorAlert } from "@/components/ToastGroup";
+import { errorAlert, txViewAlert } from "@/components/ToastGroup";
 import { coinInfo, userInfo } from "@/types";
+import Link from "next/link";
 
 interface Context {
     socket?: Socket;
@@ -63,7 +64,7 @@ const SocketProvider = (props: React.PropsWithChildren) => {
         setCounter(data);
     };
 
-    const createSuccessHandler = (data: {user: userInfo, coin: coinInfo}) => {
+    const createSuccessHandler = (data: { user: userInfo, coin: coinInfo, txHash: string }) => {
         setAlertState({
             open: true,
             user: data.user,
@@ -71,7 +72,35 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             amount: undefined,
             severity: 'info'
         });
-        // successAlert(`Successfully Created token: ${data.user.name} \n ${data.coin.ticker}`);
+        txViewAlert(
+            <div className="flex gap-4 items-center justify-between">
+                <div>
+                    <p className='font-semibold'>Created new coin</p>
+                    <p>Click to view it</p>
+                </div>
+                <Link
+                    href={`/coin/${data.coin._id}`}
+                    className="rounded-md bg-primary text-center w-[110px] py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                >
+                    View
+                </Link>
+            </div>
+        );
+        txViewAlert(
+            <div className="flex gap-4 items-center justify-between">
+                <div>
+                    <p className='font-semibold'>Create coin called {data.coin.name}[{data.coin.ticker}]</p>
+                    <p>Transaction confirmed</p>
+                </div>
+                <a
+                    href={`https://holesky.etherscan.io/tx/${data.txHash}`}
+                    target="_blank"
+                    className="rounded-md bg-primary text-center py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 w-[110px]"
+                >
+                    View tx
+                </a>
+            </div>
+        );
     }
 
     const createFailedHandler = (name: string, mint: string) => {
@@ -89,6 +118,21 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             amount: data.isBuy === 2 ? Number(data.amount) : Number(data.amount) / 1_000_000,
             severity: data.isBuy === 2 ? 'success' : 'error'
         });
+        txViewAlert(
+            <div className="flex gap-4 items-center justify-between">
+                <div>
+                    <p className='font-semibold'>{`${data.user.name} ${data.isBuy === 2 ? `bought ` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? `the worth of ${data.ticker} for ${data.amount} ETH` : data.ticker}`}</p>
+                    <p>Transaction confirmed</p>
+                </div>
+                <a
+                    href={`https://holesky.etherscan.io/tx/${data.tx}`}
+                    target="_blank"
+                    className="rounded-md bg-primary text-center py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 w-[110px]"
+                >
+                    View tx
+                </a>
+            </div>
+        );
         // infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
     }
 
@@ -124,7 +168,7 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             console.log("--------@ Token Creation: ");
 
         });
-        socket?.on("TokenCreated", async (data: {user: userInfo, coin: coinInfo}) => {
+        socket?.on("TokenCreated", async (data: { user: userInfo, coin: coinInfo, txHash: string }) => {
             console.log("--------@ Token Created!: ", name);
 
             createSuccessHandler(data);

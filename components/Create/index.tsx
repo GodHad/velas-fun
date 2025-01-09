@@ -59,7 +59,6 @@ const CreateToken = () => {
 
             const result = await createToken(connector.provider, account, coin, amount);
             if (result) {
-                successAlert('Created Coin Successfully');
                 reset();
                 setPreviewSrc(null)
             }
