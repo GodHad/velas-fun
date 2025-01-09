@@ -7,7 +7,7 @@ import { uploadImage } from "@/utils/api";
 import UserContext from "@/contexts/UserContext";
 import { coinInfo } from "@/types";
 import { hooks } from "@/connectors/metaMask";
-import { errorAlert, successAlert, warningAlert } from "../ToastGroup";
+import { errorAlert, warningAlert } from "../ToastGroup";
 import { createToken } from "@/program/VelasFunContractService";
 import { useWeb3React } from "@web3-react/core";
 import Modal from "./Modal";
