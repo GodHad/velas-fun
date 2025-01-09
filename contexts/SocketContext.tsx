@@ -3,9 +3,10 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { useRouter } from "next/navigation";
-import { errorAlert, txViewAlert } from "@/components/ToastGroup";
+import { errorAlert, infoAlert, successAlert, txViewAlert } from "@/components/ToastGroup";
 import { coinInfo, userInfo } from "@/types";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Context {
     socket?: Socket;
@@ -101,6 +102,12 @@ const SocketProvider = (props: React.PropsWithChildren) => {
                 </a>
             </div>
         );
+        
+        const resetTimeout = setTimeout(() => {
+            setAlertState(initialAlertState);
+        }, 10000);
+    
+        return () => clearTimeout(resetTimeout);
     }
 
     const createFailedHandler = (name: string, mint: string) => {
@@ -134,6 +141,11 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             </div>
         );
         // infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
+        const resetTimeout = setTimeout(() => {
+            setAlertState(initialAlertState);
+        }, 10000);
+    
+        return () => clearTimeout(resetTimeout);
     }
 
     useEffect(() => {

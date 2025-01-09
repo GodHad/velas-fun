@@ -62,6 +62,7 @@ export interface coinInfo {
     tradingOnUniswap?: boolean;
     tradingPaused?: boolean;
     uniswapPair?: boolean;
+    kingDate?: Date;
 }
 export interface msgInfo {
     coinId: string | coinInfo,

@@ -8,6 +8,7 @@ import UserContext from "@/contexts/UserContext";
 import { getCoinsInfo, getVLXPrice } from "@/utils/api";
 import { coinInfo } from "@/types";
 import { useData } from "@/contexts/PageContext";
+import KingOfTheHillMain from "./KingOfTheHill";
 
 enum SortMethods {
     lastTrade = 'Last Trade',
@@ -109,6 +110,7 @@ const Hero = () => {
                 </div>
             </section >
             <section id="features" className="py-12">
+                <KingOfTheHillMain vlxPrice={vlxPrice} />
                 <div className="container flex justify-between items-center">
                     <div className="">
                         <input

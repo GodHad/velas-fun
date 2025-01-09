@@ -10,7 +10,7 @@ import Message from "../TokenDetail/Message";
 import EditModal from "./EditModal";
 import UserContext from "@/contexts/UserContext";
 import { coinInfo, followerInfo, userInfo } from "@/types";
-import { followUser, getCoinsInfoBy, getFollowers, getFollowingUsers, getHoldingBy, getMessagesInfoBy, getUser, unfollowUser, UserHolding } from "@/utils/api";
+import { followUser, getCoinsInfoBy, getFollowers, getFollowingUsers, getHoldingBy, getMessagesInfoBy, getUser, getVLXPrice, unfollowUser, UserHolding } from "@/utils/api";
 
 export default function Profile() {
     const { user, setMessages, messages } = useContext(UserContext)
@@ -27,6 +27,15 @@ export default function Profile() {
     const perPage = 30;
     const [totalPage, setTotalPage] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
+
+    const [vlxPrice, setVLXPrice] = useState<number>(0);
+    useEffect(() => {
+        const _getVLXPrice = async () => {
+            const price = await getVLXPrice();
+            setVLXPrice(Number(price));
+        }
+        _getVLXPrice()
+    }, [])
 
     useEffect(() => {
         const segments = pathname.split('/');
@@ -255,7 +264,7 @@ export default function Profile() {
                                     {
                                         data.map((coin, index) => (
                                             <Link key={index} href={`/tokens/${coin?.token}`}>
-                                                <CoinBlog coin={coin} componentKey="coin" />
+                                                <CoinBlog coin={coin} componentKey="coin" vlxPrice={vlxPrice} />
                                             </Link>
                                         ))
                                     }

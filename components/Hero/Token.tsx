@@ -25,12 +25,12 @@ const TokenComponent = ({ token, vlxPrice }: { token: coinInfo, vlxPrice: number
                                 <p className="text-white text-xxs-10 font-medium leading-none">
                                     Market cap: ${formatNumber(vlxPrice * (token.price || 0) * 1_087_598_453)}
                                 </p>
-                                {/* {token.url && (
+                                {token.kingDate && (
                                     <p className="flex items-center gap-1">
                                         <span>Badge</span>
                                         <Image src="/images/king.svg" alt="king" width={16} height={16} className="img-fluid w-3 sm:w-4 h-3 sm:h-4" />
                                     </p>
-                                )} */}
+                                )}
                             </div>
                             <div className="w-full h-full overflow-hidden">
                                 <Image

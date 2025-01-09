@@ -53,6 +53,7 @@ export default function Providers({ children }: { children: ReactNode }) {
                 pauseOnFocusLoss={false}
                 theme="colored"
                 limit={6}
+                icon={false}
               />
             </UserContext.Provider>
           </PageProvider>

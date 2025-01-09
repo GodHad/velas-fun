@@ -11,6 +11,7 @@ import TradeForm from "./TradeForm";
 import TokenOverview from "./TokenOverview";
 import Holders from "./Holders";
 import { useSocket } from "@/contexts/SocketContext";
+import KingOfHill from "./KingOfHill";
 
 const TokenDetail = () => {
     const pathname = usePathname();
@@ -95,6 +96,7 @@ const TokenDetail = () => {
                                 <div className="lg:max-w-[380px] w-full">
                                     <TradeForm token={coin} />
                                     <TokenOverview token={coin} vlxPrice={vlxPrice} />
+                                    <KingOfHill token={coin} vlxPrice={vlxPrice} />
                                     <Holders param={param} token={coin} />
                                 </div>
                             </div>

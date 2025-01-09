@@ -9,7 +9,7 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
     const [_token, setToken] = useState<coinInfo>(token);
 
     useEffect(() => {
-        const value = Math.floor((_token.price || 0) * 1_000_000_000 / (_token.graduationMarketCap || 5) * 100)
+        const value = Math.floor((_token.price || 0) * 1_000_000_000 / (token.graduationMarketCap || 5) * 100)
         setProgress(value);
     }, [_token, setProgress]);
 
@@ -21,13 +21,13 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
             }
         ) => {
             if (_token._id === data.tokenId) {
-                const value = Math.floor(((data.price || 0) * 1_000_000_000) / (_token.graduationMarketCap || 5) * 100)
+                const value = Math.floor(((data.price || 0) * 1_000_000_000) / (token.graduationMarketCap || 5) * 100)
                 setProgress(value);
                 setToken(prevState => ({ ...prevState, price: data.price }))
             }
         }
         const handleGraduatingToDEX = (data: coinInfo) => {
-            setToken(data);
+            if (_token._id === data._id) setToken(data);
         }
         socket?.on('update-bonding-curve', handleUpdateBondingCurve);
         socket?.on('graduating-to-dex', handleGraduatingToDEX);
@@ -55,7 +55,7 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
                                 <p className="text-[10px] font-normal leading-normal"> When the market cap reaches ${(vlxPrice * (_token.graduationMarketCap || 5)).toLocaleString()}, all the liquidity from the bonding curve will be deposited into Uniswap Dex and burned. Progression increases as the price goes up. There is {(_token.reserveTwo / 1_000_000_000_000_000_000).toFixed(3)} ETH in the bonding curve. </p>
                             </>
                         ) : (
-                            <p className="text-[10px] font-normal leading-normal">graduating to uniswap now! This will take 5~20 mins.</p>
+                            <p className="text-[10px] font-normal leading-normal">Graduating to uniswap now! This will take 5~20 mins.</p>
                         )
                     }
                 </div>

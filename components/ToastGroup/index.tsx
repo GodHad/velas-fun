@@ -1,65 +1,70 @@
-import { toast } from "react-toastify";
+import { toast, ToastPosition } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const errorAlert = (text: string) => {
+export const errorAlert = (text: any, position?: ToastPosition, time?: number, style?: boolean) => {
   toast.error(text, {
-    position: "bottom-right",
-    autoClose: 5000,
+    position: position || "bottom-right",
+    autoClose: time || 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
+    style: style ? {width: '400px', right: '100px'} : {}
   });
 };
 
-export const errorAlertCenter = (text: string) => {
+export const errorAlertCenter = (text: any, position?: ToastPosition, style?: boolean) => {
   toast.error(text, {
-    position: "top-center",
+    position: position || "top-center",
     autoClose: false,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
+    style: style ? {width: '400px', right: '100px'} : {}
   });
 };
 
-export const warningAlert = (text: string) => {
+export const warningAlert = (text: any, position?: ToastPosition, time?: number, style?: boolean) => {
   toast.warning(text, {
     className: "bg-black",
-    position: "top-right",
-    autoClose: 5000,
+    position: position || "top-right",
+    autoClose: time || 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
+    style: style ? {width: '400px', right: '100px'} : {}
   });
 };
 
-export const successAlert = (text: string) => {
+export const successAlert = (text: any, position?: ToastPosition, time?: number, style?: boolean) => {
   toast.success(text, {
-    position: "bottom-right",
-    autoClose: 5000,
+    position: position || "bottom-right",
+    autoClose: time || 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
+    style: style ? {width: '400px', right: '100px'} : {}
   });
 };
 
-export const infoAlert = (text: string) => {
+export const infoAlert = (text: any, position?: ToastPosition, time?: number, style?: boolean) => {
   toast.info(text, {
-    position: "bottom-right",
-    autoClose: 5000,
+    position: position || "bottom-right",
+    autoClose: time || 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     theme: "colored",
+    style: style ? {width: '400px', right: '100px'} : {}
   });
 };
 

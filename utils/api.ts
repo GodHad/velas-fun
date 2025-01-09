@@ -310,3 +310,8 @@ export const deleteFAQ = async (id: string) => {
     const response = await axiosWithToken.delete(`${BACKEND_URL}/admin/faqs/${id}`);
     return response.data;
 }
+
+export const getKingCoin = async () => {
+    const response = await axios.get(`${BACKEND_URL}/coin/get-king-coin`);
+    return response.data;
+}
