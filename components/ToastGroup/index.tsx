@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const errorAlert = (text: string) => {
   toast.error(text, {
