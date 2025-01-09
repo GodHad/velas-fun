@@ -49,7 +49,7 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
                 <div className="flex flex-col gap-2">
                     {
                         _token.tradingOnUniswap ? (
-                            <p className="text-[10px] font-normal leading-normal"> uniswap pool seeded! view on uniswap <a className="text-primary" href={`https://app.uniswap.org/explore/pools/base/${_token.uniswapPair}`} target="_blank">here</a></p>
+                            <p className="text-[10px] font-normal leading-normal"> Uniswap pool seeded! View on uniswap <a className="text-primary" href={`https://app.uniswap.org/explore/pools/base/${_token.uniswapPair}`} target="_blank">here</a></p>
                         ) : !_token.tradingPaused ? (
                             <>
                                 <p className="text-[10px] font-normal leading-normal"> When the market cap reaches ${(vlxPrice * (_token.graduationMarketCap || 5)).toLocaleString()}, all the liquidity from the bonding curve will be deposited into Uniswap Dex and burned. Progression increases as the price goes up. There is {(_token.reserveTwo / 1_000_000_000_000_000_000).toFixed(3)} ETH in the bonding curve. </p>

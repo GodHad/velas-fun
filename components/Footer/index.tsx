@@ -12,7 +12,7 @@ const Footer = () => {
         data-wow-delay=".1s"
       >
         <div className="container">
-          <div className="-mx-4 mb-4 flex flex-wrap">
+          <div className="-mx-4 mb-4 flex flex-wrap py-2 md:py-4 lg:py-8">
             <div className="w-full px-4 md:w-1/2 lg:w-5/12 xl:w-6/12">
               <div className="max-w-[360px]">
                 <Logo />
