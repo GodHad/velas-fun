@@ -109,7 +109,7 @@ const Hero = () => {
                     </div>
                 </div>
             </section >
-            <section id="features" className="py-12">
+            <section id="features" className="py-4">
                 <KingOfTheHillMain vlxPrice={vlxPrice} />
                 <div className="container flex justify-between items-center">
                     <div className="">
