@@ -80,7 +80,7 @@ const Header = () => {
       })
       await metaMask.activate(17000);
     } catch (error) {
-      console.warn(`failed to connect...`, error);
+      console.warn(`Failed to connect...`, error);
     }
   }
 
