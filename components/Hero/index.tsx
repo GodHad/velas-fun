@@ -90,14 +90,14 @@ const Hero = () => {
                                 <div className=" rounded-md relative z-10 after:content-[''] after:bg-bg-curve after:bg-cover after:absolute after:bg-no-repeat after:bg-bottom after:bottom-0 after:left-0 after:w-full after:h-full after:-z-10 after:opacity-10 overflow-hidden p-7 sm:pb-9 sm:pt-11 lg:pt-12 xl:pt-12.5 sm:px-11 lg:px-12.2 xl:px-14.5 min-h-[450px] xs:min-h-[480px] sm:min-h-[550px] md:min-h-[360px] flex items-end md:items-center justify-center md:justify-start border dark:border-gray-700 border-gray-200">
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 xl:gap-20">
                                         <div className="col-span-1 md:col-span-5">
-                                            <div className="flex flex-col flex-wrap gap-4 sm:gap-5.5 pb-4 sm:pb-5 md:pb-7 xl:pb-8">
+                                            <div className="flex flex-col flex-wrap gap-4 sm:gap-5.5 mb-4 sm:mb-5 md:mb-7 xl:mb-8">
                                                 <h1 className="font-michroma font-bold text-3xl lg:text-4xl xl:text-5xl xl:!leading-lh-55">{metaData?.bannerTitle || 'Build Your Token in Minutes'}</h1>
                                                 <hr className="border-gray opacity-50" />
                                                 <p className="font-michroma text-body-color font-normal text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl"> {metaData?.bannerContent || 'Empower Your Crypto Journey'}</p>
                                             </div>
                                             <Link
                                                 href="/create"
-                                                className="rounded-sm bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                                                className="rounded-sm bg-primary px-8 py-2 sm:py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
                                             >
                                                 Start a New Coin
                                             </Link>
