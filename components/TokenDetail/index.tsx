@@ -44,8 +44,10 @@ const TokenDetail = () => {
 
     useEffect(() => {
         const handleGraduatingToDEX = (data: coinInfo) => {
-            setCoin(data);
-            setShowing('current')
+            if (data._id === pathname) {
+                setCoin(data);
+                setShowing('current')
+            }
         }
         socket?.on('trading-enabled-on-uniswap', handleGraduatingToDEX);
 
@@ -95,8 +97,8 @@ const TokenDetail = () => {
 
                                 <div className="lg:max-w-[380px] w-full">
                                     <TradeForm token={coin} />
-                                    <TokenOverview token={coin} vlxPrice={vlxPrice} />
                                     <KingOfHill token={coin} vlxPrice={vlxPrice} />
+                                    <TokenOverview token={coin} vlxPrice={vlxPrice} />
                                     <Holders param={param} token={coin} />
                                 </div>
                             </div>

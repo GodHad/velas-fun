@@ -2,8 +2,8 @@ import Policy from "@/components/Policy";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Velas Fun | Policy",
-    description: "Policy of Velas Fun Platform deploying memecoin",
+    title: "Bluepill Fun | Policy",
+    description: "Policy of Bluepill Fun Platform deploying memecoin",
 };
 
 const PolicyPage = () => {

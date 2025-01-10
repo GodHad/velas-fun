@@ -2,8 +2,8 @@ import FAQ from "@/components/FAQ";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Velas Fun | FAQ",
-    description: "FAQ of Velas Fun Platform deploying memecoin",
+    title: "Bluepill Fun | FAQ",
+    description: "FAQ of Bluepill Fun Platform deploying memecoin",
 };
 
 const FAQPage = () => {

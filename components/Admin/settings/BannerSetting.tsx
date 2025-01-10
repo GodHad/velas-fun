@@ -93,7 +93,7 @@ const BannerSetting = () => {
                                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                             type="text"
                                             id="bannerTitle"
-                                            placeholder="velas"
+                                            placeholder="bluepill"
                                             {...register('bannerTitle')}
                                         />
                                     </div>
@@ -109,7 +109,7 @@ const BannerSetting = () => {
                                                 className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                                 id="bannerContent"
                                                 rows={6}
-                                                placeholder="Velas Fun bla bla bla"
+                                                placeholder=""
                                                 {...register('bannerContent')}
                                             ></textarea>
                                         </div>

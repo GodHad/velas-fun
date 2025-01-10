@@ -3,8 +3,8 @@ import Hero from "@/components/Hero";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Velas Fun",
-  description: "Velas Fun Platform deploying memecoin",
+  title: "Bluepill Fun",
+  description: "Bluepill Fun Platform deploying memecoin",
 };
 
 export default function Home() {

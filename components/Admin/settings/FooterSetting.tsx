@@ -52,7 +52,7 @@ const FooterSetting = () => {
                                     className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                     id="footerContent"
                                     rows={6}
-                                    placeholder="Velas Fun"
+                                    placeholder=""
                                     {...register('footerContent')}
                                 ></textarea>
                             </div>

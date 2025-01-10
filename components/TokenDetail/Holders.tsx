@@ -70,7 +70,7 @@ export default function Holders({ param, token }: { param: string | null, token:
                 wallet: token.token,
                 bondingCurve: true
             },
-            totalAmount: 1_087_598_453 - token.reserveOne / 1_000_000
+            totalAmount: 1_000_000_000 - token.reserveOne / 1_000_000
         }
         setHolders([bondingCurve, ...agr].sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 20));
     }, [records]);

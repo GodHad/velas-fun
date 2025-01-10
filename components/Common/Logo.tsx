@@ -20,7 +20,7 @@ const Logo = () => {
                     className="w-10 h-10 rounded-b-lg object-cover z-0 left-0 top-0 blur-bg hover:scale-110 transition-[0.5]"
                 />
             }
-            <h1 className="text-[30px] font-extrabold">{metaData?.logoTitle || 'Velas'}</h1>
+            <h1 className="text-[30px] font-extrabold">{metaData?.logoTitle || 'Bluepill'}</h1>
         </Link>
     )
 }

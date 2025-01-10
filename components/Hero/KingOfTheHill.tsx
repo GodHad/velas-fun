@@ -44,7 +44,7 @@ const KingOfTheHillMain = ({ vlxPrice }: { vlxPrice: number }) => {
 
     return (
         <div className="flex flex-col items-center justify-center mb-10">
-            <h1 className="text-[24px] font-extrabold mb-2">Top Of the Hill</h1>
+            <h1 className="text-[24px] font-extrabold mb-2">The Alpha</h1>
             <Link href={`/coin/${token._id}`}>
                 <div className="card cursor-pointer sm:w-[320px] w-full">
                     <div className="dark:bg-black bg-white rounded-lg p-2.5 flex gap-2.5 shadow-xl dark:shadow-orange-600">

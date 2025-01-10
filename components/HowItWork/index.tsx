@@ -11,12 +11,12 @@ export default function HowItWork({showModal, setShowModal}: {showModal: boolean
             <div className="relative p-6 flex-auto">
               <div className="modal-content">
                 <h2 className="text-center mb-3 text-[20px] font-semibold">How It Works</h2>
-                <p className="m-[15px] font-medium">Velas prevents rugs by making sure that all created tokens are safe. Each coin on a velas is a fair-launch with no presale and no team allocation.</p>
+                <p className="m-[15px] font-medium">Bluepill prevents rugs by making sure that all created tokens are safe. Each coin on a Bluepill is a fair-launch with no presale and no team allocation.</p>
                 <p className="m-[15px] font-medium">Step 1: pick a coin that you like</p>
                 <p className="m-[15px] font-medium">Step 2: buy the coin on the bonding curve</p>
                 <p className="m-[15px] font-medium">Step 3: sell at any time to lock in your profits or losses</p>
                 <p className="m-[15px] font-medium">Step 4: when enough people buy on the bonding curve it reaches a market cap of $69k</p>
-                <p className="m-[15px] font-medium">Step 5: $12k of liquidity is then deposited in Wagyu Dex and burned</p>
+                <p className="m-[15px] font-medium">Step 5: $12k of liquidity is then deposited in Uniswap Dex and burned</p>
               </div>
             </div>
           </div>

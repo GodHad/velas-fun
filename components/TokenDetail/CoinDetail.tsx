@@ -15,13 +15,13 @@ export default function CoinDetail({ token, vlxPrice }: { token: coinInfo, vlxPr
     const [tokenPrice, setTokenPrice] = useState<number>(token.price || 0)
 
     useEffect(() => {
-        const handlePrice = (data: { price: number }) => {
-            setTokenPrice(data.price / 1_000_000_000_000)
+        const handlePrice = (data: { token: coinInfo, price: number }) => {
+            if (token._id === data.token._id) setTokenPrice(data.price)
         }
         socket?.on('transaction', handlePrice);
 
         return () => {
-            socket?.off('update-bonding-curve', handlePrice);
+            socket?.off('transaction', handlePrice);
         }
     }, [socket]);
 

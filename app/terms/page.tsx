@@ -2,8 +2,8 @@ import Terms from "@/components/Terms";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Velas Fun | Terms",
-    description: "Terms of Velas Fun Platform deploying memecoin",
+    title: "Bluepill Fun | Terms",
+    description: "Terms of Bluepill Fun Platform deploying memecoin",
 };
 
 const TermsPage = () => {

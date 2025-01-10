@@ -131,7 +131,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <a 
-                      href="https://t.me/velasfun" 
+                      href="https://t.me/bluepillfun" 
                       target="_blank"
                       className="dark:text-body-color-dark mb-2 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                     >Contact</a>
@@ -144,7 +144,7 @@ const Footer = () => {
           <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D2D8E183] to-transparent dark:via-[#959CB183]"></div>
           <div className="py-4">
             <p className="text-center text-base text-body-color dark:text-white">
-              @2024 velas.fun
+              @2024 Bluepill.fun
             </p>
           </div>
         </div>

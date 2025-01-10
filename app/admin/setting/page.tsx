@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import Setting from '@/components/Admin/Setting'
 
 export const metadata: Metadata = {
-    title: "Velas Fun | Admin",
-    description: "Velas Fun Platform deploying memecoin",
+    title: "Bluepill Fun | Admin",
+    description: "Bluepill Fun Platform deploying memecoin",
 };
 
 const SettingDash = () => {

@@ -5,8 +5,8 @@ import TopCoins from '@/components/Admin/TopCoins';
 import Overview from '@/components/Admin/Overview';
 
 export const metadata: Metadata = {
-  title: "Velas Fun | Admin",
-  description: "Velas Fun Platform deploying memecoin",
+  title: "Bluepill Fun | Admin",
+  description: "Bluepill Fun Platform deploying memecoin",
 };
 
 const AdminDashboard: React.FC = () => {

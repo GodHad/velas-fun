@@ -50,7 +50,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     href="/"
                     className={`header-logo block w-full`}
                 >
-                    <h1 className="text-[30px] font-extrabold">Velas</h1>
+                    <h1 className="text-[30px] font-extrabold">Bluepill</h1>
                 </Link>
 
                 <button

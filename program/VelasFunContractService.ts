@@ -198,7 +198,7 @@ export const updateConstantVariables = async (
         } = {
             from: account,
             to: VelasFunContract.address,
-            data: contract.methods.updateVariables(paused, admin, creationFee, feePercent, creatorReward, velasFunReward, graduationMarketCap, feeAddress).encodeABI(),
+            data: contract.methods.updateVariables(paused, admin, web3.utils.toWei(creationFee, 'ether'), feePercent, web3.utils.toWei(creatorReward, 'ether'), web3.utils.toWei(velasFunReward, 'ether'), web3.utils.toWei(graduationMarketCap, 'ether'), feeAddress).encodeABI(),
             gasPrice: (await web3.eth.getGasPrice()).toString()
         }
 

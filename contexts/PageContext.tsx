@@ -33,6 +33,7 @@ interface AdminDataProps {
   creatorReward: number;
   velasFunReward: number;
   graduationMarketCap: number;
+  kingPercent: number;
   siteKill: boolean;
   logoTitle?: string;
   logoUrl?: string;
@@ -62,6 +63,7 @@ interface MetaDataProps {
   policy?: string;
   terms?: string;
   siteKill: boolean;
+  kingPercent: number;
 }
 
 export function PageProvider({ children }: PageProviderProps) {
