@@ -11,7 +11,7 @@ export default function HowItWork({showModal, setShowModal}: {showModal: boolean
             <div className="relative p-6 flex-auto">
               <div className="modal-content">
                 <h2 className="text-center mb-3 text-[20px] font-semibold">How It Works</h2>
-                <p className="m-[15px] font-medium">Bluepill prevents rugs by making sure that all created tokens are safe. Each coin on a Bluepill is a fair-launch with no presale and no team allocation.</p>
+                <p className="m-[15px] font-medium">BluePill prevents rugs by making sure that all created tokens are safe. Each coin on a BluePill is a fair-launch with no presale and no team allocation.</p>
                 <p className="m-[15px] font-medium">Step 1: pick a coin that you like</p>
                 <p className="m-[15px] font-medium">Step 2: buy the coin on the bonding curve</p>
                 <p className="m-[15px] font-medium">Step 3: sell at any time to lock in your profits or losses</p>

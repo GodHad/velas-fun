@@ -2,8 +2,8 @@ import CreateToken from "@/components/Create";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bluepill Fun | Create New Token",
-  description: "Bluepill Fun Platform deploying memecoin",
+  title: "BluePill Fun | Create New Token",
+  description: "BluePill Fun Platform deploying memecoin",
 };
 
 const CreatePage = () => {

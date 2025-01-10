@@ -81,7 +81,7 @@ const TokenDetail = () => {
                                     {coin.tradingOnUniswap &&
                                         <div className="tabs mt-4">
                                             <div className="flex items-center gap-2 pb-4">
-                                                <div className={`font-semibold text-xs leading-none cursor-pointer w-24 sm:w-28 pb-2 pt-2 px-4 text-center flex justify-center items-center transition-colors duration-300 rounded ${showing === 'base' ? 'bg-primary text-white' : 'text-gray-500'}`} onClick={() => setShowing('base')}> Bluepill Chart </div>
+                                                <div className={`font-semibold text-xs leading-none cursor-pointer w-24 sm:w-28 pb-2 pt-2 px-4 text-center flex justify-center items-center transition-colors duration-300 rounded ${showing === 'base' ? 'bg-primary text-white' : 'text-gray-500'}`} onClick={() => setShowing('base')}> BluePill Chart </div>
                                                 <div className={`font-semibold text-xs leading-none cursor-pointer w-24 sm:w-28 pb-2 pt-2 px-4 text-center flex justify-center items-center transition-colors duration-300 rounded ${showing === 'current' ? 'bg-primary text-white' : 'text-gray-500'}`} onClick={() => setShowing('current')}> Current Chart</div>
                                             </div>
                                         </div>

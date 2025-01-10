@@ -144,7 +144,7 @@ const Footer = () => {
           <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D2D8E183] to-transparent dark:via-[#959CB183]"></div>
           <div className="py-4">
             <p className="text-center text-base text-body-color dark:text-white">
-              @2024 Bluepill.fun
+              @2024 BluePill.fun
             </p>
           </div>
         </div>

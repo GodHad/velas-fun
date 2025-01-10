@@ -2,8 +2,8 @@ import Terms from "@/components/Terms";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Bluepill Fun | Terms",
-    description: "Terms of Bluepill Fun Platform deploying memecoin",
+    title: "BluePill Fun | Terms",
+    description: "Terms of BluePill Fun Platform deploying memecoin",
 };
 
 const TermsPage = () => {
