@@ -1,5 +1,4 @@
 'use client'
-import { useData } from "@/contexts/PageContext";
 import UserContext from "@/contexts/UserContext";
 import { getTop5Coins } from "@/utils/api";
 import Image from "next/image";
