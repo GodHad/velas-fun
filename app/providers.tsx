@@ -16,8 +16,6 @@ import CookieConsent, { Cookies } from 'react-cookie-consent'
 export const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: ReactNode }) {
-  const [hasConsent, setHasConsent] = useState<boolean>(false);
-
   const [user, setUser] = useState<userInfo>({} as userInfo);
   const [login, setLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +36,6 @@ export default function Providers({ children }: { children: ReactNode }) {
       socket.close()
     }
   }, [])
-
-  useEffect(() => {
-    const consent = Cookies.get("CookieConsent");
-    setHasConsent(consent === "true");
-  }, []);
 
   const handleDecline = () => {
     Cookies.set("CookieConsent", "false", { path: "/" });
@@ -105,7 +98,7 @@ export default function Providers({ children }: { children: ReactNode }) {
                   <li><b>Mandatory:</b> Authentication tokens for login.</li>
                   <li><b>Optional:</b> MetaMask tokens for wallet integration.</li>
                 </ul>
-                By clicking "Accept", you agree to storing optional data.
+                By clicking &quot;Accept&quot; you agree to storing optional data.
               </CookieConsent>
             </UserContext.Provider>
           </PageProvider>
