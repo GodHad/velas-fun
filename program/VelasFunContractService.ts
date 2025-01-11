@@ -4,6 +4,7 @@ import VelasFunABI from '@/abi/VelasFunABI.json';
 import MemecoinABI from '@/abi/MemecoinABI.json';
 import { coinInfo } from "@/types";
 import axios from "axios";
+import { Cookies } from "react-cookie-consent";
 
 const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || '';
 const JWT = process.env.NEXT_PUBLIC_PINATA_PRIVATE_JWT;
@@ -56,7 +57,6 @@ export const createToken = async (
         const gasPrice = await web3.eth.getGasPrice()
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
-        console.log(Number(creationFee) + Number(web3.utils.toWei(amount, "ether")))
         const transaction: {
             from: string;
             to: string;
@@ -245,10 +245,14 @@ export const getTokenAmount = async (account: string, token: string): Promise<nu
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
     try {
-        const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
-        if (addedTokens.includes(tokenAddress)) {
-            console.log(`${tokenAddress} is already added to MetaMask.`);
-            return;
+        const consent = Cookies.get("CookieConsent");
+        
+        if (consent === 'true') {
+            const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
+            if (addedTokens.includes(tokenAddress)) {
+                console.log(`${tokenAddress} is already added to MetaMask.`);
+                return;
+            }
         }
 
         const web3 = new Web3(provider);
@@ -270,11 +274,15 @@ const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
             },
         });
 
-        if (success) {
-            addedTokens.push(tokenAddress);
-            localStorage.setItem('addedTokens', JSON.stringify(addedTokens));
-        } else {
-            console.log('Failed to add the token to MetaMask.');
+        if (consent === 'true') {
+            const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
+
+            if (success) {
+                addedTokens.push(tokenAddress);
+                localStorage.setItem('addedTokens', JSON.stringify(addedTokens));
+            } else {
+                console.log('Failed to add the token to MetaMask.');
+            }
         }
     } catch (error) {
         console.error('Error adding token to MetaMask', error);

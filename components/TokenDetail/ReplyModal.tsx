@@ -2,10 +2,12 @@ import { coinInfo, replyInfo, userInfo } from "@/types";
 import { postReply, uploadImage } from "@/utils/api";
 import Image from "next/image";
 import { useState } from "react";
+import Spinner from "../Common/Spinner";
 
 export default function ReplyModal({ showModal, setShowModal, token, user }: { showModal: boolean, setShowModal: (e: boolean) => void, token: coinInfo, user: userInfo }) {
     const [message, setMessage] = useState<string>('');
     const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleFileChange = (files: FileList | null) => {
         if (!files || files.length === 0) {
@@ -38,6 +40,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
     }
 
     const replyPost = async () => {
+        setIsLoading(true);
         let reply: replyInfo = {} as replyInfo;
         if (previewSrc) {
             const url = await uploadImage(previewSrc);
@@ -61,6 +64,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
         setShowModal(false);
         await postReply(reply);
         setMessage('')
+        setIsLoading(false);
     }
 
     return (
@@ -127,8 +131,8 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
                             </div>
                             <div className="grid grid-cols-12 mt-5">
                                 <div className="col-span-12 flex justify-end items-end gap-5">
-                                    <button type="submit" className="rounded-lg bg-primary  text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" onClick={replyPost}>
-                                        Post
+                                    <button type="submit" className="rounded-lg bg-primary  text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" disabled={isLoading} onClick={replyPost}>
+                                        {isLoading ? <Spinner /> : 'Post'}
                                     </button>
                                     <button type="submit" className="rounded-lg bg-body-color  text-base md:text-lg px-5 py-3 w-[160px] md:w-[200px] focus:outline-0 leading-6 text-center disabled:cursor-not-allowed disabled:opacity-50" onClick={() => setShowModal(false)}>
                                         Cancel

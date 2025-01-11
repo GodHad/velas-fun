@@ -34,6 +34,7 @@
     "pino-pretty": "^13.0.0",
     "react": "^18.3.1",
     "react-apexcharts": "^1.7.0",
+    "react-cookie-consent": "^9.0.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.2",
     "react-loading": "^2.0.3",
