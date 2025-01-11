@@ -1,13 +1,13 @@
 "use client"
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Script from "next/script";
 import { coinInfo } from "@/types";
+import { getVLXPrice } from "@/utils/api";
 
 interface TradingChartProps {
     coin: coinInfo;
-    vlxPrice: number;
 }
 
 const TVChartContainer = dynamic(
@@ -16,8 +16,19 @@ const TVChartContainer = dynamic(
     { ssr: false }
 );
 
-export default function TradingViewWidget({ coin, vlxPrice }: TradingChartProps) {
+export default function TradingViewWidget({ coin }: TradingChartProps) {
     const [isScriptReady, setIsScriptReady] = useState(false);
+
+    const [vlxPrice, setVLXPrice] = useState<number>(3000);
+
+    useEffect(() => {
+        const handleGetPrice = async () => {
+            const price = await getVLXPrice();
+            setVLXPrice(price)
+        }
+        handleGetPrice()
+    }, [])
+
     return (
         <>
             <Head>

@@ -5,7 +5,7 @@ import TokenComponent from "./Token";
 import ResponsivePaginationComponent from "react-responsive-pagination";
 import 'react-responsive-pagination/themes/classic.css';
 import UserContext from "@/contexts/UserContext";
-import { getCoinsInfo, getVLXPrice } from "@/utils/api";
+import { getCoinsInfo } from "@/utils/api";
 import { coinInfo } from "@/types";
 import { useData } from "@/contexts/PageContext";
 import KingOfTheHillMain from "./KingOfTheHill";
@@ -20,7 +20,7 @@ enum SortMethods {
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/'
 
 const Hero = () => {
-    const { setIsLoading } = useContext(UserContext);
+    const { setIsLoading, vlxPrice } = useContext(UserContext);
     const [allTokens, setAllTokens] = useState<coinInfo[]>([]);
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState<SortMethods>(SortMethods.lastTrade);
@@ -62,16 +62,6 @@ const Hero = () => {
     }
 
     const { metaData } = useData();
-
-    const [vlxPrice, setVLXPrice] = useState<number>(0);
-
-    useEffect(() => {
-        const _getVLXPrice = async () => {
-            const price = await getVLXPrice();
-            setVLXPrice(Number(price));
-        }
-        _getVLXPrice()
-    }, [])
 
     return (
         <>

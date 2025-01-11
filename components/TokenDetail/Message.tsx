@@ -21,7 +21,7 @@ export default function Message({ message, coinDisplay }: { message: msgInfo, co
                                 <span className="text-yellow hover:text-yellow-500 ps-1.5 inline-flex gap-1 transition-all duration-500 ease-in-out hover:underline cursor-pointer"> {(message.sender as userInfo).name} </span>
                             </Link>
                             <span className="text-body-color">{moment(message.time).format('MMM DD, YYYY, hh:mm:ss')}</span>
-                            {coinDisplay && <Link href={`/coin/${(message.coinId as coinInfo).token}`}><span className="text-yellow">{(message.coinId as coinInfo).token}</span></Link>}
+                            {coinDisplay && <Link href={`/coin/${(message.coinId as coinInfo)._id}`}><span className="text-yellow">{(message.coinId as coinInfo).token}</span></Link>}
                         </div>
                     </div>
                     <div className="flex gap-4">

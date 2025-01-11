@@ -40,8 +40,8 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
     }, [showing, param, setMessages, perPage, currentPage]);
 
     useEffect(() => {
-        const handler = (data: { isBuy: number, user: userInfo, token: coinInfo, amount: number, ticker: string, price: number, tx: string, feePercent: number }) => {
-            const { isBuy, user, amount, price, tx, feePercent } = data;
+        const handler = (data: { isBuy: number, user: userInfo, token: coinInfo, ethAmount: number, tokenAmount: number, ticker: string, price: number, tx: string, feePercent: number }) => {
+            const { isBuy, user, tokenAmount, ethAmount, price, tx, feePercent } = data;
             if (data.token._id === coin._id && trades.record) {
                 setTrades({
                     ...trades,
@@ -50,7 +50,8 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                             holder: user,
                             holdingStatus: isBuy,
                             time: new Date(),
-                            amount,
+                            ethAmount,
+                            tokenAmount,
                             price,
                             tx,
                             feePercent
@@ -70,8 +71,10 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
 
     useEffect(() => {
         const newPostHandler = (data: msgInfo) => {
-            if (coin._id === data.coinId)
-                setMessages([...messages, { ...data }])
+            if (coin._id === data.coinId) {
+                console.log([...messages, data])
+                setMessages((prev) => ([...prev, { ...data }]))
+            }
         }
 
         socket?.on('new-post', newPostHandler);
@@ -196,11 +199,11 @@ export default function Thread({ param, coin }: { param: string, coin: coinInfo 
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">
                                                     <span className={`${transaction.holdingStatus === 2 ? 'text-green-500' : 'text-red-500'}`}> {transaction.holdingStatus === 2 ? 'Buy' : 'Sell'} </span>
                                                 </td>
-                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount).toFixed(3) : (transaction.amount * transaction.price / 1_000_000).toFixed(3)}</td>
-                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.holdingStatus === 2 ? (transaction.amount * (100 - transaction.feePercent) / 100 / transaction.price).toFixed(3) : (transaction.amount / 1_000_000).toFixed(3)}</td>
+                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{transaction.ethAmount.toFixed(4)}</td>
+                                                <td className="px-4 lg:px-5 py-3.5 lg:py-4">{(transaction.tokenAmount / 1_000_000).toFixed(6)}</td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4">{moment(transaction.time).fromNow()}</td>
                                                 <td className="px-4 lg:px-5 py-3.5 lg:py-4 text-center">
-                                                    <a target="_blank" className="hover:underline" href={`https://explorer.solana.com/tx/${transaction.tx}`}>{transaction.tx.slice(0, 4)}....{transaction.tx.slice(-4)}</a>
+                                                    <a target="_blank" className="hover:underline" href={`${process.env.NEXT_PUBLIC_TRANSACTION_EXPLORER_URL}${transaction.tx}`}>{transaction.tx.slice(0, 4)}....{transaction.tx.slice(-4)}</a>
                                                 </td>
                                             </tr>
                                         ))}

@@ -17,7 +17,8 @@ interface backendRecordInfo {
     token: coinInfo;
     user: userInfo;
     isBuy: number;
-    amount: number;
+    ethAmount: number;
+    tokenAmount: number;
     price: number;
     tx: string;
     feePercent: number;
@@ -56,21 +57,22 @@ export default function Holders({ param, token }: { param: string | null, token:
                 }
 
                 if (record.holdingStatus === 2)
-                    acc[holder.name].totalAmount += record.amount / record.price;
-                else acc[holder.name].totalAmount -= record.amount / 1_000_000;
+                    acc[holder.name].totalAmount += record.tokenAmount / 1_000_000;
+                else acc[holder.name].totalAmount -= record.tokenAmount / 1_000_000;
                 return acc;
             }, {} as Record<string, holderInfo>);
             return Object.values(aggregation);
         }
 
         const agr = holderCalc(records);
+        const total = agr.reduce((res, cur) => (res + cur.totalAmount), 0)
         const bondingCurve: holderInfo = {
             holder: {
                 name: token.token.slice(0, 6),
                 wallet: token.token,
                 bondingCurve: true
             },
-            totalAmount: 1_000_000_000 - token.reserveOne / 1_000_000
+            totalAmount: 1_000_000_000 - total
         }
         setHolders([bondingCurve, ...agr].sort((a, b) => b.totalAmount - a.totalAmount).slice(0, 20));
     }, [records]);
@@ -82,7 +84,8 @@ export default function Holders({ param, token }: { param: string | null, token:
                 holder: data.user,
                 holdingStatus: data.isBuy,
                 time: new Date(),
-                amount: data.amount, 
+                ethAmount: data.ethAmount, 
+                tokenAmount: data.tokenAmount,
                 price: data.price,
                 tx: data.tx,
                 feePercent: data.feePercent
@@ -107,7 +110,7 @@ export default function Holders({ param, token }: { param: string | null, token:
                     <a href={`https://solscan.io/address/${holder.holder.wallet}`} className="text-sm lg:text-base font-medium text-body-color !leading-5 xl:!leading-none">
                         {index + 1}. <span className="text-yellow hover:underline cursor-pointer">{holder.holder.name} {holder.holder.dev ? '(dev)' : ''} {holder.holder.bondingCurve ? '(bonding curve)' : ''}</span>
                     </a>
-                    <p className="text-sm lg:text-base font-medium !leading-5 xl:!leading-none"> {Math.floor(Math.abs((holder.totalAmount / 1_087_598_453) * 10000)) / 100}% </p>
+                    <p className="text-sm lg:text-base font-medium !leading-5 xl:!leading-none"> {Math.floor(Math.abs((holder.totalAmount / 1_000_000_000) * 10000)) / 100}% </p>
                 </div>
             ))}
         </div>

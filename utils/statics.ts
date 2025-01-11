@@ -40,7 +40,8 @@ export const chartOverrides = {
     "scalesProperties.fontSize": 14,
     "priceScaleSelectionStrategyName": "left",
     "scalesProperties.showSymbolLabels": true,
-
+    "scalesProperties.lineWidth": 1,
+    "paneProperties.leftAxisWidth": 80, 
     ...chartStyleOverrides,
 };
 

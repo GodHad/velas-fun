@@ -38,13 +38,15 @@ export const TVChartContainer = ({
             tvWidgetRef.current.remove();
         }
         const elem = chartContainerRef.current;
+        const isDarkTheme = document.documentElement.classList.contains("dark");
+
         console.log("localhost host", location.host)
         if (name) {
             const widgetOptions: ChartingLibraryWidgetOptions = {
                 symbol: name,
                 debug: false,
                 datafeed: getDataFeed({ pairIndex, name, token, socket, vlxPrice }),
-                theme: "dark",
+                theme: isDarkTheme ? "dark" : "light",
                 locale: "en",
                 container: elem,
                 library_path: `${location.protocol}//${location.host}/libraries/charting_library/`,
@@ -61,7 +63,6 @@ export const TVChartContainer = ({
                 custom_css_url: "/tradingview-chart.css",
                 overrides: chartOverrides,
                 interval: "1D" as ResolutionString,
-
             };
 
             tvWidgetRef.current = new widget(widgetOptions);

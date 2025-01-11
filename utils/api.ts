@@ -246,43 +246,75 @@ export async function getVLXPrice() {
 }
 
 export const getOverview = async () => {
-    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/overview`);
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/overview`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     const data = response.data;
     return data;
 }
 
 export const getTotalBalanceAndToken = async (option: string) => {
-    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-balance-token?option=${option}`)
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-balance-token?option=${option}`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    })
     return response.data;
 }
 
 export const getTransactionByWeek = async (option: string) => {
-    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-weekly-transaction?option=${option}`)
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-weekly-transaction?option=${option}`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    })
     return response.data;
 }
 
 export const getTop5Coins = async () => {
-    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-top-5-coins`);
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-top-5-coins`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 
 export const getAdminData = async () => {
-    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-admin-data`);
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-admin-data`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 
 export const updateAdmin = async (data: any) => {
-    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update`, data);
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update`, data, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 
 export const updateLogoInfo = async (data: any) => {
-    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update-logo-info`, data);
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update-logo-info`, data, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 
 export const updateBannerInfo = async (data: any) => {
-    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update-banner-info`, data);
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/update-banner-info`, data, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 
@@ -297,17 +329,29 @@ export const getFAQs = async () => {
 }
 
 export const createFAQ = async (data: any) => {
-    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/faqs`, data)
+    const response = await axiosWithToken.post(`${BACKEND_URL}/admin/faqs`, data, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    })
     return response.data;
 }
 
 export const updateFAQ = async (data: any) => {
-    const response = await axiosWithToken.put(`${BACKEND_URL}/admin/faqs/${data._id}`, data);
+    const response = await axiosWithToken.put(`${BACKEND_URL}/admin/faqs/${data._id}`, data, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 
 export const deleteFAQ = async (id: string) => {
-    const response = await axiosWithToken.delete(`${BACKEND_URL}/admin/faqs/${id}`);
+    const response = await axiosWithToken.delete(`${BACKEND_URL}/admin/faqs/${id}`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
     return response.data;
 }
 

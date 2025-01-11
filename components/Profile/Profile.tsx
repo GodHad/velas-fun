@@ -10,10 +10,10 @@ import Message from "../TokenDetail/Message";
 import EditModal from "./EditModal";
 import UserContext from "@/contexts/UserContext";
 import { coinInfo, followerInfo, userInfo } from "@/types";
-import { followUser, getCoinsInfoBy, getFollowers, getFollowingUsers, getHoldingBy, getMessagesInfoBy, getUser, getVLXPrice, unfollowUser, UserHolding } from "@/utils/api";
+import { followUser, getCoinsInfoBy, getFollowers, getFollowingUsers, getHoldingBy, getMessagesInfoBy, getUser, unfollowUser, UserHolding } from "@/utils/api";
 
 export default function Profile() {
-    const { user, setMessages, messages } = useContext(UserContext)
+    const { user, setMessages, messages, vlxPrice } = useContext(UserContext)
     const pathname = usePathname();
     const [param, setParam] = useState<string | null>(null);
     const [index, setIndex] = useState<userInfo>({} as userInfo);
@@ -27,15 +27,6 @@ export default function Profile() {
     const perPage = 30;
     const [totalPage, setTotalPage] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
-
-    const [vlxPrice, setVLXPrice] = useState<number>(0);
-    useEffect(() => {
-        const _getVLXPrice = async () => {
-            const price = await getVLXPrice();
-            setVLXPrice(Number(price));
-        }
-        _getVLXPrice()
-    }, [])
 
     useEffect(() => {
         const segments = pathname.split('/');
@@ -188,7 +179,7 @@ export default function Profile() {
                 </div>
                 <div className="flex justify-center">
                     <div className="flex flex-col">
-                        <p className="text-xs sm:text-sm md:text-base border border-blue-1 rounded-lg p-2.5 mt-1">{index.wallet}</p>
+                        {index.wallet && <p className="text-xs sm:text-sm md:text-base border border-blue-1 rounded-lg p-2.5 mt-1">{index.wallet}</p>}
                         {/* <div className="flex justify-end">
                             <a target="_blank" className="mt-2 inline-flex cursor-pointer items-center space-x-2 border-b border-transparent hover:border-white" href={`https://solscan.io/address/${index.wallet}`}>
                                 <span>View on Holesky</span>
@@ -242,11 +233,11 @@ export default function Profile() {
                                             </div>
                                             <div className="flex justify-end items-center">
                                                 <div className="flex">
-                                                    <Link href={`/coin/${_holding.coin.token}`} className="hover:underline">[view coin]</Link>
+                                                    <Link href={`/coin/${_holding.coin._id}`} className="hover:underline">[view coin]</Link>
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr className="border-b border-gray-1" />
+                                        <hr className="border-gray-1" />
                                     </div>
                                 ))
                             )}

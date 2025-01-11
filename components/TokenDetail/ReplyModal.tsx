@@ -60,6 +60,7 @@ export default function ReplyModal({ showModal, setShowModal, token, user }: { s
         }
         setShowModal(false);
         await postReply(reply);
+        setMessage('')
     }
 
     return (

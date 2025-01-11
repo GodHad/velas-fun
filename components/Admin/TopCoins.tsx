@@ -1,8 +1,10 @@
 'use client'
-import { getTop5Coins, getVLXPrice } from "@/utils/api";
+import { useData } from "@/contexts/PageContext";
+import UserContext from "@/contexts/UserContext";
+import { getTop5Coins } from "@/utils/api";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
 type Coin = {
@@ -17,7 +19,7 @@ type Coin = {
 
 const TopCoins = () => {
     const [coins, setCoins] = useState<Coin[]>([]);
-    const [price, setPrice] = useState<number>(0);
+    const { vlxPrice } = useContext(UserContext);
 
     const getTop5CoinsMutaion = useMutation(getTop5Coins, {
         onSuccess: (data) => {
@@ -27,13 +29,6 @@ const TopCoins = () => {
 
     useEffect(() => {
         getTop5CoinsMutaion.mutate();
-        const fetchPrice = async () => {
-            const vlxprice = await getVLXPrice();
-            console.log(vlxprice);
-            setPrice(vlxprice);
-        };
-
-        fetchPrice();
     }, [])
 
     return (
@@ -84,9 +79,9 @@ const TopCoins = () => {
                                 <Image className="rounded-full h-12 w-12 object-contain" src={coin.image} alt="Brand" width={48} height={48} />
                             </div>
                             <Link href={'/coin/' + coin.id}>
-                            <p className="hidden text-primary underline sm:block">
-                                {coin.name}
-                            </p>
+                                <p className="hidden text-primary underline sm:block">
+                                    {coin.name}
+                                </p>
                             </Link>
                         </div>
 
@@ -95,7 +90,7 @@ const TopCoins = () => {
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">{(price * coin.marketcap).toFixed(2)}</p>
+                            <p className="text-meta-3">{(vlxPrice * coin.marketcap).toFixed(2)}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">

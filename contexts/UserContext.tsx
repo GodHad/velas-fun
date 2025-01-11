@@ -2,34 +2,50 @@
 import { msgInfo, userInfo } from '@/types';
 import { createContext } from 'react';
 
-const UserContext = createContext({
+type UserContextType = {
+    user: userInfo;
+    setUser: (value: userInfo) => void;
+
+    login: boolean;
+    setLogin: (value: boolean) => void;
+
+    isLoading: boolean;
+    setIsLoading: (value: boolean) => void;
+
+    imageUrl: string;
+    setImageUrl: (value: string) => void;
+
+    isCreated: boolean;
+    setIsCreated: (value: boolean) => void;
+
+    messages: msgInfo[];
+    setMessages: React.Dispatch<React.SetStateAction<msgInfo[]>>;
+
+    vlxPrice: number;
+    setVLXPrice: (value: number) => void;
+};
+
+const UserContext = createContext<UserContextType>({
     user: {} as userInfo,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setUser: (_value: userInfo) => {},
+    setUser: () => {},
 
     login: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setLogin: (_value: boolean) => {},
+    setLogin: () => {},
 
     isLoading: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setIsLoading: (_value: boolean) => {},
-    
+    setIsLoading: () => {},
+
     imageUrl: '/upload-bg.png',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setImageUrl: (_value: string) => {},
+    setImageUrl: () => {},
 
     isCreated: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setIsCreated: (_value: boolean) => {},
+    setIsCreated: () => {},
 
     messages: [] as msgInfo[],
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setMessages: (_value: msgInfo[]) => {}, 
+    setMessages: () => {},
 
-    vlxPrice: 0,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setVLXPrice: (_value: number) => {},
+    vlxPrice: 3000,
+    setVLXPrice: () => {},
 })
 
 export default UserContext;

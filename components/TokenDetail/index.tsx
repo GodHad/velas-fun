@@ -1,25 +1,25 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import CoinDetail from "./CoinDetail";
 import TradingViewWidget from "./TradingViewWidget";
 import { coinInfo } from "@/types";
 import { usePathname } from "next/navigation";
-import { getCoinInfo, getVLXPrice } from "@/utils/api";
+import { getCoinInfo } from "@/utils/api";
 import Thread from "./Thread";
 import TradeForm from "./TradeForm";
 import TokenOverview from "./TokenOverview";
 import Holders from "./Holders";
 import { useSocket } from "@/contexts/SocketContext";
-import KingOfHill from "./KingOfHill";
+import UserContext from "@/contexts/UserContext";
 
 const TokenDetail = () => {
     const pathname = usePathname();
     const [param, setParam] = useState<string>('');
     const [coin, setCoin] = useState<coinInfo | null>(null);
-    const [vlxPrice, setVLXPrice] = useState<number>(0);
     const [showing, setShowing] = useState<string>('base');
     const { socket } = useSocket();
+    const { vlxPrice } = useContext(UserContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,14 +33,6 @@ const TokenDetail = () => {
 
         fetchData();
     }, [pathname]);
-
-    useEffect(() => {
-        const _getVLXPrice = async () => {
-            const price = await getVLXPrice();
-            setVLXPrice(Number(price));
-        }
-        _getVLXPrice()
-    }, [])
 
     useEffect(() => {
         const handleGraduatingToDEX = (data: coinInfo) => {
@@ -91,13 +83,12 @@ const TokenDetail = () => {
                                             <iframe id="dextools-widget" title="DEXTools Trading Chart" width={"100%"} height={"400"} src={`https://www.dextools.io/widget-chart/en/base/pe-light/${coin.uniswapPair}?theme=dark`} />
                                         </>
                                     }
-                                    {showing === 'base' && <TradingViewWidget coin={coin} vlxPrice={vlxPrice} />}
+                                    {showing === 'base' && <TradingViewWidget coin={coin} />}
                                     <Thread param={param} coin={coin} />
                                 </div>
 
                                 <div className="lg:max-w-[380px] w-full">
                                     <TradeForm token={coin} />
-                                    <KingOfHill token={coin} vlxPrice={vlxPrice} />
                                     <TokenOverview token={coin} vlxPrice={vlxPrice} />
                                     <Holders param={param} token={coin} />
                                 </div>

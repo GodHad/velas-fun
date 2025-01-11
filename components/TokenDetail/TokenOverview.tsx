@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { coinInfo } from "@/types";
 import { useSocket } from "@/contexts/SocketContext";
+import KingOfHill from "./KingOfHill";
 
 export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) {
     const [progress, setProgress] = useState<number>(60);
@@ -17,13 +18,18 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
         const handleUpdateBondingCurve = (
             data: {
                 tokenId: string,
-                price: number
+                price: number,
+                reserveTwo: number
             }
         ) => {
             if (_token._id === data.tokenId) {
                 const value = Math.floor(((data.price || 0) * 1_000_000_000) / (token.graduationMarketCap || 5) * 100)
                 setProgress(value);
-                setToken(prevState => ({ ...prevState, price: data.price }))
+                setToken(prevState => ({ 
+                    ...prevState, 
+                    price: data.price, 
+                    reserveTwo: data.reserveTwo
+                }))
             }
         }
         const handleGraduatingToDEX = (data: coinInfo) => {
@@ -60,6 +66,7 @@ export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vl
                     }
                 </div>
             </div>
+            <KingOfHill token={token} vlxPrice={vlxPrice} />
             <div className=" rounded-xl sm:rounded-2xl p-4 sm:p-5 mb-4 border dark:border-gray-700 border-gray-200">
                 <h4 className="text-[15px] md:text-base xl:text-lg font-semibold !leading-none mb-3.5">Overview</h4>
                 <div>

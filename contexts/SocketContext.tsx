@@ -3,10 +3,9 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import { useRouter } from "next/navigation";
-import { errorAlert, infoAlert, successAlert, txViewAlert } from "@/components/ToastGroup";
+import { errorAlert, txViewAlert } from "@/components/ToastGroup";
 import { coinInfo, userInfo } from "@/types";
 import Link from "next/link";
-import Image from "next/image";
 
 interface Context {
     socket?: Socket;
@@ -94,7 +93,7 @@ const SocketProvider = (props: React.PropsWithChildren) => {
                     <p>Transaction confirmed</p>
                 </div>
                 <a
-                    href={`https://holesky.etherscan.io/tx/${data.txHash}`}
+                    href={`${process.env.NEXT_PUBLIC_TRANSACTION_EXPLORER_URL}${data.txHash}`}
                     target="_blank"
                     className="rounded-md bg-primary text-center py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 w-[110px]"
                 >
@@ -122,17 +121,17 @@ const SocketProvider = (props: React.PropsWithChildren) => {
             open: true,
             user: data.user,
             coin: data.token,
-            amount: data.isBuy === 2 ? Number(data.amount) : Number(data.amount) / 1_000_000,
+            amount: data.isBuy === 2 ? Number(data.ethAmount) : Number(data.tokenAmount) / 1_000_000,
             severity: data.isBuy === 2 ? 'success' : 'error'
         });
         txViewAlert(
             <div className="flex gap-4 items-center justify-between">
                 <div>
-                    <p className='font-semibold'>{`${data.user.name} ${data.isBuy === 2 ? `bought ` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? `the worth of ${data.ticker} for ${data.amount} ETH` : data.ticker}`}</p>
+                    <p className='font-semibold'>{`${data.user.name} ${data.isBuy === 2 ? `bought ` : `sold ${data.tokenAmount / 1_000_000}`} ${data.isBuy === 2 ? `the worth of ${data.ticker} for ${data.ethAmount} ETH` : data.ticker}`}</p>
                     <p>Transaction confirmed</p>
                 </div>
                 <a
-                    href={`https://holesky.etherscan.io/tx/${data.tx}`}
+                    href={`${process.env.NEXT_PUBLIC_TRANSACTION_EXPLORER_URL}${data.tx}`}
                     target="_blank"
                     className="rounded-md bg-primary text-center py-2 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 w-[110px]"
                 >
@@ -140,7 +139,6 @@ const SocketProvider = (props: React.PropsWithChildren) => {
                 </a>
             </div>
         );
-        // infoAlert(`${data.user.name} ${data.isBuy === 2 ? `bought ${data.amount}` : `sold ${data.amount / 1_000_000}`} ${data.isBuy === 2 ? 'VLX' : data.ticker}`);
         const resetTimeout = setTimeout(() => {
             setAlertState(initialAlertState);
         }, 10000);

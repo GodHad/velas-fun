@@ -69,16 +69,16 @@ const Header = () => {
         method: 'wallet_addEthereumChain',
         params: [{
           chainId: '0x4268', 
-          chainName: 'Holesky',
+          chainName: process.env.NEXT_PUBLIC_CHAIN_NAME,
           nativeCurrency: {
             name: 'ETH',
             symbol: 'ETH',
             decimals: 18,
           },
-          rpcUrls: ['https://ethereum-holesky.publicnode.com'], 
+          rpcUrls: [process.env.NEXT_PUBLIC_CHAIN_RPC_URL], 
         }],
       })
-      await metaMask.activate(17000);
+      await metaMask.activate(Number(process.env.NEXT_PUBLIC_CHAIN_ID || 1));
     } catch (error) {
       console.warn(`Failed to connect...`, error);
     }

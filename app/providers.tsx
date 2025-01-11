@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { Web3ReactProvider } from "@web3-react/core";
 import { ToastContainer } from "react-toastify";
@@ -21,7 +21,20 @@ export default function Providers({ children }: { children: ReactNode }) {
   const [imageUrl, setImageUrl] = useState('/upload-bg.png');
   const [isCreated, setIsCreated] = useState(false);
   const [messages, setMessages] = useState<msgInfo[]>([]);
-  const [vlxPrice, setVLXPrice] = useState<number>(0);
+  const [vlxPrice, setVLXPrice] = useState<number>(3300);
+
+  useEffect(() => {
+    const socket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade');
+
+    socket.onmessage = (event) => {
+        const trade = JSON.parse(event.data);
+        setVLXPrice(trade.p);
+    };
+
+    return () => {
+      socket.close()
+    }
+  }, [])
 
   return (
     <Web3ReactProvider connectors={[[metaMask, hooks]]}>

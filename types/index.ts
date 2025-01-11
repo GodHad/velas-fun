@@ -81,7 +81,8 @@ export interface recordInfo {
     holder: userInfo,
     holdingStatus: number,
     time: Date,
-    amount: number,
+    ethAmount: number,
+    tokenAmount: number,
     price: number,
     tx: string,
     feePercent: number;
