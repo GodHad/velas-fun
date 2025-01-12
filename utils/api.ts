@@ -355,6 +355,15 @@ export const deleteFAQ = async (id: string) => {
     return response.data;
 }
 
+export const getTransactions = async () => {
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-txs`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
+    return response.data;
+}
+
 export const getKingCoin = async () => {
     const response = await axios.get(`${BACKEND_URL}/coin/get-king-coin`);
     return response.data;

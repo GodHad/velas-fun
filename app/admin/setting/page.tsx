@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Setting from '@/components/Admin/Setting'
 
 export const metadata: Metadata = {
-    title: "BluePill Fun | Admin",
+    title: "BluePill Fun | Admin | Setting",
     description: "BluePill Fun Platform deploying memecoin",
 };
 

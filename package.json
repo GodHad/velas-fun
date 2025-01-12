@@ -14,6 +14,7 @@
     "@metamask/providers": "^18.2.0",
     "@metamask/sdk-react": "^0.31.4",
     "@pinata/sdk": "^2.1.0",
+    "@tanstack/react-table": "^8.20.6",
     "@types/bn.js": "^5.1.6",
     "@web3-react/core": "^8.2.2",
     "@web3-react/injected-connector": "^6.0.7",

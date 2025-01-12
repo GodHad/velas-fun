@@ -122,3 +122,11 @@ export interface followerInfo {
         follower: userInfo;
     }[];
 }
+
+export interface transactionInfo {
+    user: userInfo;
+    type: string;
+    txHash: string;
+    amount: number;
+    createdAt: Date;
+}
