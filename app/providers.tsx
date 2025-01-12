@@ -88,7 +88,7 @@ export default function Providers({ children }: { children: ReactNode }) {
                 onDecline={handleDecline}
                 disableStyles
                 disableButtonStyles
-                containerClasses="bg-black text-white p-4 flex flex-col md:flex-row items-center justify-between fixed bottom-0 w-full border-t z-[1000]"
+                containerClasses="bg-black text-white p-4 flex flex-col md:flex-row items-center justify-between fixed bottom-0 w-full border-t z-[10000]"
                 contentClasses="text-md mb-2 md:mb-0"
                 buttonClasses="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all"
                 declineButtonClasses="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-all mx-4"
