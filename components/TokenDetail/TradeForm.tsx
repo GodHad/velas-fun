@@ -71,9 +71,9 @@ export default function TradeForm({ token }: { token: coinInfo }) {
 
     return (
         <div className="rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:mt-3 mb-4 border dark:border-gray-700 border-gray-200">
-            <div className="flex items-center border border-primary rounded-md overflow-hidden mb-5 lg:mb-6">
-                <div className={`font-syne font-semibold text-sm sm:text-base xl:text-lg  cursor-pointer w-full py-1.5 sm:py-2 px-2 sm:px-2.5 text-nowrap flex justify-center items-center relative ${isBuy === 2 ? 'bg-primary text-white' : 'text-gray-500 opacity-50'}`} onClick={() => setIsBuy(2)}>Buy</div>
-                <div className={`font-syne font-semibold text-sm sm:text-base xl:text-lg cursor-pointer w-full py-1.5 sm:py-2 px-2 sm:px-2.5 text-nowrap flex justify-center items-center relative  ${isBuy === 1 ? 'bg-primary text-white' : 'text-gray-500 opacity-50'}`} onClick={() => setIsBuy(1)}>Sell</div>
+            <div className="flex items-center rounded-md overflow-hidden mb-5 lg:mb-6">
+                <div className={`font-syne font-semibold text-sm sm:text-base xl:text-lg  cursor-pointer w-full py-1.5 sm:py-2 px-2 sm:px-2.5 text-nowrap flex justify-center items-center relative border ${isBuy === 2 ? 'bg-green-500 text-white border-green-500' : 'text-gray-500 opacity-50 border-primary'}`} onClick={() => setIsBuy(2)}>Buy</div>
+                <div className={`font-syne font-semibold text-sm sm:text-base xl:text-lg cursor-pointer w-full py-1.5 sm:py-2 px-2 sm:px-2.5 text-nowrap flex justify-center items-center relative border ${isBuy === 1 ? 'bg-red-500 text-white border-red-500' : 'text-gray-500 opacity-50 border-primary'}`} onClick={() => setIsBuy(1)}>Sell</div>
             </div>
             <div>
                 {isBuy === 2 ?
@@ -132,7 +132,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                         </div>
                     </>
                 }
-                <button className="font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal bg-primary text-white hover:bg-primary opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden" onClick={handleTrade} disabled={isTrading || metaData?.siteKill || (token.tradingPaused && !token.tradingOnUniswap)}>
+                <button className={`font-syne font-semibold text-sm sm:text-base xl:text-lg xl:leading-normal text-white opacity-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500 ease-in-out w-full rounded-md p-2 overflow-hidden ${isBuy === 2 ? 'bg-green-500' : 'bg-red-500'}`} onClick={handleTrade} disabled={isTrading || metaData?.siteKill || (token.tradingPaused && !token.tradingOnUniswap)}>
                     {
                         isTrading ?
                             <Spinner />
