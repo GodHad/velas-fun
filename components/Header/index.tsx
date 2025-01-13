@@ -68,7 +68,7 @@ const Header = () => {
       await metaMask.provider?.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0x4268',
+          chainId: process.env.NEXT_PUBLIC_CHAIN_ID_HEX,
           chainName: process.env.NEXT_PUBLIC_CHAIN_NAME,
           nativeCurrency: {
             name: 'ETH',
@@ -212,19 +212,19 @@ const Header = () => {
                         {user.admin &&
                           <Link
                             href="/admin"
-                            role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
+                            role="menuitem" className="w-full block md:hidden px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
                           >
                             Admin Page
                           </Link>
                         }
                         <Link
                           href="/faq"
-                          role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
+                          role="menuitem" className="w-full block md:hidden px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
                         >
                           FAQ
                         </Link>
                         <button
-                          role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
+                          role="menuitem" className="w-full block md:hidden px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
                           onClick={() => setShowModal(true)}
                         >
                           How it works

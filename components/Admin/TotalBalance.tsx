@@ -219,13 +219,13 @@ const TotalBalance: React.FC = () => {
                             Day
                         </button>
                         <button
-                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdar ${option === 'week' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
+                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${option === 'week' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
                             onClick={() => setOption('week')}
                         >
                             Week
                         </button>
                         <button
-                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdar ${option === 'month' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
+                            className={`rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark ${option === 'month' ? 'bg-white shadow-card dark:bg-boxdark' : ''}`}
                             onClick={() => setOption('month')}
                         >
                             Month

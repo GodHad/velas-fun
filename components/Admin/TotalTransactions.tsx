@@ -48,7 +48,7 @@ const options: ApexOptions = {
   },
 
   xaxis: {
-    categories: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+    categories: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
   },
   legend: {
     position: 'top',
