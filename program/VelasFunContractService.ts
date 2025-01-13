@@ -54,7 +54,9 @@ export const createToken = async (
     try {
         const web3 = new Web3(provider)
         const { name, ticker, description, url, twitter, telegram, website } = coin;
-        const gasPrice = await web3.eth.getGasPrice()
+        const gasPrice = await web3.eth.getGasPrice();
+        const baseFee = parseInt(gasPrice.toString(), 10);
+        const priorityFee = web3.utils.toWei('2', 'gwei');
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
         const transaction: {
@@ -66,17 +68,20 @@ export const createToken = async (
             data: any;
             gasPrice: string;
             gas?: bigint;
+            maxFeePerGas: string;
+            maxPriorityFeePerGas: string;
         } = {
             from: account,
             to: VelasFunContract.address,
             value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
             data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
-            gasPrice: gasPrice.toString()
+            gasPrice: gasPrice.toString(),
+            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
+            maxPriorityFeePerGas: priorityFee
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-
-        transaction.gas = gas;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction)
         return true;
@@ -91,6 +96,8 @@ export const buyTokens = async (provider: any, account: string, token: string, a
     try {
         const web3 = new Web3(provider)
         const gasPrice = await web3.eth.getGasPrice();
+        const baseFee = parseInt(gasPrice.toString(), 10);
+        const priorityFee = web3.utils.toWei('2', 'gwei');
 
         const transaction: {
             from: string;
@@ -101,15 +108,19 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             data: any;
             gasPrice: string;
             gas?: bigint;
+            maxFeePerGas: string;
+            maxPriorityFeePerGas: string;
         } = {
             from: account,
             to: VelasFunContract.address,
             value: web3.utils.toWei(amount, 'ether'),
             data: contract.methods.buyTokens(token, web3.utils.toWei(amount, 'ether')).encodeABI(),
-            gasPrice: gasPrice.toString()
+            gasPrice: gasPrice.toString(),
+            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
+            maxPriorityFeePerGas: priorityFee
         }
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
@@ -145,7 +156,10 @@ export const sellTokens = async (provider: any, account: string, token: string, 
             return false;
         }
 
-        await waitApprove(tokenContract, account, tokenAmount, 30000)
+        await waitApprove(tokenContract, account, tokenAmount, 30000);
+
+        const baseFee = parseInt(approveGasPrice.toString(), 10);
+        const priorityFee = web3.utils.toWei('2', 'gwei');
 
         const transaction: {
             from: string;
@@ -154,15 +168,19 @@ export const sellTokens = async (provider: any, account: string, token: string, 
             data: any;
             gasPrice: string;
             gas?: bigint;
+            maxFeePerGas: string;
+            maxPriorityFeePerGas: string;
         } = {
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.sellTokens(token, Number(amount) * 1_000_000).encodeABI(),
-            gasPrice: (await web3.eth.getGasPrice()).toString()
+            gasPrice: approveGasPrice.toString(),
+            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
+            maxPriorityFeePerGas: priorityFee
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction);
         return true;
@@ -187,6 +205,9 @@ export const updateConstantVariables = async (
 ) => {
     try {
         const web3 = new Web3(provider);
+        const gasPrice = await web3.eth.getGasPrice();
+        const baseFee = parseInt(gasPrice.toString(), 10);
+        const priorityFee = web3.utils.toWei('2', 'gwei')
 
         const transaction: {
             from: string;
@@ -195,15 +216,19 @@ export const updateConstantVariables = async (
             data: any;
             gasPrice: string;
             gas?: bigint;
+            maxFeePerGas: string;
+            maxPriorityFeePerGas: string;
         } = {
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.updateVariables(paused, admin, web3.utils.toWei(creationFee, 'ether'), feePercent, web3.utils.toWei(creatorReward, 'ether'), web3.utils.toWei(velasFunReward, 'ether'), web3.utils.toWei(graduationMarketCap, 'ether'), feeAddress).encodeABI(),
-            gasPrice: (await web3.eth.getGasPrice()).toString()
+            gasPrice: gasPrice.toString(),
+            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
+            maxPriorityFeePerGas: priorityFee
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction);
         return true;
@@ -218,7 +243,6 @@ export const getContractBalance = async () => {
         const balanceWei = await web3Service.web3.eth.getBalance(VelasFunContract.address);
         const balanceVLX = await web3Service.web3.utils.fromWei(balanceWei, 'ether');
 
-        console.log(`Contract Balance: ${balanceVLX} ETH`);
         return balanceVLX;
     } catch (error) {
         console.log("error fetching balance: ", error);
