@@ -9,12 +9,8 @@ const nextConfig: NextConfig = {
         hostname: 'violet-able-landfowl-471.mypinata.cloud',
       },
       {
-        protocol: 'http',
-        hostname: 'localhost'
-      },
-      {
-        protocol: 'http',
-        hostname: '18.212.112.11'
+        protocol: 'https',
+        hostname: 'cyan-effective-fly-860.mypinata.cloud',
       },
       {
         hostname: 'ipfs.fleek.co'
