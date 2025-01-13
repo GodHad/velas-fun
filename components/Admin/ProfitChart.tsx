@@ -137,7 +137,7 @@ const ProfitChart: React.FC = () => {
                 ],
             });
             setCategories(
-                data.map((item: { time: string; profit: number }) => item.time) 
+                data.map((item: { time: string; profit: number }) => option === 'day' ? moment(item.time).format('HH') : option === 'week' ? moment(item.time).format('ddd') : moment(item.time).format('DD'))
             );
         },
     });
