@@ -85,7 +85,7 @@ const TanstackDatatable = <TData,>({
                                     {header.isPlaceholder ? null : (
                                         <>
                                             <div
-                                                className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                                                className={header.column.getCanSort() ? 'select-none' : ''}
                                             >
                                                 {flexRender(
                                                     header.column.columnDef.header,

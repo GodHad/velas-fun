@@ -81,10 +81,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <div>
 
                         <ul className="mb-6 flex flex-col gap-1.5">
-                        <li>
+                            <li>
                                 <Link
                                     href="/admin"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${!pathname.includes('setting') && 'bg-graydark dark:bg-meta-4 text-white'
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${!pathname.includes('setting') && !pathname.includes('transaction') && 'bg-gray-500 dark:bg-meta-4 text-white'
                                         }`}
                                 >
                                     <svg
@@ -123,7 +123,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <Link
                                     href="/admin/setting"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('setting') &&
-                                        'bg-graydark dark:bg-meta-4 text-white'
+                                        'bg-gray-500 dark:bg-meta-4 text-white'
                                         }`}
                                 >
                                     <svg
@@ -162,10 +162,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <Link
                                     href="/admin/transactions"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium duration-300 ease-in-out hover:text-white hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('transactions') &&
-                                        'bg-graydark dark:bg-meta-4 text-white'
+                                        'bg-gray-500 dark:bg-meta-4 text-white'
                                         }`}
                                 >
-                                    <svg width="18" height="18" viewBox="0 -1 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-60.000000, -6680.000000)" fill="none" className="fill-primary dark:fill-white"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M19.3436674,6529.90723 L24,6524.929 L19.3436674,6520 L17.8942332,6521.34528 L20.314609,6523.93938 L4,6523.93938 L4,6525.94876 L20.314609,6525.94876 L17.8942332,6528.51474 L19.3436674,6529.90723 Z M10.1057668,6536.63061 L7.68638788,6533.98627 L23.9371978,6533.98627 L23.9371978,6531.97689 L7.68638788,6531.97689 L10.1057668,6529.46115 L8.65633255,6528.11286 L4,6533.0931 L8.65633255,6538 L10.1057668,6536.63061 Z"> </path> </g> </g> </g> </g></svg>
+                                    <svg width="18" height="18" viewBox="0 -1 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill="none"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-60.000000, -6680.000000)" fill="none" className={`fill-current`}> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M19.3436674,6529.90723 L24,6524.929 L19.3436674,6520 L17.8942332,6521.34528 L20.314609,6523.93938 L4,6523.93938 L4,6525.94876 L20.314609,6525.94876 L17.8942332,6528.51474 L19.3436674,6529.90723 Z M10.1057668,6536.63061 L7.68638788,6533.98627 L23.9371978,6533.98627 L23.9371978,6531.97689 L7.68638788,6531.97689 L10.1057668,6529.46115 L8.65633255,6528.11286 L4,6533.0931 L8.65633255,6538 L10.1057668,6536.63061 Z"> </path> </g> </g> </g> </g></svg>
                                     Transactions
                                 </Link>
                             </li>

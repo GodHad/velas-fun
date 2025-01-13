@@ -21,6 +21,7 @@ const Header = () => {
   const isActivating = useIsActivating();
 
   const [showModal, setShowModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   const account = useAccount()
 
@@ -68,14 +69,14 @@ const Header = () => {
       await metaMask.provider?.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0x4268', 
+          chainId: '0x4268',
           chainName: process.env.NEXT_PUBLIC_CHAIN_NAME,
           nativeCurrency: {
             name: 'ETH',
             symbol: 'ETH',
             decimals: 18,
           },
-          rpcUrls: [process.env.NEXT_PUBLIC_CHAIN_RPC_URL], 
+          rpcUrls: [process.env.NEXT_PUBLIC_CHAIN_RPC_URL],
         }],
       })
       await metaMask.activate(Number(process.env.NEXT_PUBLIC_CHAIN_ID || 1));
@@ -140,19 +141,19 @@ const Header = () => {
     setLogin(false);
     localStorage.clear();
   }
-  
+
   const { setMetaData } = useData()
   const getMetaData_ = async () => {
-      try {
-          const data = await getMetaData();
-          setMetaData(data)
-      } catch {
-          errorAlert('Failed to get the MetaData');
-      }
+    try {
+      const data = await getMetaData();
+      setMetaData(data)
+    } catch {
+      errorAlert('Failed to get the MetaData');
+    }
   }
 
   useEffect(() => {
-      getMetaData_()
+    getMetaData_()
   }, [])
 
   return (
@@ -209,6 +210,26 @@ const Header = () => {
                     </button>
                     <div className="absolute top-8 right-0 mt-2 w-full rounded-md shadow-lg bg-white dark:bg-black dark:border-none border border-body-color z-500 hidden dark:text-white duration-300 transition-all">
                       <div role="none" className="py-0">
+                        {user.admin &&
+                          <Link
+                            href="/admin"
+                            role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
+                          >
+                            Admin Page
+                          </Link>
+                        }
+                        <Link
+                          href="/faq"
+                          role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
+                        >
+                          FAQ
+                        </Link>
+                        <button
+                          role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white"
+                          onClick={() => setShowModal(true)}
+                        >
+                          How it works
+                        </button>
                         <Link href={`/profile/${user._id}`} role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-t-md text-left hover:bg-primary hover:text-white">View Profile</Link>
                         <button role="menuitem" className="w-full block px-4 py-2 font-syne text-xs sm:text-sm font-medium rounded-b-md text-left hover:bg-primary  hover:text-white" onClick={logOut}>Disconnect Wallet</button>
                       </div>
@@ -220,10 +241,10 @@ const Header = () => {
                 </div>
               </div>
             </div>
+            <HowItWork showModal={showModal} setShowModal={setShowModal} />
           </div>
         </div>
       </header>
-      <HowItWork showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 };

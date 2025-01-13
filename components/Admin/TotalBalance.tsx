@@ -132,6 +132,8 @@ const TotalBalance: React.FC = () => {
             },
         ],
     });
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
 
     const getBalanceAndTokenMutation = useMutation(getTotalBalanceAndToken, {
         onSuccess: (data) => {
@@ -171,6 +173,18 @@ const TotalBalance: React.FC = () => {
     useEffect(() => {
         handleReset();
         getBalanceAndTokenMutation.mutate(option);
+
+        const currentDate = moment();
+        if (option === 'day') {
+            setStartDate(currentDate.startOf('day').format('MM.DD HH:mm:ss'))
+            setEndDate(currentDate.endOf('day').format('MM.DD HH:mm:ss'))
+        } else if (option === 'week') {
+            setStartDate(currentDate.clone().startOf('week').format('MM.DD'))
+            setEndDate(currentDate.clone().endOf('week').format('MM.DD'))
+        } else if (option === 'month') {
+            setStartDate(currentDate.clone().startOf('month').format('MM.DD'))
+            setEndDate(currentDate.clone().endOf('month').format('MM.DD'))
+        }
     }, [option])
 
     return (
@@ -183,7 +197,7 @@ const TotalBalance: React.FC = () => {
                         </span>
                         <div className="w-full">
                             <p className="font-semibold text-primary">Total Coins</p>
-                            <p className="text-sm font-medium">12.04.2024 - 12.05.2024</p>
+                            <p className="text-sm font-medium">{startDate} - {endDate}</p>
                         </div>
                     </div>
                     <div className="flex min-w-47.5">
@@ -192,7 +206,7 @@ const TotalBalance: React.FC = () => {
                         </span>
                         <div className="w-full">
                             <p className="font-semibold text-secondary">Total Balance</p>
-                            <p className="text-sm font-medium">12.04.2024 - 12.05.2024</p>
+                            <p className="text-sm font-medium">{startDate} - {endDate}</p>
                         </div>
                     </div>
                 </div>

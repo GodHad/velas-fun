@@ -364,6 +364,26 @@ export const getTransactions = async () => {
     return response.data;
 }
 
+export const getTotalProfit = async () => {
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-total-profit`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
+
+    return response. data;
+}
+
+export const getProfitData = async (option: string) => {
+    const response = await axiosWithToken.get(`${BACKEND_URL}/admin/get-profit-data?option=${option}`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    });
+
+    return response.data;
+}
+
 export const getKingCoin = async () => {
     const response = await axios.get(`${BACKEND_URL}/coin/get-king-coin`);
     return response.data;
