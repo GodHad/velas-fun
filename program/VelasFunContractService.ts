@@ -54,9 +54,9 @@ export const createToken = async (
     try {
         const web3 = new Web3(provider)
         const { name, ticker, description, url, twitter, telegram, website } = coin;
-        const gasPrice = await web3.eth.getGasPrice();
+        // const gasPrice = await web3.eth.getGasPrice();
         // const baseFee = parseInt(gasPrice.toString(), 10);
-        const priorityFee = web3.utils.toWei('4', 'gwei');
+        const priorityFee = web3.utils.toWei('8', 'gwei');
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
         const transaction: {
