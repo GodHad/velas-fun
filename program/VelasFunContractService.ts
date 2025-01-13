@@ -55,8 +55,8 @@ export const createToken = async (
         const web3 = new Web3(provider)
         const { name, ticker, description, url, twitter, telegram, website } = coin;
         const gasPrice = await web3.eth.getGasPrice();
-        const baseFee = parseInt(gasPrice.toString(), 10);
-        const priorityFee = web3.utils.toWei('2', 'gwei');
+        // const baseFee = parseInt(gasPrice.toString(), 10);
+        const priorityFee = web3.utils.toWei('4', 'gwei');
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
         const transaction: {
@@ -74,8 +74,8 @@ export const createToken = async (
             to: VelasFunContract.address,
             value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
             data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
-            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
-            maxPriorityFeePerGas: priorityFee
+            maxFeePerGas: web3.utils.toWei("100", "gwei"), // Set max fee per gas
+            maxPriorityFeePerGas: priorityFee,
         }
 
         const gas = await web3.eth.estimateGas(transaction);
