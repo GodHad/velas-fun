@@ -21,7 +21,6 @@ const Header = () => {
   const isActivating = useIsActivating();
 
   const [showModal, setShowModal] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   const account = useAccount()
 
