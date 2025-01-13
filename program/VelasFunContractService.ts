@@ -79,7 +79,7 @@ export const createToken = async (
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 2n;
+        transaction.gas = gas * 10n;
 
         await web3.eth.sendTransaction(transaction)
         return true;
@@ -116,7 +116,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             maxPriorityFeePerGas: priorityFee
         }
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 2n;
+        transaction.gas = gas * 10n;
         
         await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
@@ -175,7 +175,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 2n;
+        transaction.gas = gas * 10n;
 
         await web3.eth.sendTransaction(transaction);
         return true;
@@ -221,7 +221,7 @@ export const updateConstantVariables = async (
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 2n;
+        transaction.gas = gas * 10n;
 
         await web3.eth.sendTransaction(transaction);
         return true;
