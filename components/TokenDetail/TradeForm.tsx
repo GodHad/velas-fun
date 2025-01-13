@@ -136,7 +136,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                     {
                         isTrading ?
                             <Spinner />
-                            : 'Place trade'
+                            : 'Place Trade'
                     }
                 </button>
             </div>
