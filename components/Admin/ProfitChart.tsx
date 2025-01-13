@@ -131,6 +131,7 @@ const ProfitChart: React.FC = () => {
                 series: [
                     {
                         name: 'Profit',
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         data: data.map((_: any) => parseFloat(_.profit.toFixed(6))),
                     },
                 ],
