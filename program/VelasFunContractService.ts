@@ -134,6 +134,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         const tokenContract = new web3.eth.Contract(MemecoinABI, token);
         const tokenAmount = Number(amount) * 1_000_000;
         const approveTransaction = tokenContract.methods.approve(VelasFunContract.address, tokenAmount);
+        const approveGas = await approveTransaction.estimateGas({ from: account });
         const approveGasPrice = await web3.eth.getGasPrice();
         const baseFee = parseInt(approveGasPrice.toString(), 10);
         const priorityFee = web3.utils.toWei('2', 'gwei');
@@ -142,7 +143,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
             from: account,
             to: token,
             data: approveTransaction.encodeABI(),
-            gasPrice: approveGasPrice,
+            gas: approveGas,
             maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
             maxPriorityFeePerGas: priorityFee
         };
