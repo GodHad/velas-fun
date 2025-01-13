@@ -66,7 +66,6 @@ export const createToken = async (
             value: any;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: any;
-            gasPrice: string;
             gas?: bigint;
             maxFeePerGas: string;
             maxPriorityFeePerGas: string;
@@ -75,7 +74,6 @@ export const createToken = async (
             to: VelasFunContract.address,
             value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
             data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
-            gasPrice: gasPrice.toString(),
             maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
             maxPriorityFeePerGas: priorityFee
         }
@@ -106,7 +104,6 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             value: any;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: any;
-            gasPrice: string;
             gas?: bigint;
             maxFeePerGas: string;
             maxPriorityFeePerGas: string;
@@ -115,7 +112,6 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             to: VelasFunContract.address,
             value: web3.utils.toWei(amount, 'ether'),
             data: contract.methods.buyTokens(token, web3.utils.toWei(amount, 'ether')).encodeABI(),
-            gasPrice: gasPrice.toString(),
             maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
             maxPriorityFeePerGas: priorityFee
         }
@@ -214,7 +210,6 @@ export const updateConstantVariables = async (
             to: string;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: any;
-            gasPrice: string;
             gas?: bigint;
             maxFeePerGas: string;
             maxPriorityFeePerGas: string;
@@ -222,7 +217,6 @@ export const updateConstantVariables = async (
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.updateVariables(paused, admin, web3.utils.toWei(creationFee, 'ether'), feePercent, web3.utils.toWei(creatorReward, 'ether'), web3.utils.toWei(velasFunReward, 'ether'), web3.utils.toWei(graduationMarketCap, 'ether'), feeAddress).encodeABI(),
-            gasPrice: gasPrice.toString(),
             maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
             maxPriorityFeePerGas: priorityFee
         }
