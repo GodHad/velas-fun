@@ -4,7 +4,7 @@ import { useData } from '@/contexts/PageContext';
 import { updateConstantVariables } from '@/program/VelasFunContractService';
 import { updateAdmin } from '@/utils/api';
 import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { hooks } from '@/connectors/metaMask';
 import { errorAlert, successAlert } from '@/components/ToastGroup';
 
