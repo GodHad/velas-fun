@@ -122,7 +122,7 @@ const Variables = () => {
                                         step="0.0001"
                                         id="creationFee"
                                         {...register('creationFee', {
-                                            min: { value: 0.0003, message: 'Creation Fee can\'t be lower than 0.0003 ether' },
+                                            min: { value: 0.0001, message: 'Creation Fee can\'t be lower than 0.0001 ether' },
                                             required: 'Creation Fee is required'
                                         })}
                                     />
