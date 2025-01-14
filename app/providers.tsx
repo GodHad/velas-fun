@@ -12,6 +12,7 @@ import "dotenv/config";
 import SocketProvider from "@/contexts/SocketContext";
 import { hooks, metaMask } from "@/connectors/metaMask";
 import CookieConsent, { Cookies } from 'react-cookie-consent'
+import { getVLXPrice } from "@/utils/api";
 
 export const queryClient = new QueryClient();
 
@@ -25,16 +26,23 @@ export default function Providers({ children }: { children: ReactNode }) {
   const [vlxPrice, setVLXPrice] = useState<number>(3300);
 
   useEffect(() => {
-    const socket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade');
+    // const socket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade');
 
-    socket.onmessage = (event) => {
-      const trade = JSON.parse(event.data);
-      setVLXPrice(trade.p);
-    };
+    // socket.onmessage = (event) => {
+    //   const trade = JSON.parse(event.data);
+    //   setVLXPrice(trade.p);
+    // };
 
-    return () => {
-      socket.close()
+    // return () => {
+    //   socket.close()
+    // }
+    const handleGetETHPrice = async () => {
+      const ethPrice = await getVLXPrice();
+      console.log(ethPrice)
+      setVLXPrice(ethPrice);
     }
+
+    handleGetETHPrice();
   }, [])
 
   const handleDecline = () => {
