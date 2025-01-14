@@ -54,7 +54,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
             if (isBuy === 2) res = await buyTokens(connector.provider, account, token.token, sol);
             else res = await sellTokens(connector.provider, account, token.token, sol);
 
-            if (!res) errorAlert(isBuy === 2 ? 'Failed to buy tokens' : 'Failed to sell tokens');
+            if (res !== true) errorAlert(isBuy === 2 ? 'Failed to buy tokens' : 'Failed to sell tokens');
 
             setIsTrading(false);
         } catch (error) {

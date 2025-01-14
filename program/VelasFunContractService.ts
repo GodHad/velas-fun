@@ -54,9 +54,8 @@ export const createToken = async (
     try {
         const web3 = new Web3(provider)
         const { name, ticker, description, url, twitter, telegram, website } = coin;
-        // const gasPrice = await web3.eth.getGasPrice();
-        // const baseFee = parseInt(gasPrice.toString(), 10);
-        const priorityFee = web3.utils.toWei('100', 'gwei');
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
         const transaction: {
@@ -74,18 +73,20 @@ export const createToken = async (
             to: VelasFunContract.address,
             value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
             data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
-            maxFeePerGas: web3.utils.toWei("100", "gwei"), // Set max fee per gas
-            maxPriorityFeePerGas: priorityFee,
+            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 3n;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction)
         return true;
-    } catch (error) {
-        console.error("Error is occurred:", error);
-        return false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        console.log("Error is occurred:", error.message);
+        if (error.data) return error.data.message
+        return error.message;
     }
 }
 
@@ -93,9 +94,8 @@ export const createToken = async (
 export const buyTokens = async (provider: any, account: string, token: string, amount: string) => {
     try {
         const web3 = new Web3(provider)
-        const gasPrice = await web3.eth.getGasPrice();
-        const baseFee = parseInt(gasPrice.toString(), 10);
-        const priorityFee = web3.utils.toWei('2', 'gwei');
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
 
         const transaction: {
             from: string;
@@ -112,18 +112,19 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             to: VelasFunContract.address,
             value: web3.utils.toWei(amount, 'ether'),
             data: contract.methods.buyTokens(token, web3.utils.toWei(amount, 'ether')).encodeABI(),
-            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
-            maxPriorityFeePerGas: priorityFee
+            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 3n;
-        
+        transaction.gas = gas * 2n;
+
         await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
         return true;
-    } catch (error) {
-        console.error(error);
-        return false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        if (error.data) return error.data.message
+        return error.message;
     }
 }
 
@@ -135,19 +136,18 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         const tokenAmount = Number(amount) * 1_000_000;
         const approveTransaction = tokenContract.methods.approve(VelasFunContract.address, tokenAmount);
         const approveGas = await approveTransaction.estimateGas({ from: account });
-        const approveGasPrice = await web3.eth.getGasPrice();
-        const baseFee = parseInt(approveGasPrice.toString(), 10);
-        const priorityFee = web3.utils.toWei('2', 'gwei');
-        
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
+
         const approveTransactionData = {
             from: account,
             to: token,
             data: approveTransaction.encodeABI(),
             gas: approveGas,
-            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
-            maxPriorityFeePerGas: priorityFee
+            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         };
-        
+
         const approveTx = await web3.eth.sendTransaction(approveTransactionData);
         const approvalMined = await waitForTransaction(approveTx.transactionHash as string, web3, 30000);
         if (!approvalMined) {
@@ -170,39 +170,40 @@ export const sellTokens = async (provider: any, account: string, token: string, 
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.sellTokens(token, Number(amount) * 1_000_000).encodeABI(),
-            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
-            maxPriorityFeePerGas: priorityFee
+            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 3n;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction);
         return true;
-    } catch (error) {
-        console.error(error);
-        return false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        if (error.data) return error.data.message
+        return error.message;
     }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateConstantVariables = async (
-    provider: any, 
-    account: string, 
-    paused: boolean, 
-    admin: string[], 
-    creationFee: number, 
-    feePercent: number, 
-    creatorReward: number, 
-    velasFunReward: number, 
+    provider: any,
+    account: string,
+    paused: boolean,
+    admin: string[],
+    creationFee: number,
+    feePercent: number,
+    creatorReward: number,
+    velasFunReward: number,
     graduationMarketCap: number,
     feeAddress: string
 ) => {
     try {
         const web3 = new Web3(provider);
         const gasPrice = await web3.eth.getGasPrice();
-        const baseFee = parseInt(gasPrice.toString(), 10);
-        const priorityFee = web3.utils.toWei('2', 'gwei')
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
 
         const transaction: {
             from: string;
@@ -216,18 +217,19 @@ export const updateConstantVariables = async (
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.updateVariables(paused, admin, web3.utils.toWei(creationFee, 'ether'), feePercent, web3.utils.toWei(creatorReward, 'ether'), web3.utils.toWei(velasFunReward, 'ether'), web3.utils.toWei(graduationMarketCap, 'ether'), feeAddress).encodeABI(),
-            maxFeePerGas: (baseFee + parseInt(priorityFee, 10)).toString(),
-            maxPriorityFeePerGas: priorityFee
+            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
 
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 3n;
+        transaction.gas = gas * 2n;
 
         await web3.eth.sendTransaction(transaction);
         return true;
-    } catch (error) {
-        console.error(error);
-        return false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        if (error.data) return error.data.message
+        return error.message;
     }
 }
 
@@ -263,7 +265,7 @@ export const getTokenAmount = async (account: string, token: string): Promise<nu
 const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
     try {
         const consent = Cookies.get("CookieConsent");
-        
+
         if (consent === 'true') {
             const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
             if (addedTokens.includes(tokenAddress)) {

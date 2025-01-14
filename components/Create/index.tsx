@@ -58,11 +58,13 @@ const CreateToken = () => {
             } as coinInfo
 
             const result = await createToken(connector.provider, account, coin, amount);
-            if (result) {
+            console.log(result)
+            if (result === true) {
                 reset();
                 setPreviewSrc(null)
+            } else {
+                errorAlert(result);
             }
-            else errorAlert('Failed to create coin');
 
             setIsModal(false);
             setIsLoading(false);

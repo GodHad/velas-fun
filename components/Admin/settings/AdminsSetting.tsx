@@ -72,15 +72,16 @@ const AdminsSetting = () => {
                 adminData.feeAddress
             );
 
-            if (result) {
+            if (result === true) {
                 const data = await updateAdmin({ admin });
                 setAdminData(data);
                 successAlert('Update Admin Info successfully')
             } else {
-                throw new Error('Failed to update variables');
+                throw new Error(result);
             }
-        } catch {
-            errorAlert('Failed to update Admin Info')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            errorAlert(error.message || error)
         }
     };
 

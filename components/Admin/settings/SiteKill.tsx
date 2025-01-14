@@ -17,7 +17,6 @@ const SiteKill = () => {
     const [enabled, setEnabled] = useState<boolean>(!!adminData?.siteKill);
 
     const handleToggle = useCallback(async () => {
-        if (enabled === adminData?.siteKill) return;
 
         if (!connector.provider || !account) {
             errorAlert('Please connect your wallet');
@@ -48,22 +47,19 @@ const SiteKill = () => {
                 adminData.feeAddress
             );
 
-            if (result) {
+            if (result === true) {
                 const updatedData = await updateAdmin({ siteKill: enabled });
                 setAdminData(updatedData);
                 successAlert(enabled ? 'Paused the site' : 'Resumed the site');
+                setEnabled(!enabled)
             } else {
-                throw new Error('Failed to update variables');
+                throw new Error(result);
             }
-        } catch (error) {
-            console.log(error)
-            errorAlert('Failed to pause/resume the site.');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            errorAlert(error.message || error)
         }
     }, [enabled, connector.provider, account, adminData]);
-
-    useEffect(() => {
-        handleToggle();
-    }, [enabled, handleToggle]);
 
     const toggleClass = (condition: boolean, trueClass: string, falseClass: string) =>
         condition ? trueClass : falseClass;
@@ -84,7 +80,7 @@ const SiteKill = () => {
                                         type="checkbox"
                                         id="toggle3"
                                         className="sr-only"
-                                        onChange={() => setEnabled(!enabled)}
+                                        onChange={handleToggle}
                                         checked={enabled}
                                     />
                                     <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>

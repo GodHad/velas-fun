@@ -90,10 +90,11 @@ const Variables = () => {
                 setAdminData(data)
                 successAlert('Update Variables Successfully')
             } else {
-                throw new Error('Failed to update variables');
+                throw new Error(result);
             }
-        } catch {
-            errorAlert('Failed to update variables')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            errorAlert(error.message || error)
         }
     };
 
