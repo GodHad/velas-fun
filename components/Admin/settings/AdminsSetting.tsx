@@ -73,8 +73,6 @@ const AdminsSetting = () => {
             );
 
             if (result === true) {
-                const data = await updateAdmin({ admin });
-                setAdminData(data);
                 successAlert('Update Admin Info successfully')
             } else {
                 throw new Error(result);

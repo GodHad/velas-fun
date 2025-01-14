@@ -37,7 +37,7 @@ const SiteKill = () => {
             const result = await updateConstantVariables(
                 connector.provider,
                 account,
-                enabled,
+                !enabled,
                 adminData.admin,
                 adminData.creationFee || 0,
                 adminData.feePercent || 0,
@@ -48,8 +48,6 @@ const SiteKill = () => {
             );
 
             if (result === true) {
-                const updatedData = await updateAdmin({ siteKill: !enabled });
-                setAdminData(updatedData);
                 successAlert(enabled ? 'Resumed the site' : 'Paused the site');
                 setEnabled(!enabled)
             } else {
@@ -85,10 +83,9 @@ const SiteKill = () => {
                                     />
                                     <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
                                     <div
-                                        className={`dot absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition 
-                      ${toggleClass(!enabled, '!right-1 !translate-x-full !bg-primary dark:!bg-white', '')}`}
+                                        className={`dot absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition ${toggleClass(!!enabled, '!right-1 !translate-x-full !bg-primary dark:!bg-white', '')}`}
                                     >
-                                        <span className={toggleClass(!enabled, '!block', 'hidden')}>
+                                        <span className={toggleClass(!!enabled, '!block', 'hidden')}>
                                             <svg
                                                 className="fill-white dark:fill-black"
                                                 width="11"
@@ -105,7 +102,7 @@ const SiteKill = () => {
                                                 ></path>
                                             </svg>
                                         </span>
-                                        <span className={toggleClass(!enabled, 'hidden', '')}>
+                                        <span className={toggleClass(!!enabled, 'hidden', '')}>
                                             <svg
                                                 className="h-4 w-4 stroke-current"
                                                 fill="none"

@@ -1,9 +1,10 @@
 'use client'
 import { useCallback, useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import { getOverview } from "@/utils/api";
+import { getAdminData, getOverview } from "@/utils/api";
 import CardDataStats from "./CardDataStats"
 import { getContractBalance } from "@/program/VelasFunContractService";
+import { useData } from "@/contexts/PageContext";
 
 export type CardDataProps = {
     total: number;
@@ -21,10 +22,11 @@ interface Overview {
 
 const Overview = () => {
     const [data, setData] = useState<Overview | null>(null);
+    const { setAdminData } = useData()
 
     const getOverviewMutation = useMutation(getOverview, {
         onSuccess: async (data) => {
-            const {user, coin, transaction} = data;
+            const { user, coin, transaction } = data;
             setData(prev => {
                 if (prev) {
                     return {
@@ -35,7 +37,7 @@ const Overview = () => {
                     }
                 } else {
                     return {
-                        user, 
+                        user,
                         coin,
                         transaction,
                         balance: {
@@ -52,7 +54,7 @@ const Overview = () => {
         setData(prev => {
             if (prev) {
                 return {
-                    ...prev, 
+                    ...prev,
                     balance: {
                         total: contractBalance,
                     }
@@ -77,6 +79,8 @@ const Overview = () => {
                 }
             }
         });
+        const data = await getAdminData()
+        setAdminData(data)
     }, [])
 
     useEffect(() => {
