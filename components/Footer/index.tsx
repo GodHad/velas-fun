@@ -89,7 +89,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-2/12 xl:w-2/12">
+            <div className="w-full px-4 mt-4 md:mt-0 sm:w-1/2 md:w-1/2 lg:w-2/12 xl:w-2/12">
               <div>
                 <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
                   Terms
@@ -144,7 +144,7 @@ const Footer = () => {
           <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D2D8E183] to-transparent dark:via-[#959CB183]"></div>
           <div className="py-4">
             <p className="text-center text-base text-body-color dark:text-white">
-              @2024 BluePill.fun
+              @2025 BluePill.fun
             </p>
           </div>
         </div>
