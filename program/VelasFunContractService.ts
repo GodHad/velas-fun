@@ -85,7 +85,7 @@ export const createToken = async (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.log("Error is occurred:", error.message);
-        if (error.data) return error.data.message
+        if (error.data) return error.data.message || error.message
         return error.message;
     }
 }
@@ -123,7 +123,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         return true;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        if (error.data) return error.data.message
+        if (error.data) return error.data.message || error.message
         return error.message;
     }
 }
@@ -181,7 +181,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         return true;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        if (error.data) return error.data.message
+        if (error.data) return error.data.message || error.message
         return error.message;
     }
 }
@@ -228,7 +228,7 @@ export const updateConstantVariables = async (
         return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        if (error.data) return error.data.message
+        if (error.data) return error.data.message || error.message
         return error.message;
     }
 }
