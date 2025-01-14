@@ -23,7 +23,7 @@ const getToken = () => {
 };
 const axiosWithToken = axios.create({
     headers: {
-        Authorization: `Bearer ${getToken()}`
+        Authorization: `Bearer ${getToken()}`,
     }
 })
 
