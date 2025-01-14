@@ -48,9 +48,9 @@ const SiteKill = () => {
             );
 
             if (result === true) {
-                const updatedData = await updateAdmin({ siteKill: enabled });
+                const updatedData = await updateAdmin({ siteKill: !enabled });
                 setAdminData(updatedData);
-                successAlert(enabled ? 'Paused the site' : 'Resumed the site');
+                successAlert(enabled ? 'Resumed the site' : 'Paused the site');
                 setEnabled(!enabled)
             } else {
                 throw new Error(result);

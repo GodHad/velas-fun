@@ -55,7 +55,7 @@ export const createToken = async (
         const web3 = new Web3(provider)
         const { name, ticker, description, url, twitter, telegram, website } = coin;
         const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
+        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
         const transaction: {
@@ -73,7 +73,7 @@ export const createToken = async (
             to: VelasFunContract.address,
             value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
             data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
-            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
 
@@ -95,7 +95,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
     try {
         const web3 = new Web3(provider)
         const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
+        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const transaction: {
             from: string;
@@ -112,7 +112,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             to: VelasFunContract.address,
             value: web3.utils.toWei(amount, 'ether'),
             data: contract.methods.buyTokens(token, web3.utils.toWei(amount, 'ether')).encodeABI(),
-            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
         const gas = await web3.eth.estimateGas(transaction);
@@ -137,14 +137,14 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         const approveTransaction = tokenContract.methods.approve(VelasFunContract.address, tokenAmount);
         const approveGas = await approveTransaction.estimateGas({ from: account });
         const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
+        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const approveTransactionData = {
             from: account,
             to: token,
             data: approveTransaction.encodeABI(),
             gas: approveGas,
-            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         };
 
@@ -170,7 +170,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.sellTokens(token, Number(amount) * 1_000_000).encodeABI(),
-            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
 
@@ -203,7 +203,7 @@ export const updateConstantVariables = async (
         const web3 = new Web3(provider);
         const gasPrice = await web3.eth.getGasPrice();
         const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
+        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const transaction: {
             from: string;
@@ -217,7 +217,7 @@ export const updateConstantVariables = async (
             from: account,
             to: VelasFunContract.address,
             data: contract.methods.updateVariables(paused, admin, web3.utils.toWei(creationFee, 'ether'), feePercent, web3.utils.toWei(creatorReward, 'ether'), web3.utils.toWei(velasFunReward, 'ether'), web3.utils.toWei(graduationMarketCap, 'ether'), feeAddress).encodeABI(),
-            maxFeePerGas: (baseFee + maxPriorityFeePerGas).toString(),
+            maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
 
