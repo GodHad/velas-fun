@@ -52,12 +52,18 @@ export const createToken = async (
     amount: number
 ) => {
     try {
-        const web3 = new Web3(provider)
+        const web3 = new Web3(provider);
         const { name, ticker, description, url, twitter, telegram, website } = coin;
-        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
+
+        const baseFee = (await web3.eth.getBlock('latest')).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
+
+        console.log("Base Fee:", baseFee);
+        console.log("Max Priority Fee:", maxPriorityFeePerGas);
+
+        const amountInWei = web3.utils.toWei(amount.toString(), "ether");
         const transaction: {
             from: string;
             to: string;
@@ -71,24 +77,29 @@ export const createToken = async (
         } = {
             from: account,
             to: VelasFunContract.address,
-            value: Number(creationFee) + Number(web3.utils.toWei(amount, "ether")),
-            data: contract.methods.createToken(name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, Number(web3.utils.toWei(amount, "ether"))).encodeABI(),
+            value: BigInt(creationFee) + BigInt(amountInWei),
+            data: contract.methods.createToken(
+                name, ticker, description, url, twitter, telegram, website, PINATA_GATEWAY_URL + metadataURI, amountInWei
+            ).encodeABI(),
             maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
-            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
-        }
+            maxPriorityFeePerGas: maxPriorityFeePerGas.toString(),
+        };
 
         const gas = await web3.eth.estimateGas(transaction);
+        console.log("Estimated Gas:", gas);
         transaction.gas = gas * 2n;
 
-        await web3.eth.sendTransaction(transaction)
+        const receipt = await web3.eth.sendTransaction(transaction);
+        console.log("Transaction Receipt:", receipt);
+
         return true;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        console.log("Error is occurred:", error.message);
-        if (error.data) return error.data.message || error.message
+        console.error("Transaction Error:", error);
+        if (error.data) return error.data.message || error.message;
         return error.message;
     }
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const buyTokens = async (provider: any, account: string, token: string, amount: string) => {
