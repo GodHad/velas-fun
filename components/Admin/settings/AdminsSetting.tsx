@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react';
-import { updateAdmin } from '@/utils/api';
 import { useData } from '@/contexts/PageContext';
 import { errorAlert, successAlert } from '@/components/ToastGroup';
 import { useWeb3React } from '@web3-react/core';
@@ -8,7 +7,7 @@ import { hooks } from '@/connectors/metaMask';
 import { updateConstantVariables } from '@/program/VelasFunContractService';
 
 const AdminsSetting = () => {
-    const { adminData, setAdminData } = useData();
+    const { adminData } = useData();
     const { connector } = useWeb3React();
     const { useAccount } = hooks;
 
