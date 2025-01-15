@@ -225,7 +225,7 @@ const Variables = () => {
                                         step="0.01"
                                         id="graduationMarketCap"
                                         {...register('graduationMarketCap', {
-                                            min: { value: 1.7, message: 'Graduation Market Cap can\'t be lower than 1.7 ETH' },
+                                            min: { value: 0.85, message: 'Graduation Market Cap can\'t be lower than 0.85 ETH' },
                                             required: 'Graduation Market Cap is required'
                                         })}
                                     />
