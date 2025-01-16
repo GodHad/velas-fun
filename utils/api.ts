@@ -149,7 +149,7 @@ export const getHoldingBy = async (userId: string, perPage: number = 10, current
         return response.data;
     } catch (error) {
         console.error(error);
-        return { holdings: [], pagination: { currentPage: '', perPage: '', totalItems: 0, totalPages: 0 } };
+        return { holdings: [], pagination: { currentPage: 1, perPage: 10, totalItems: 0, totalPages: 0 } };
     }
 }
 
@@ -159,7 +159,7 @@ export const getCoinsInfoBy = async (id: string, perPage: number = 10, currentPa
         return res.data
     } catch (error) {
         console.error(error);
-        return { coins: [], pagination: { currentPage: '', perPage: '', totalItems: 0, totalPages: 0 } };
+        return { coins: [], pagination: { currentPage: 1, perPage: 10, totalItems: 0, totalPages: 0 } };
     }
 }
 
@@ -168,7 +168,7 @@ export const getMessagesInfoBy = async (id: string, perPage: number = 10, curren
         const response = await axios.get(`${BACKEND_URL}/feedback/user/${id}?perPage=${perPage}&currentPage=${currentPage}`);
         return response.data;
     } catch {
-        return { messages: [], pagination: { currentPage: '', perPage: '', totalItems: 0, totalPages: 0 } };
+        return { messages: [], pagination: { currentPage: 1, perPage: 10, totalItems: 0, totalPages: 0 } };
     }
 }
 
@@ -387,4 +387,13 @@ export const getProfitData = async (option: string) => {
 export const getKingCoin = async () => {
     const response = await axios.get(`${BACKEND_URL}/coin/get-king-coin`);
     return response.data;
+}
+
+export const deleteTokenById = async (id: string) => {
+    try {
+        await axiosWithToken.delete(`${BACKEND_URL}/admin/delete-token?id=${id}`);
+        return true;
+    } catch (error) {
+        return false;
+    }
 }

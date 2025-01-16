@@ -49,7 +49,7 @@ const TanstackDatatable = <TData,>({
                     {
                         isLoading ?
                             <tr className='border-t border-[#EEEEEE] dark:border-strokedark'>
-                                <td className='px-5 py-4 lg:px-7 2xl:px-11' colSpan={5}><Spinner /></td>
+                                <td className='px-5 py-4 lg:px-7 2xl:px-11' colSpan={table.getHeaderGroups()[0].headers.length}><Spinner /></td>
                             </tr>
                             :
                             table.getRowModel().rows.length > 0 ? table.getRowModel().rows.map(row => {
@@ -69,7 +69,7 @@ const TanstackDatatable = <TData,>({
                                 )
                             }) :
                                 <tr className='border-t border-[#EEEEEE] dark:border-strokedark'>
-                                    <td colSpan={table.getHeaderGroups()[0].headers.length} className='text-center px-5 py-4 lg:px-7 2xl:px-11'>No events</td>
+                                    <td colSpan={table.getHeaderGroups()[0].headers.length} className='text-center px-5 py-4 lg:px-7 2xl:px-11'>No Data</td>
                                 </tr>
                     }
                 </tbody>

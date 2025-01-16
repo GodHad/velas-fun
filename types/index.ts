@@ -30,8 +30,8 @@ export interface userInfo {
 }
 
 export interface Pagination {
-    currentPage: string;
-    perPage: string;
+    currentPage: number;
+    perPage: number;
     totalItems: number;
     totalPages: number;
 }

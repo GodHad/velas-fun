@@ -212,7 +212,6 @@ export const updateConstantVariables = async (
 ) => {
     try {
         const web3 = new Web3(provider);
-        const gasPrice = await web3.eth.getGasPrice();
         const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
         const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 

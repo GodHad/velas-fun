@@ -1,7 +1,6 @@
 'use client'
 import Pagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
-import 'react-responsive-pagination'
 import { useMemo, useState, useEffect } from 'react';
 import {
     ColumnDef,
