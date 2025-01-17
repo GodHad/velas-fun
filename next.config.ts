@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
         hostname: 'localhost'
       },
       {
-        hostname: 'api.blupill.fun'
+        hostname: 'api.bluepill.fun'
       }
     ]
   },
