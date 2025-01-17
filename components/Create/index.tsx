@@ -112,7 +112,7 @@ const CreateToken = () => {
     const { metaData } = useData()
 
     return (
-        <section className="dark:bg-gray-dark bg-white relative z-10 overflow-hidden pb-16 pt-[120px]">
+        <section className="dark:bg-gray-dark bg-white relative z-100 overflow-hidden pb-16 pt-[120px]">
             <div className="container">
                 <a className="flex gap-2 sm:gap-3 mb-5 text-gray-8 items-center group cursor-pointer" onClick={() => router.back()}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" className="text-body-color group-hover:text-primary transition-all duration-300">

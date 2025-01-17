@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: 'img.freepik.com'
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost'
       }
     ]
   },
